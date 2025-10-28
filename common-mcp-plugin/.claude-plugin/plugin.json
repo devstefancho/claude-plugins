@@ -1,0 +1,8 @@
+{
+  "name": "common-mcp-plugin",
+  "description": "Common MCP servers for shared tools and integrations (chrome-devtools, etc)",
+  "version": "1.0.0",
+  "author": {
+    "name": "Claude Plugins Team"
+  }
+}
