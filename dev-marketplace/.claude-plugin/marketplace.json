@@ -1,0 +1,14 @@
+{
+  "name": "dev-marketplace",
+  "description": "Local development marketplace for testing code style plugin",
+  "owner": {
+    "name": "Stefan Cho"
+  },
+  "plugins": [
+    {
+      "name": "code-style-plugin",
+      "source": "../code-style-plugin",
+      "description": "코드 스타일 원칙 기반 AI 코드 리뷰 Plugin - 단일책임원칙, DRY, 단순화 우선, YAGNI, 타입 안전성을 검사합니다"
+    }
+  ]
+}
