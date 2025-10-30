@@ -1,0 +1,8 @@
+{
+  "name": "code-quality-plugin",
+  "description": "Code quality review skill focusing on DRY, KISS, and Clean Code principles",
+  "version": "1.0.0",
+  "author": {
+    "name": "devstefancho"
+  }
+}
