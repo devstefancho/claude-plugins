@@ -1,7 +1,6 @@
 ---
 argument-hint: "[--all]"
-description: "Implement features from tasks document with optional batch mode"
-model: claude-haiku-4-5-20251001
+description: Implement features from tasks document with optional batch mode
 ---
 
 # Implementation Executor
