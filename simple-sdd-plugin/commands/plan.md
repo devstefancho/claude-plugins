@@ -1,7 +1,6 @@
 ---
 argument-hint: "[tech-stack]"
-description: "Create comprehensive technical implementation plan from specification"
-model: claude-haiku-4-5-20251001
+description: Create comprehensive technical implementation plan from specification
 ---
 
 # Implementation Plan Generator
