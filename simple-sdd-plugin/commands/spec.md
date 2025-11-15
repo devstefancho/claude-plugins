@@ -1,7 +1,6 @@
 ---
 argument-hint: "[requirements]"
 description: "Generate a comprehensive software specification document from requirements"
-model: claude-haiku-4-5-20251001
 ---
 
 # Specification Generator
