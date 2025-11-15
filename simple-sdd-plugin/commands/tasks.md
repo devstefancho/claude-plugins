@@ -1,7 +1,6 @@
 ---
 argument-hint: "[context]"
-description: "Generate implementation tasks from specification and plan"
-model: claude-haiku-4-5-20251001
+description: Generate implementation tasks from specification and plan
 ---
 
 # Tasks Generator
