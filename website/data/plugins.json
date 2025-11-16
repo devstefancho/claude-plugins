@@ -1,0 +1,323 @@
+{
+  "marketplace": {
+    "name": "devstefancho-claude-plugins",
+    "repo": "devstefancho/claude-plugins",
+    "installCommand": "/plugin marketplace add devstefancho/claude-plugins"
+  },
+  "plugins": [
+    {
+      "id": "code-quality-plugin",
+      "name": "code-quality-plugin",
+      "version": "1.0.0",
+      "description": "Code quality review skill focusing on DRY, KISS, and Clean Code principles",
+      "author": "devstefancho",
+      "category": "code-review",
+      "components": {
+        "skills": [
+          "code-quality-reviewer"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Request code review or quality assessment",
+        "Ask for feedback on code changes",
+        "Question code complexity or readability",
+        "Review pull requests or commits",
+        "Request refactoring suggestions"
+      ],
+      "installCommand": "/plugin install code-quality-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall code-quality-plugin@devstefancho-claude-plugins",
+      "readmePath": "code-quality-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "code-style-plugin",
+      "name": "code-style-plugin",
+      "version": "1.0.0",
+      "description": "코드 스타일 원칙 기반 AI 코드 리뷰 Skill - 단일책임원칙, DRY, 단순화 우선, YAGNI, 타입 안전성을 검사합니다",
+      "author": "Code Style Team",
+      "category": "code-review",
+      "components": {
+        "skills": [
+          "code-style-reviewer"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install code-style-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall code-style-plugin@devstefancho-claude-plugins",
+      "readmePath": "code-style-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "common-mcp-plugin",
+      "name": "common-mcp-plugin",
+      "version": "1.0.0",
+      "description": "Common MCP servers for shared tools and integrations (chrome-devtools, etc)",
+      "author": "Claude Plugins Team",
+      "category": "infrastructure",
+      "components": {
+        "skills": [],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": [
+          "chrome-devtools"
+        ]
+      },
+      "features": [],
+      "installCommand": "/plugin install common-mcp-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall common-mcp-plugin@devstefancho-claude-plugins",
+      "readmePath": "common-mcp-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "git-commit-plugin",
+      "name": "git-commit-plugin",
+      "version": "1.0.0",
+      "description": "Auto-generate conventional commit messages in Korean by analyzing changes",
+      "author": "Stefan Cho",
+      "category": "workflow",
+      "components": {
+        "skills": [],
+        "commands": [
+          "commit"
+        ],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Smart Analysis - Analyzes staged/unstaged changes automatically",
+        "Scope Detection - Determines appropriate commit type (feat, fix, chore, etc.)",
+        "Korean Messages - Generates commit messages in Korean",
+        "User Confirmation - Asks for approval before committing",
+        "Security Checks - Warns about sensitive information in commits"
+      ],
+      "installCommand": "/plugin install git-commit-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall git-commit-plugin@devstefancho-claude-plugins",
+      "readmePath": "git-commit-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "git-worktree-plugin",
+      "name": "git-worktree-plugin",
+      "version": "1.0.0",
+      "description": "Manage git worktrees for parallel branch work. Proactively suggests worktree creation when working on PRs or new features",
+      "author": "Stefan Cho",
+      "category": "workflow",
+      "components": {
+        "skills": [
+          "git-worktree"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Easy Creation - Creates worktrees with proper branch naming conventions",
+        "Cleanup Management - Lists and removes worktrees safely"
+      ],
+      "installCommand": "/plugin install git-worktree-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall git-worktree-plugin@devstefancho-claude-plugins",
+      "readmePath": "git-worktree-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "pr-create-plugin",
+      "name": "pr-create-plugin",
+      "version": "1.0.0",
+      "description": "Create GitHub pull requests with auto-generated title and description based on branch changes",
+      "author": "Stefan Cho",
+      "category": "workflow",
+      "components": {
+        "skills": [],
+        "commands": [
+          "pr-create"
+        ],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Smart Analysis - Analyzes all commits since branching from main",
+        "Auto Title - Generates concise PR title from changes",
+        "Structured Body - Creates summary and test plan sections",
+        "Push & Create - Pushes branch and creates PR in one command"
+      ],
+      "installCommand": "/plugin install pr-create-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall pr-create-plugin@devstefancho-claude-plugins",
+      "readmePath": "pr-create-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "scaffold-claude-feature",
+      "name": "scaffold-claude-feature",
+      "version": "1.2.0",
+      "description": "Generate Claude Code features (slash commands, skills, subagents, hooks, output styles) with proper structure and best practices",
+      "author": "Stefan Cho",
+      "category": "code-review",
+      "components": {
+        "skills": [
+          "scaffold-claude-feature"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Slash Commands - Reusable prompts",
+        "Skills - Model-invoked capabilities",
+        "Subagents - Specialized AI agents",
+        "Hooks - Event handlers",
+        "Output Styles - Custom system prompts"
+      ],
+      "installCommand": "/plugin install scaffold-claude-feature@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall scaffold-claude-feature@devstefancho-claude-plugins",
+      "readmePath": "scaffold-claude-feature/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "session-reporter-plugin",
+      "name": "session-reporter-plugin",
+      "version": "1.0.0",
+      "description": "Generate HTML reports to visualize work sessions including conversation history, code changes, and execution results",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [
+          "session-reporter"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Session Visualization - View conversation history, code changes, and execution results",
+        "Flexible Scope - Export last activity only or entire session",
+        "Auto-open - HTML file opens automatically in your browser",
+        "Clean Formatting - Syntax highlighting and section navigation"
+      ],
+      "installCommand": "/plugin install session-reporter-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall session-reporter-plugin@devstefancho-claude-plugins",
+      "readmePath": "session-reporter-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "simple-sdd-plugin",
+      "name": "simple-sdd-plugin",
+      "version": "1.0.0",
+      "description": "Simple SDD (Software Specification & Design) workflow commands for generating specifications, plans, tasks, and implementations",
+      "author": "Stefan Cho",
+      "category": "specification",
+      "components": {
+        "skills": [],
+        "commands": [
+          "implement",
+          "plan",
+          "spec",
+          "tasks"
+        ],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install simple-sdd-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall simple-sdd-plugin@devstefancho-claude-plugins",
+      "readmePath": "simple-sdd-plugin/README.md",
+      "hasReadme": false
+    },
+    {
+      "id": "spec-manager-plugin",
+      "name": "spec-manager-plugin",
+      "version": "1.0.0",
+      "description": "Manage specification files for spec-driven development workflow with feat, fix, docs, refactor, and chore scopes",
+      "author": "Stefan Cho",
+      "category": "specification",
+      "components": {
+        "skills": [
+          "spec-manager"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Structured Specs - Organize specs in specs/{scope}/{work-name}.md",
+        "Scope Support - feat, fix, docs, refactor, chore",
+        "XML Tag Format - Consistent structure for each scope type",
+        "Duplicate Detection - Checks for similar existing specs"
+      ],
+      "installCommand": "/plugin install spec-manager-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall spec-manager-plugin@devstefancho-claude-plugins",
+      "readmePath": "spec-manager-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "stop-notification-plugin",
+      "name": "stop-notification-plugin",
+      "version": "1.1.0",
+      "description": "macOS notification when Claude finishes working",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [],
+        "commands": [],
+        "hooks": true,
+        "mcpServers": []
+      },
+      "features": [
+        "Claude가 응답을 완료할 때마다 macOS 네이티브 다이얼로그 알림 표시",
+        "3초 후 자동으로 닫힘",
+        "한국어 메시지 지원"
+      ],
+      "installCommand": "/plugin install stop-notification-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall stop-notification-plugin@devstefancho-claude-plugins",
+      "readmePath": "stop-notification-plugin/README.md",
+      "hasReadme": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "code-review",
+      "name": {
+        "ko": "코드 리뷰 & 품질",
+        "en": "Code Review & Quality"
+      },
+      "icon": "🎨"
+    },
+    {
+      "id": "workflow",
+      "name": {
+        "ko": "개발 워크플로우",
+        "en": "Development Workflow"
+      },
+      "icon": "🔄"
+    },
+    {
+      "id": "specification",
+      "name": {
+        "ko": "사양 & 계획",
+        "en": "Specification & Planning"
+      },
+      "icon": "📋"
+    },
+    {
+      "id": "utility",
+      "name": {
+        "ko": "유틸리티",
+        "en": "Utilities"
+      },
+      "icon": "🛠️"
+    },
+    {
+      "id": "infrastructure",
+      "name": {
+        "ko": "인프라",
+        "en": "Infrastructure"
+      },
+      "icon": "🏗️"
+    }
+  ]
+}
