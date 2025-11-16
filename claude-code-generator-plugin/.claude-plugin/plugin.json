@@ -1,7 +1,7 @@
 {
   "name": "claude-code-generator-plugin",
   "description": "Generate Claude Code features (slash commands, skills, subagents, hooks, output styles) with proper structure and best practices",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Stefan Cho"
   }

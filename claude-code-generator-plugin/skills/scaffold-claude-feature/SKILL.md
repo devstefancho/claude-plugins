@@ -1,11 +1,11 @@
 ---
-name: claude-code-generator
-description: Generate Claude Code features (slash commands, skills, subagents, hooks, output styles). Use when user asks to create Claude Code build tools or mentions these feature types explicitly.
+name: scaffold-claude-feature
+description: Claude Code 확장 기능(skill, slash command, subagent, hook, output style)의 기본 구조를 생성합니다. 새로운 skill을 만들거나, command 템플릿이 필요하거나, hook 설정을 시작할 때 사용합니다.
 ---
 
-# Claude Code Feature Generator
+# Claude Code Feature Scaffolder
 
-Quick generator for Claude Code features with proper structure and best practices.
+Quick scaffolder for Claude Code features with proper structure and best practices.
 
 ## Feature Types
 
