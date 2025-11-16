@@ -54,6 +54,11 @@
       "name": "pr-create-plugin",
       "source": "./pr-create-plugin",
       "description": "Create GitHub pull requests with auto-generated title and description"
+    },
+    {
+      "name": "stop-notification-plugin",
+      "source": "./stop-notification-plugin",
+      "description": "macOS notification when Claude finishes working (Stop hook)"
     }
   ]
 }
