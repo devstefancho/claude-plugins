@@ -26,8 +26,8 @@
       "description": "Common MCP servers for shared tools and integrations (chrome-devtools, etc)"
     },
     {
-      "name": "claude-code-generator-plugin",
-      "source": "./claude-code-generator-plugin",
+      "name": "scaffold-claude-feature",
+      "source": "./scaffold-claude-feature",
       "description": "Generate Claude Code features (slash commands, skills, subagents, hooks, output styles) with proper structure"
     },
     {
