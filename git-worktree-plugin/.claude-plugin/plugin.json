@@ -1,0 +1,8 @@
+{
+  "name": "git-worktree-plugin",
+  "description": "Manage git worktrees for parallel branch work. Proactively suggests worktree creation when working on PRs or new features",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}

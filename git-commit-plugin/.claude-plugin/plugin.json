@@ -1,0 +1,8 @@
+{
+  "name": "git-commit-plugin",
+  "description": "Auto-generate conventional commit messages in Korean by analyzing changes",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}

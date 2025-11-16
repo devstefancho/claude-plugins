@@ -1,0 +1,8 @@
+{
+  "name": "pr-create-plugin",
+  "description": "Create GitHub pull requests with auto-generated title and description based on branch changes",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}

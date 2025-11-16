@@ -1,0 +1,8 @@
+{
+  "name": "spec-manager-plugin",
+  "description": "Manage specification files for spec-driven development workflow with feat, fix, docs, refactor, and chore scopes",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}

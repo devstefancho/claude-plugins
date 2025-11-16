@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "[EventName]": [
+      {
+        "matcher": "[ToolPattern or omit for events like Stop]",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[bash-command or $CLAUDE_PROJECT_DIR/script.sh]",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -24,6 +24,36 @@
       "name": "common-mcp-plugin",
       "source": "./common-mcp-plugin",
       "description": "Common MCP servers for shared tools and integrations (chrome-devtools, etc)"
+    },
+    {
+      "name": "claude-code-generator-plugin",
+      "source": "./claude-code-generator-plugin",
+      "description": "Generate Claude Code features (slash commands, skills, subagents, hooks, output styles) with proper structure"
+    },
+    {
+      "name": "git-worktree-plugin",
+      "source": "./git-worktree-plugin",
+      "description": "Manage git worktrees for parallel branch work with proactive suggestions"
+    },
+    {
+      "name": "session-reporter-plugin",
+      "source": "./session-reporter-plugin",
+      "description": "Generate HTML reports to visualize work sessions with conversation history and code changes"
+    },
+    {
+      "name": "spec-manager-plugin",
+      "source": "./spec-manager-plugin",
+      "description": "Manage specification files for spec-driven development workflow"
+    },
+    {
+      "name": "git-commit-plugin",
+      "source": "./git-commit-plugin",
+      "description": "Auto-generate conventional commit messages in Korean by analyzing changes"
+    },
+    {
+      "name": "pr-create-plugin",
+      "source": "./pr-create-plugin",
+      "description": "Create GitHub pull requests with auto-generated title and description"
     }
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "name": "session-reporter-plugin",
+  "description": "Generate HTML reports to visualize work sessions including conversation history, code changes, and execution results",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}
