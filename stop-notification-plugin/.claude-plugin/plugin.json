@@ -1,0 +1,6 @@
+{
+  "name": "stop-notification-plugin",
+  "description": "macOS notification when Claude finishes working",
+  "version": "1.0.0",
+  "author": "devstefancho"
+}
