@@ -2,6 +2,7 @@
   "name": "stop-notification-plugin",
   "description": "macOS notification when Claude finishes working",
   "version": "1.1.0",
-  "author": "devstefancho",
-  "hooks": "./hooks/hooks.json"
+  "author": {
+    "name": "Stefan Cho"
+  }
 }
