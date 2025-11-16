@@ -2,6 +2,7 @@
 name: session-reporter
 description: Generate HTML file to view work session. Use when user asks to view content as HTML (e.g., 'HTML로 보여줘', 'HTML 파일로 만들어줘', 'view as HTML', 'export to HTML', 'HTML로 저장').
 allowed-tools: Write, Bash, AskUserQuestion
+model: haiku
 ---
 
 # Session Reporter
