@@ -10,7 +10,6 @@ import {
   Terminal,
   Webhook,
   Plug,
-  Download,
   Copy,
   ExternalLink,
   Check
@@ -40,7 +39,6 @@ const props = defineProps<{
 }>()
 
 const copied = ref(false)
-const installed = ref(false)
 
 const categoryNames = {
   'code-review': { ko: '코드 리뷰', en: 'Code Review' },
@@ -57,18 +55,6 @@ const copyInstallCommand = async () => {
     setTimeout(() => {
       copied.value = false
     }, 2000)
-  } catch (err) {
-    console.error('Failed to copy:', err)
-  }
-}
-
-const installPlugin = async () => {
-  try {
-    await navigator.clipboard.writeText(props.plugin.installCommand)
-    installed.value = true
-    setTimeout(() => {
-      installed.value = false
-    }, 3000)
   } catch (err) {
     console.error('Failed to copy:', err)
   }
@@ -130,17 +116,12 @@ const getCategoryIcon = (categoryId: string) => {
     </div>
 
     <div class="plugin-card-actions">
-      <button class="btn btn-primary" @click="installPlugin">
-        <Download v-if="!installed" :size="16" />
-        <Check v-else :size="16" />
-        {{ lang === 'en' ? 'Install' : '설치' }}
-      </button>
-      <button class="btn btn-secondary" @click="copyInstallCommand">
+      <button class="btn btn-primary" @click="copyInstallCommand">
         <Copy v-if="!copied" :size="16" />
         <Check v-else :size="16" />
         {{ lang === 'en' ? 'Copy' : '복사' }}
       </button>
-      <a :href="`/${lang || 'ko'}/plugins/${plugin.id}`" class="btn btn-outline">
+      <a :href="`https://github.com/devstefancho/claude-plugins/tree/main/${plugin.id}`" target="_blank" class="btn btn-outline">
         <ExternalLink :size="16" />
         {{ lang === 'en' ? 'Details' : '상세' }}
       </a>
