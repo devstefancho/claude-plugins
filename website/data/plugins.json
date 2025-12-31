@@ -36,7 +36,7 @@
       "id": "code-style-plugin",
       "name": "code-style-plugin",
       "version": "1.0.0",
-      "description": "코드 스타일 원칙 기반 AI 코드 리뷰 Skill - 단일책임원칙, DRY, 단순화 우선, YAGNI, 타입 안전성을 검사합니다",
+      "description": "AI code review skill based on code style principles - checks SRP (Single Responsibility Principle), DRY, Simplicity First, YAGNI, and Type Safety",
       "author": "Code Style Team",
       "category": "code-review",
       "components": {
@@ -47,7 +47,11 @@
         "hooks": false,
         "mcpServers": []
       },
-      "features": [],
+      "features": [
+        "Naming conventions (consistency of variables, functions, classes, etc.)",
+        "Code structure and complexity",
+        "Comments and documentation quality"
+      ],
       "installCommand": "/plugin install code-style-plugin@devstefancho-claude-plugins",
       "uninstallCommand": "/plugin uninstall code-style-plugin@devstefancho-claude-plugins",
       "readmePath": "code-style-plugin/README.md",
@@ -92,7 +96,6 @@
       "features": [
         "Smart Analysis - Analyzes staged/unstaged changes automatically",
         "Scope Detection - Determines appropriate commit type (feat, fix, chore, etc.)",
-        "Korean Messages - Generates commit messages in Korean",
         "User Confirmation - Asks for approval before committing",
         "Security Checks - Warns about sensitive information in commits"
       ],
@@ -268,9 +271,9 @@
         "mcpServers": []
       },
       "features": [
-        "Claude가 응답을 완료할 때마다 macOS 네이티브 다이얼로그 알림 표시",
-        "3초 후 자동으로 닫힘",
-        "한국어 메시지 지원"
+        "Display macOS native dialog notification when Claude completes a response",
+        "Auto-closes after 3 seconds",
+        "Customizable message"
       ],
       "installCommand": "/plugin install stop-notification-plugin@devstefancho-claude-plugins",
       "uninstallCommand": "/plugin uninstall stop-notification-plugin@devstefancho-claude-plugins",
@@ -295,11 +298,11 @@
         "mcpServers": []
       },
       "features": [
-        "~/.claude/history.jsonl에서 작업 히스토리 추출",
-        "티켓 번호 및 프로젝트별 자동 그룹화",
-        "마크다운 또는 JSON 출력 지원",
-        "기존 데일리 파일 업데이트 시 다른 섹션 보존",
-        "타임존 지원"
+        "Extract work history from ~/.claude/history.jsonl",
+        "Automatic grouping by ticket number and project",
+        "Markdown or JSON output support",
+        "Preserve other sections when updating existing daily files",
+        "Timezone support"
       ],
       "installCommand": "/plugin install worktrace-plugin@devstefancho-claude-plugins",
       "uninstallCommand": "/plugin uninstall worktrace-plugin@devstefancho-claude-plugins",

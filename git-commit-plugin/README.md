@@ -1,12 +1,11 @@
 # Git Commit Plugin
 
-Auto-generate conventional commit messages in Korean by analyzing git changes.
+Auto-generate conventional commit messages by analyzing git changes.
 
 ## Features
 
 - **Smart Analysis** - Analyzes staged/unstaged changes automatically
 - **Scope Detection** - Determines appropriate commit type (feat, fix, chore, etc.)
-- **Korean Messages** - Generates commit messages in Korean
 - **User Confirmation** - Asks for approval before committing
 - **Security Checks** - Warns about sensitive information in commits
 
@@ -44,7 +43,7 @@ The command will:
 ## Example Output
 
 ```
-feat: 사용자 인증 기능 추가
-fix: 날짜 범위 검색 시 경계값 오류 수정
-chore: 의존성 버전 업데이트
+feat: Add user authentication feature
+fix: Fix boundary value error in date range search
+chore: Update dependency versions
 ```

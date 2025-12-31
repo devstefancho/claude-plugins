@@ -1,45 +1,45 @@
 # Stop Notification Plugin
 
-Claude Code 작업 완료 시 macOS 알림을 표시하는 플러그인입니다.
+Display macOS notifications when Claude Code finishes working.
 
-## 기능
+## Features
 
-- Claude가 응답을 완료할 때마다 macOS 네이티브 다이얼로그 알림 표시
-- 3초 후 자동으로 닫힘
-- 한국어 메시지 지원
+- Display macOS native dialog notification when Claude completes a response
+- Auto-closes after 3 seconds
+- Customizable message
 
-## 요구사항
+## Requirements
 
-- macOS (osascript 사용)
+- macOS (uses osascript)
 - Claude Code
 
-## 설치
+## Installation
 
 ```bash
 /plugin install stop-notification-plugin@devstefancho-claude-plugins
 ```
 
-설치 후 Claude Code를 재시작하면 활성화됩니다.
+Restart Claude Code after installation to activate.
 
-## 제거
+## Uninstall
 
 ```bash
 /plugin uninstall stop-notification-plugin@devstefancho-claude-plugins
 ```
 
-## 동작 방식
+## How It Works
 
-이 플러그인은 Claude Code의 `Stop` 이벤트 hook을 사용합니다. Claude가 응답을 완료할 때마다 다음과 같은 알림이 표시됩니다:
+This plugin uses Claude Code's `Stop` event hook. Each time Claude completes a response, a notification is displayed:
 
-- **제목:** Claude Code 작업 완료
-- **메시지:** Claude가 작업을 완료했습니다
-- **버튼:** 확인
-- **자동 닫힘:** 3초
+- **Title:** Claude Code Task Complete
+- **Message:** Claude has finished working
+- **Button:** OK
+- **Auto-close:** 3 seconds
 
-## 커스터마이징
+## Customization
 
-알림 메시지나 동작을 변경하려면 `hooks/stop-notification.sh` 스크립트를 수정하세요.
+To change the notification message or behavior, modify the `hooks/stop-notification.sh` script.
 
-## 라이선스
+## License
 
 MIT

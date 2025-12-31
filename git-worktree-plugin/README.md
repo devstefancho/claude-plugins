@@ -17,7 +17,7 @@ Manage git worktrees for parallel branch work.
 ## Usage
 
 The skill is proactively invoked when you mention:
-- Working on a PR (e.g., "PR #9 작업하자", "work on PR #123")
+- Working on a PR (e.g., "Let's work on PR #9", "work on PR #123")
 - Starting a new feature/task
 - Implementing something while on main branch
 

@@ -1,6 +1,6 @@
 ---
 name: session-reporter
-description: Generate HTML file to view work session. Use when user asks to view content as HTML (e.g., 'HTML로 보여줘', 'HTML 파일로 만들어줘', 'view as HTML', 'export to HTML', 'HTML로 저장').
+description: Generate HTML file to view work session. Use when user asks to view content as HTML (e.g., 'view as HTML', 'export to HTML', 'create HTML file', 'save as HTML').
 allowed-tools: Write, Bash, AskUserQuestion
 ---
 
@@ -17,33 +17,33 @@ Follow these steps to generate a session report:
 Use the AskUserQuestion tool to determine what content to include:
 
 ```
-Question: "어떤 범위의 세션 내용을 HTML로 만들까요?"
+Question: "What scope of session content should be included in the HTML?"
 Options:
-- "마지막 작업만" (Last activity only - most recent task/conversation)
-- "전체 세션" (Full session - entire conversation from start)
-- "커스텀 선택" (Custom - ask user to specify what to include)
+- "Last activity only" (most recent task/conversation)
+- "Full session" (entire conversation from start)
+- "Custom" (ask user to specify what to include)
 ```
 
 ### 2. Collect Session Information
 
 Based on the user's choice, gather the following information:
 
-- **작업 요약 (Work Summary)**:
+- **Work Summary**:
   - Files modified
   - Key decisions made
   - Major changes implemented
 
-- **대화 내용 (Conversation)**:
+- **Conversation**:
   - User questions and requests
   - Claude's responses
   - Important clarifications
 
-- **코드 변경사항 (Code Changes)**:
+- **Code Changes**:
   - Modified files with diffs or before/after comparisons
   - New files created
   - Files deleted
 
-- **실행 결과 (Execution Results)**:
+- **Execution Results**:
   - Test results
   - Build output
   - Error messages
@@ -81,7 +81,7 @@ After generating the HTML file:
 ### 5. Inform User
 
 Tell the user:
-- HTML 파일이 생성되었고 브라우저에서 열렸습니다
+- The HTML file has been generated and opened in the browser
 - The file path for future reference
 - The file is temporary and will be cleaned up on system restart
 
@@ -90,18 +90,18 @@ Tell the user:
 ### Example 1: Last Activity Only
 
 ```
-User: HTML로 보여줘
+User: View as HTML
 Claude: [Uses AskUserQuestion to confirm scope]
-User: 마지막 작업만
+User: Last activity only
 Claude: [Generates HTML with recent changes only, opens in browser]
 ```
 
 ### Example 2: Full Session
 
 ```
-User: 전체 세션 내용을 HTML 파일로 만들어줘
+User: Create an HTML file with the full session
 Claude: [Uses AskUserQuestion to confirm]
-User: 전체 세션
+User: Full session
 Claude: [Generates comprehensive HTML with all conversation and changes]
 ```
 

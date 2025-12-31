@@ -1,6 +1,6 @@
 ---
 name: scaffold-claude-feature
-description: Claude Code 확장 기능(skill, slash command, subagent, hook, output style)의 기본 구조를 생성합니다. 새로운 skill을 만들거나, command 템플릿이 필요하거나, hook 설정을 시작할 때 사용합니다.
+description: Generate basic structure for Claude Code extension features (skill, slash command, subagent, hook, output style). Use when creating a new skill, needing a command template, or starting hook configuration.
 ---
 
 # Claude Code Feature Scaffolder

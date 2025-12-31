@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { Search, Package } from 'lucide-vue-next'
+import { Search, Package, LayoutGrid, List } from 'lucide-vue-next'
 import pluginData from '../../../data/plugins.json'
 import PluginCard from './PluginCard.vue'
 
@@ -29,6 +29,7 @@ interface Plugin {
 const searchQuery = ref('')
 const selectedCategory = ref('')
 const selectedComponent = ref('')
+const viewMode = ref<'card' | 'list'>('card')
 
 const categories = pluginData.categories
 const plugins = pluginData.plugins as Plugin[]
@@ -91,12 +92,12 @@ const clearFilters = () => {
 }
 
 const getCategoryLabel = (categoryId: string) => {
-  const lang = props.lang || 'ko'
+  const lang = props.lang || 'en'
   return categoryNames[categoryId]?.[lang] || categoryId
 }
 
 const labels = computed(() => {
-  const lang = props.lang || 'ko'
+  const lang = props.lang || 'en'
   return {
     searchPlaceholder: lang === 'ko' ? '플러그인 검색...' : 'Search plugins...',
     allCategories: lang === 'ko' ? '모든 카테고리' : 'All Categories',
@@ -138,6 +139,23 @@ const labels = computed(() => {
           <option value="hooks">Hooks</option>
           <option value="mcp">MCP Servers</option>
         </select>
+
+        <div class="view-toggle">
+          <button
+            :class="['view-toggle-btn', { active: viewMode === 'card' }]"
+            @click="viewMode = 'card'"
+            :title="lang === 'ko' ? '카드 보기' : 'Card view'"
+          >
+            <LayoutGrid :size="18" />
+          </button>
+          <button
+            :class="['view-toggle-btn', { active: viewMode === 'list' }]"
+            @click="viewMode = 'list'"
+            :title="lang === 'ko' ? '리스트 보기' : 'List view'"
+          >
+            <List :size="18" />
+          </button>
+        </div>
       </div>
     </div>
 
@@ -148,12 +166,13 @@ const labels = computed(() => {
       </button>
     </div>
 
-    <div v-if="filteredPlugins.length > 0" class="plugin-grid">
+    <div v-if="filteredPlugins.length > 0" :class="viewMode === 'card' ? 'plugin-grid' : 'plugin-list-view'">
       <PluginCard
         v-for="plugin in filteredPlugins"
         :key="plugin.id"
         :plugin="plugin"
         :lang="lang"
+        :view="viewMode"
       />
     </div>
 

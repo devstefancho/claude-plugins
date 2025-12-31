@@ -1,140 +1,140 @@
 ---
 name: code-style-reviewer
-description: 코드 스타일 원칙 기반 리뷰 - 단일책임원칙(SRP), DRY(Don't Repeat Yourself), 단순화 우선, YAGNI(You Aren't Gonna Need It), 타입 안전성을 검사합니다. 코드 구조와 명명규칙도 함께 평가합니다. 코드 리뷰가 필요할 때 자동으로 사용됩니다.
+description: Code style principle-based review - checks SRP (Single Responsibility Principle), DRY (Don't Repeat Yourself), Simplicity First, YAGNI (You Aren't Gonna Need It), and Type Safety. Also evaluates code structure and naming conventions. Automatically used when code review is needed.
 allowed-tools: Read, Grep, Glob
 ---
 
 # Code Style Reviewer
 
-코드 스타일 원칙에 따른 전문적인 코드 리뷰를 제공하는 Skill입니다. Claude가 직접 코드를 분석하여 5가지 핵심 원칙을 중심으로 상세한 리포트를 생성합니다.
+A skill that provides professional code review based on code style principles. Claude directly analyzes code and generates detailed reports focusing on 5 core principles.
 
-## 검사 원칙
+## Review Principles
 
-### 1. 단일책임원칙 (Single Responsibility Principle)
-클래스, 함수, 모듈은 하나의 책임만 가져야 합니다. 복잡한 함수는 여러 작은 함수로 분리되어야 합니다.
+### 1. Single Responsibility Principle (SRP)
+Classes, functions, and modules should have only one responsibility. Complex functions should be split into smaller functions.
 
 ### 2. DRY (Don't Repeat Yourself)
-같은 로직이 반복되면 안 됩니다. 공통 로직은 별도의 함수나 유틸리티로 추출해야 합니다.
+The same logic should not be repeated. Common logic should be extracted into separate functions or utilities.
 
-### 3. 단순화 우선
-복잡한 추상화보다는 이해하기 쉬운 단순한 코드를 우선합니다. 과도한 설계는 피합니다.
+### 3. Simplicity First
+Prefer simple, easy-to-understand code over complex abstractions. Avoid over-engineering.
 
 ### 4. YAGNI (You Aren't Gonna Need It)
-현재 필요하지 않은 기능은 추가하지 않습니다. 미래를 대비한 불필요한 코드는 제거해야 합니다.
+Do not add features that are not currently needed. Remove unnecessary code written for future use.
 
-### 5. 타입 안전성
-`any` 타입 사용을 최소화합니다. TypeScript를 사용할 때는 명확한 타입을 정의해야 합니다.
+### 5. Type Safety
+Minimize the use of `any` type. When using TypeScript, define clear types.
 
 ## Instructions
 
-### 리뷰 프로세스
+### Review Process
 
-1. **대상 파일 파악**
-   - 검토할 코드 파일을 Read 도구로 읽습니다
-   - 파일 구조와 전체 범위를 파악합니다
+1. **Identify Target Files**
+   - Read code files to review using the Read tool
+   - Understand file structure and scope
 
-2. **원칙별 분석**
-   - 각 파일에 대해 5가지 원칙을 체계적으로 검토합니다
-   - Grep을 사용하여 반복되는 패턴을 찾습니다
-   - 명명규칙의 일관성을 확인합니다
+2. **Principle-by-Principle Analysis**
+   - Systematically review each file against the 5 principles
+   - Use Grep to find repeating patterns
+   - Check naming convention consistency
 
-3. **상세 리포트 생성**
-   - 파일별로 구분된 리포트를 작성합니다
-   - 각 문제점에 대해 구체적인 개선 방안을 제시합니다
-   - 우선순위를 표시합니다:
-     - **Critical**: 반드시 수정해야 함
-     - **Warning**: 개선이 필요함
-     - **Suggestion**: 고려해볼 만함
+3. **Generate Detailed Report**
+   - Write reports organized by file
+   - Provide specific improvement suggestions for each issue
+   - Mark priorities:
+     - **Critical**: Must be fixed
+     - **Warning**: Needs improvement
+     - **Suggestion**: Worth considering
 
-4. **코드 예시 제공**
-   - 각 문제에 대해 "문제 코드" vs "개선 코드" 예시를 제시합니다
-   - 변경의 이유를 명확히 설명합니다
+4. **Provide Code Examples**
+   - Present "Problem Code" vs "Improved Code" examples for each issue
+   - Clearly explain the reason for the change
 
-## 리뷰 체크리스트
+## Review Checklist
 
-### 단일책임원칙 검사
-- [ ] 함수가 하나의 작업만 수행하는가?
-- [ ] 클래스가 하나의 책임만 가지는가?
-- [ ] 복잡한 로직이 작은 함수로 분리되어 있는가?
-- [ ] 함수의 길이가 적절한가? (권장: 20줄 이하)
+### Single Responsibility Principle Check
+- [ ] Does the function perform only one task?
+- [ ] Does the class have only one responsibility?
+- [ ] Is complex logic split into smaller functions?
+- [ ] Is the function length appropriate? (Recommended: under 20 lines)
 
-### DRY 검사
-- [ ] 반복되는 코드가 있는가?
-- [ ] 공통 로직이 추출되었는가?
-- [ ] 설정 값이 하드코딩되지 않았는가?
-- [ ] 유사한 구조의 코드가 통합될 수 있는가?
+### DRY Check
+- [ ] Is there repeated code?
+- [ ] Has common logic been extracted?
+- [ ] Are config values not hardcoded?
+- [ ] Can similar code structures be consolidated?
 
-### 단순화 우선 검사
-- [ ] 불필요한 추상화가 있는가?
-- [ ] 복잡한 문법 대신 단순한 표현을 사용했는가?
-- [ ] 깊은 중첩 구조가 있는가? (권장: 3단계 이내)
-- [ ] 과도하게 우아한(overly clever) 코드가 있는가?
+### Simplicity First Check
+- [ ] Are there unnecessary abstractions?
+- [ ] Are simple expressions used instead of complex syntax?
+- [ ] Is there deep nesting? (Recommended: within 3 levels)
+- [ ] Is there overly clever code?
 
-### YAGNI 검사
-- [ ] 사용되지 않는 코드가 있는가?
-- [ ] 미래를 대비한 불필요한 기능이 있는가?
-- [ ] 제거할 수 있는 매개변수가 있는가?
-- [ ] 죽은(dead) 코드나 주석이 있는가?
+### YAGNI Check
+- [ ] Is there unused code?
+- [ ] Are there unnecessary features added "just in case"?
+- [ ] Are there removable parameters?
+- [ ] Is there dead code or commented-out code?
 
-### 타입 안전성 검사 (TypeScript)
-- [ ] `any` 타입이 사용되었는가?
-- [ ] 모든 함수의 매개변수에 타입이 정의되었는가?
-- [ ] 반환 타입이 명시적인가?
-- [ ] `interface`와 `type`을 적절히 사용했는가?
+### Type Safety Check (TypeScript)
+- [ ] Is `any` type used?
+- [ ] Do all function parameters have types defined?
+- [ ] Are return types explicit?
+- [ ] Are `interface` and `type` used appropriately?
 
-### 명명규칙 검사
-- [ ] 변수명이 명확하고 의미있는가?
-- [ ] 함수명이 동사로 시작하는가?
-- [ ] 클래스명이 명사이고 PascalCase인가?
-- [ ] 상수가 UPPER_SNAKE_CASE인가?
-- [ ] 명명규칙이 일관성 있는가?
+### Naming Convention Check
+- [ ] Are variable names meaningful and clear?
+- [ ] Do function names start with verbs?
+- [ ] Are class names nouns in PascalCase?
+- [ ] Are constants in UPPER_SNAKE_CASE?
+- [ ] Are naming conventions consistent?
 
-## 예시
+## Examples
 
-자세한 예시와 패턴은 [EXAMPLES.md](EXAMPLES.md) 참고
-상세한 원칙 설명은 [PRINCIPLES.md](PRINCIPLES.md) 참고
+See [EXAMPLES.md](EXAMPLES.md) for detailed examples and patterns
+See [PRINCIPLES.md](PRINCIPLES.md) for detailed principle explanations
 
-## 리뷰 출력 형식
+## Review Output Format
 
 ```
 # Code Style Review Report
 
-## 📄 파일: [filename]
+## 📄 File: [filename]
 
-### ✅ 좋은 점
-- [좋은 사례들]
+### ✅ Good Points
+- [Good practices]
 
 ### ⚠️ Critical Issues
-**문제 1: [제목]**
-- 위치: [라인 또는 함수명]
-- 원칙: [해당 원칙]
-- 설명: [상세 설명]
-- 개선 방법:
+**Issue 1: [Title]**
+- Location: [Line or function name]
+- Principle: [Applicable principle]
+- Description: [Detailed explanation]
+- How to improve:
   ```
   // Before
-  [현재 코드]
+  [Current code]
 
   // After
-  [개선된 코드]
+  [Improved code]
   ```
 
 ### 📢 Warnings
-[경고 수준 문제들]
+[Warning-level issues]
 
 ### 💡 Suggestions
-[제안 수준의 개선 사항들]
+[Suggestion-level improvements]
 
-## 📊 종합 평가
-- 전체 코드 품질 점수: [X/10]
-- 가장 중요한 개선 사항: [상위 3개]
+## 📊 Overall Assessment
+- Overall code quality score: [X/10]
+- Most important improvements: [Top 3]
 ```
 
-## 사용 시나리오
+## Usage Scenarios
 
-이 Skill은 다음 상황에 자동으로 활용됩니다:
+This skill is automatically used in the following situations:
 
-- 코드 리뷰 요청 시
-- 코드 품질 분석 요청 시
-- 코드 구조 개선 조언 필요 시
-- 새로운 파일의 스타일 검사 시
-- 기존 코드의 리팩토링 제안 시
+- When code review is requested
+- When code quality analysis is requested
+- When code structure improvement advice is needed
+- When checking style of new files
+- When suggesting refactoring for existing code

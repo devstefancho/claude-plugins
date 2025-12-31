@@ -514,6 +514,132 @@
   gap: var(--space-6);
 }
 
+/* Plugin list view */
+.plugin-list-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* View toggle */
+.view-toggle {
+  display: flex;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--vp-c-bg);
+  border: none;
+  cursor: pointer;
+  color: var(--vp-c-text-3);
+  transition: all var(--transition-fast);
+}
+
+.view-toggle-btn:first-child {
+  border-right: 1px solid var(--vp-c-border);
+}
+
+.view-toggle-btn:hover {
+  background: var(--vp-c-bg-mute);
+  color: var(--vp-c-text-2);
+}
+
+.view-toggle-btn.active {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+
+/* List view card styling */
+.plugin-card-list {
+  flex-direction: row;
+  align-items: flex-start;
+  padding: var(--space-4);
+  gap: var(--space-4);
+  border-radius: 12px;
+}
+
+.plugin-card-list:hover {
+  transform: none;
+}
+
+/* List view - Icon */
+.plugin-list-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--vp-c-bg-mute);
+  border-radius: 10px;
+  color: var(--vp-c-text-2);
+  flex-shrink: 0;
+}
+
+/* List view - Main content */
+.plugin-list-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.plugin-list-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.plugin-card-list .plugin-card-title {
+  font-size: var(--font-size-base);
+  margin: 0;
+}
+
+.plugin-card-list .plugin-card-version {
+  flex-shrink: 0;
+}
+
+.plugin-card-list .plugin-card-description {
+  -webkit-line-clamp: 2;
+  margin: 0;
+}
+
+/* List view - Right section */
+.plugin-list-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.plugin-card-list .plugin-card-badges {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  gap: var(--space-1);
+}
+
+.plugin-card-list .plugin-card-actions {
+  padding-top: 0;
+  gap: var(--space-2);
+}
+
+/* Small button variant */
+.btn-sm {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+}
+
+.plugin-card-list .btn-primary {
+  flex: none;
+}
+
 /* Empty state */
 .empty-state {
   display: flex;
@@ -678,11 +804,37 @@
   }
 
   .filter-group {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .view-toggle {
+    flex-shrink: 0;
   }
 
   .plugin-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* List view on mobile - stack vertically */
+  .plugin-card-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  .plugin-list-icon {
+    display: none;
+  }
+
+  .plugin-list-right {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .plugin-list-filters {

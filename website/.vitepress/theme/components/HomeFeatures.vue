@@ -52,7 +52,7 @@ const features = {
   ]
 }
 
-const currentFeatures = props.lang === 'en' ? features.en : features.ko
+const currentFeatures = props.lang === 'ko' ? features.ko : features.en
 </script>
 
 <template>

@@ -19,10 +19,10 @@ Generate HTML reports to visualize your Claude Code work sessions.
 
 The skill is invoked when you ask to view content as HTML:
 
-- "HTML로 보여줘"
-- "HTML 파일로 만들어줘"
 - "view as HTML"
 - "export to HTML"
+- "create HTML file"
+- "save as HTML"
 
 ## Report Contents
 

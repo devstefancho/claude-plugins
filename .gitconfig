@@ -1,0 +1,14 @@
+[user]
+	name = devstefancho
+	email = skku7714@gmail.com
+	signingKey = 4B067576836CFAE2 
+[push]
+	default = current
+	autoSetupRemote = true
+[commit]
+	gpgsign = true
+	template = /Users/devstefancho/.gitmessage.txt
+[core]
+	editor = nvim
+
+

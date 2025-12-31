@@ -1,47 +1,47 @@
-# Code Style Principles - 상세 가이드
+# Code Style Principles - Detailed Guide
 
-## 1. 단일책임원칙 (Single Responsibility Principle - SRP)
+## 1. Single Responsibility Principle (SRP)
 
-### 개념
-"하나의 클래스나 함수는 하나의 변경 이유만 가져야 한다"
+### Concept
+"A class or function should have only one reason to change"
 
-### 왜 중요한가?
-- 코드 이해와 유지보수가 쉬워집니다
-- 테스트가 간단해집니다
-- 재사용성이 높아집니다
-- 변경 영향도가 최소화됩니다
+### Why is it important?
+- Makes code easier to understand and maintain
+- Simplifies testing
+- Increases reusability
+- Minimizes change impact
 
-### 체크리스트
-- [ ] 함수가 한 가지 작업만 수행하는가?
-- [ ] 함수가 여러 이유로 변경될 가능성이 있는가?
-- [ ] 클래스가 여러 책임을 가지고 있는가?
-- [ ] 함수의 이름이 무엇을 하는지 정확히 설명하는가?
-- [ ] 함수를 한 문장으로 설명할 수 있는가?
+### Checklist
+- [ ] Does the function perform only one task?
+- [ ] Could the function change for multiple reasons?
+- [ ] Does the class have multiple responsibilities?
+- [ ] Does the function name accurately describe what it does?
+- [ ] Can you describe the function in one sentence?
 
-### 나쁜 예
+### Bad Example
 ```typescript
-// 여러 책임을 가진 함수
+// Function with multiple responsibilities
 function processUserOrder(userId: string, items: Item[]) {
-  // 1. 사용자 검증
+  // 1. User validation
   const user = validateUser(userId);
 
-  // 2. 주문 생성
+  // 2. Create order
   const order = createOrder(user, items);
 
-  // 3. 결제 처리
+  // 3. Process payment
   processPayment(order);
 
-  // 4. 이메일 발송
+  // 4. Send email
   sendEmail(user.email, "Order confirmed");
 
-  // 5. 로깅
+  // 5. Logging
   logTransaction(order);
 }
 ```
 
-### 좋은 예
+### Good Example
 ```typescript
-// 각 함수가 하나의 책임만 가짐
+// Each function has only one responsibility
 function processUserOrder(userId: string, items: Item[]) {
   const user = validateUser(userId);
   const order = createOrder(user, items);
@@ -50,17 +50,17 @@ function processUserOrder(userId: string, items: Item[]) {
   recordTransaction(order);
 }
 
-// 결제만 담당
+// Handles only payment
 function handlePayment(order: Order): void {
   processPayment(order);
 }
 
-// 알림만 담당
+// Handles only notification
 function notifyUser(user: User, order: Order): void {
   sendEmail(user.email, "Order confirmed");
 }
 
-// 로깅만 담당
+// Handles only logging
 function recordTransaction(order: Order): void {
   logTransaction(order);
 }
@@ -70,25 +70,25 @@ function recordTransaction(order: Order): void {
 
 ## 2. DRY (Don't Repeat Yourself)
 
-### 개념
-"같은 코드는 한 번만 작성해야 한다"
+### Concept
+"The same code should be written only once"
 
-### 왜 중요한가?
-- 버그 수정이 한 곳에서만 필요합니다
-- 코드가 간결해집니다
-- 유지보수 비용이 감소합니다
-- 일관성이 보장됩니다
+### Why is it important?
+- Bug fixes are needed in only one place
+- Code becomes more concise
+- Maintenance costs decrease
+- Consistency is guaranteed
 
-### 체크리스트
-- [ ] 반복되는 패턴이나 로직이 있는가?
-- [ ] 유사한 함수들이 통합될 수 있는가?
-- [ ] 공통 로직이 유틸리티 함수로 추출되었는가?
-- [ ] 복사-붙여넣기한 코드가 있는가?
-- [ ] 같은 정규식이나 로직이 여러 곳에 있는가?
+### Checklist
+- [ ] Are there repeating patterns or logic?
+- [ ] Can similar functions be consolidated?
+- [ ] Has common logic been extracted into utility functions?
+- [ ] Is there copy-pasted code?
+- [ ] Is the same regex or logic in multiple places?
 
-### 나쁜 예
+### Bad Example
 ```typescript
-// 반복되는 검증 로직
+// Repeated validation logic
 function createUser(email: string, name: string) {
   if (!email || email.length === 0) {
     throw new Error("Email is required");
@@ -96,7 +96,7 @@ function createUser(email: string, name: string) {
   if (!name || name.length === 0) {
     throw new Error("Name is required");
   }
-  // 사용자 생성...
+  // Create user...
 }
 
 function createPost(title: string, content: string) {
@@ -106,13 +106,13 @@ function createPost(title: string, content: string) {
   if (!content || content.length === 0) {
     throw new Error("Content is required");
   }
-  // 포스트 생성...
+  // Create post...
 }
 ```
 
-### 좋은 예
+### Good Example
 ```typescript
-// 검증 로직을 한 곳에서 관리
+// Manage validation logic in one place
 function validateRequired(value: string, fieldName: string): void {
   if (!value || value.length === 0) {
     throw new Error(`${fieldName} is required`);
@@ -122,39 +122,39 @@ function validateRequired(value: string, fieldName: string): void {
 function createUser(email: string, name: string) {
   validateRequired(email, "Email");
   validateRequired(name, "Name");
-  // 사용자 생성...
+  // Create user...
 }
 
 function createPost(title: string, content: string) {
   validateRequired(title, "Title");
   validateRequired(content, "Content");
-  // 포스트 생성...
+  // Create post...
 }
 ```
 
 ---
 
-## 3. 단순화 우선 (Simplicity First)
+## 3. Simplicity First
 
-### 개념
-"복잡한 추상화보다는 이해하기 쉬운 단순한 코드를 우선한다"
+### Concept
+"Prefer simple, easy-to-understand code over complex abstractions"
 
-### 왜 중요한가?
-- 새로운 팀원이 빨리 코드를 이해합니다
-- 버그가 적어집니다
-- 유지보수가 쉬워집니다
-- 과도한 설계를 피합니다
+### Why is it important?
+- New team members understand code quickly
+- Fewer bugs
+- Easier maintenance
+- Avoids over-engineering
 
-### 체크리스트
-- [ ] 코드를 읽고 쉽게 이해할 수 있는가?
-- [ ] 불필요한 추상화가 있는가?
-- [ ] 깊은 중첩이 있는가? (3단계 이상)
-- [ ] 과도하게 우아한(clever) 코드가 있는가?
-- [ ] 한 줄의 코드로 너무 많은 작업을 하는가?
+### Checklist
+- [ ] Can you read and easily understand the code?
+- [ ] Are there unnecessary abstractions?
+- [ ] Is there deep nesting? (3+ levels)
+- [ ] Is there overly clever code?
+- [ ] Does a single line do too many things?
 
-### 나쁜 예
+### Bad Example
 ```typescript
-// 불필요한 추상화와 복잡성
+// Unnecessary abstraction and complexity
 interface Strategy {
   execute(data: any): any;
 }
@@ -169,21 +169,21 @@ class ComplexStrategy implements Strategy {
   };
 }
 
-// 깊은 중첩
+// Deep nesting
 if (user) {
   if (user.isActive) {
     if (user.permissions) {
       if (user.permissions.includes('admin')) {
-        // 실제 작업
+        // Actual work
       }
     }
   }
 }
 ```
 
-### 좋은 예
+### Good Example
 ```typescript
-// 단순하고 명확한 구현
+// Simple and clear implementation
 function doubleNumbers(obj: Record<string, any>): Record<string, any> {
   return Object.entries(obj).reduce((acc, [key, value]) => {
     acc[key] = typeof value === 'number' ? value * 2 : value;
@@ -191,7 +191,7 @@ function doubleNumbers(obj: Record<string, any>): Record<string, any> {
   }, {} as Record<string, any>);
 }
 
-// Early return으로 중첩 제거
+// Remove nesting with early return
 function checkAdminPermission(user: User): boolean {
   if (!user) return false;
   if (!user.isActive) return false;
@@ -199,7 +199,7 @@ function checkAdminPermission(user: User): boolean {
   return user.permissions.includes('admin');
 }
 
-// 더 나은 방식
+// Even better approach
 function isAdmin(user: User): boolean {
   return user?.isActive && user?.permissions?.includes('admin') ?? false;
 }
@@ -209,55 +209,55 @@ function isAdmin(user: User): boolean {
 
 ## 4. YAGNI (You Aren't Gonna Need It)
 
-### 개념
-"현재 필요하지 않은 기능은 구현하지 않는다"
+### Concept
+"Don't implement features that are not currently needed"
 
-### 왜 중요한가?
-- 코드 복잡도를 낮춥니다
-- 유지보수해야 할 코드의 양을 줄입니다
-- 미래 변경에 더 유연하게 대응합니다
-- 불필요한 버그의 원인을 제거합니다
+### Why is it important?
+- Reduces code complexity
+- Reduces the amount of code to maintain
+- Enables more flexible response to future changes
+- Eliminates sources of unnecessary bugs
 
-### 체크리스트
-- [ ] 사용되지 않는 코드가 있는가?
-- [ ] 사용되지 않는 매개변수가 있는가?
-- [ ] "나중에 필요할 것 같아서" 추가한 기능이 있는가?
-- [ ] 테스트되지 않는 코드가 있는가?
-- [ ] 주석 처리된 코드가 있는가?
+### Checklist
+- [ ] Is there unused code?
+- [ ] Are there unused parameters?
+- [ ] Are there features added "just in case"?
+- [ ] Is there untested code?
+- [ ] Is there commented-out code?
 
-### 나쁜 예
+### Bad Example
 ```typescript
-// 사용되지 않는 기능과 매개변수
+// Unused features and parameters
 interface UserService {
-  // 현재는 사용하지 않지만, 나중에 필요할 것 같아서 추가
+  // Currently not used but added "just in case"
   createUser(email: string, name: string, preferredLanguage?: string): User;
   updateUser(id: string, data: Partial<User>): User;
   deleteUser(id: string): void;
-  // 나중에 필요할 것 같아서 추가
+  // Added "just in case"
   suspendUser(id: string, reason: string): User;
   archiveUser(id: string): User;
 }
 
 function getUserFullInfo(userId: string, includeAnalytics?: boolean, includeHistory?: boolean, includeFuturePredictions?: boolean) {
-  // 현재는 includeAnalytics와 includeFuturePredictions를 사용하지 않음
+  // Currently not using includeAnalytics and includeFuturePredictions
   const user = getUser(userId);
   // ...
 }
 ```
 
-### 좋은 예
+### Good Example
 ```typescript
-// 필요한 기능만 구현
+// Implement only needed features
 interface UserService {
   createUser(email: string, name: string): User;
   updateUser(id: string, data: Partial<User>): User;
   deleteUser(id: string): void;
-  // 필요해지면 그때 추가
+  // Add when needed
 }
 
 function getUserFullInfo(userId: string) {
   const user = getUser(userId);
-  // 필요한 정보만 반환
+  // Return only needed information
   return {
     id: user.id,
     email: user.email,
@@ -265,7 +265,7 @@ function getUserFullInfo(userId: string) {
   };
 }
 
-// 미래에 필요하면 그때 추가
+// Add when needed in the future
 function getUserWithAnalytics(userId: string) {
   const user = getUser(userId);
   const analytics = getAnalytics(userId);
@@ -275,27 +275,27 @@ function getUserWithAnalytics(userId: string) {
 
 ---
 
-## 5. 타입 안전성 (Type Safety)
+## 5. Type Safety
 
-### 개념
-"`any` 타입을 피하고, 명확한 타입 정의를 사용한다" (TypeScript)
+### Concept
+"Avoid `any` type and use clear type definitions" (TypeScript)
 
-### 왜 중요한가?
-- 런타임 에러를 개발 단계에서 발견합니다
-- IDE의 자동완성이 정확해집니다
-- 코드 리팩토링이 안전합니다
-- 의도가 명확해집니다
+### Why is it important?
+- Catch runtime errors during development
+- IDE autocomplete becomes accurate
+- Code refactoring is safe
+- Intent becomes clear
 
-### 체크리스트
-- [ ] `any` 타입이 사용되었는가?
-- [ ] 함수의 매개변수에 타입이 모두 정의되었는가?
-- [ ] 함수의 반환 타입이 명시되었는가?
-- [ ] 객체의 모양이 `interface`로 정의되었는가?
-- [ ] `unknown` 타입을 사용할 때 타입 가드가 있는가?
+### Checklist
+- [ ] Is `any` type used?
+- [ ] Do all function parameters have types defined?
+- [ ] Are return types explicit?
+- [ ] Are object shapes defined with `interface`?
+- [ ] When using `unknown` type, are there type guards?
 
-### 나쁜 예
+### Bad Example
 ```typescript
-// any 타입 남용
+// any type overuse
 function processData(data: any): any {
   return data.map((item: any) => {
     return {
@@ -305,21 +305,21 @@ function processData(data: any): any {
   });
 }
 
-// 타입이 없는 반환값
+// Function without types
 function getUserData(id) {
   // ...
   return user;
 }
 
-// 암묵적 any
+// Implicit any
 function filterItems(items, predicate) {
   return items.filter(predicate);
 }
 ```
 
-### 좋은 예
+### Good Example
 ```typescript
-// 명확한 타입 정의
+// Clear type definitions
 interface DataItem {
   id: string;
   value: number;
@@ -333,7 +333,7 @@ function processData(data: DataItem[]): DataItem[] {
   }));
 }
 
-// 명시적 반환 타입
+// Explicit return type
 interface User {
   id: string;
   email: string;
@@ -345,12 +345,12 @@ function getUserData(id: string): User {
   return user;
 }
 
-// 제네릭으로 유연성 유지
+// Maintain flexibility with generics
 function filterItems<T>(items: T[], predicate: (item: T) => boolean): T[] {
   return items.filter(predicate);
 }
 
-// unknown을 사용할 때는 타입 가드 필수
+// Type guards required when using unknown
 function process(data: unknown): void {
   if (typeof data === 'string') {
     console.log(data.toUpperCase());
@@ -362,84 +362,84 @@ function process(data: unknown): void {
 
 ---
 
-## 6. 명명규칙 (Naming Conventions)
+## 6. Naming Conventions
 
-### 개념
-"코드는 인간을 위해 작성되며, 명확한 이름이 코드의 의도를 전달한다"
+### Concept
+"Code is written for humans, and clear names convey the intent of the code"
 
-### 체크리스트
-- [ ] 변수명이 의미있고 명확한가?
-- [ ] 함수명이 동사로 시작하는가?
-- [ ] 클래스명이 명사이고 PascalCase인가?
-- [ ] 상수가 UPPER_SNAKE_CASE인가?
-- [ ] 명명규칙이 일관성 있는가?
+### Checklist
+- [ ] Are variable names meaningful and clear?
+- [ ] Do function names start with verbs?
+- [ ] Are class names nouns in PascalCase?
+- [ ] Are constants in UPPER_SNAKE_CASE?
+- [ ] Are naming conventions consistent?
 
-### 나쁜 예
+### Bad Example
 ```typescript
-// 의미없는 이름
+// Meaningless names
 const x = 10;
 const temp = userData;
 const fn = (a) => a * 2;
 
-// 일관성 없는 명명
+// Inconsistent naming
 const max_count = 100;
 const itemTotal = 50;
 const MaxValue = 200;
 
-// 너무 긴 이름
+// Name too long
 const userDataForProcessingAndStorageButNotForDeletionOrModification = user;
 ```
 
-### 좋은 예
+### Good Example
 ```typescript
-// 명확한 이름
+// Clear names
 const maxRetries = 10;
 const userProfile = userData;
 const doubleNumber = (value: number) => value * 2;
 
-// 일관성 있는 명명 (camelCase for variables/functions)
+// Consistent naming (camelCase for variables/functions)
 const maxCount = 100;
 const itemTotal = 50;
 const maxValue = 200;
 
-// 적절한 길이
+// Appropriate length
 const userForProcessing = user;
 ```
 
-### 명명 규칙 요약
+### Naming Convention Summary
 
-| 대상 | 규칙 | 예시 |
-|------|------|------|
-| 변수 | camelCase | `userName`, `isActive`, `itemCount` |
-| 함수 | camelCase + 동사 | `getUserData`, `validateEmail`, `calculateTotal` |
-| 클래스 | PascalCase | `UserService`, `ValidationHelper`, `ApiClient` |
-| 상수 | UPPER_SNAKE_CASE | `MAX_RETRY`, `DEFAULT_TIMEOUT`, `API_KEY` |
-| 파일 | lowercase + kebab-case | `user-service.ts`, `api-client.ts` |
-| 인터페이스 | PascalCase + I prefix (선택) | `IUser` 또는 `User` |
+| Target | Rule | Example |
+|--------|------|---------|
+| Variable | camelCase | `userName`, `isActive`, `itemCount` |
+| Function | camelCase + verb | `getUserData`, `validateEmail`, `calculateTotal` |
+| Class | PascalCase | `UserService`, `ValidationHelper`, `ApiClient` |
+| Constant | UPPER_SNAKE_CASE | `MAX_RETRY`, `DEFAULT_TIMEOUT`, `API_KEY` |
+| File | lowercase + kebab-case | `user-service.ts`, `api-client.ts` |
+| Interface | PascalCase + I prefix (optional) | `IUser` or `User` |
 | Enum | PascalCase | `UserStatus`, `PaymentMethod` |
 
 ---
 
-## 종합 체크리스트
+## Comprehensive Checklist
 
-코드 리뷰 시 확인할 항목들:
+Items to check during code review:
 
-### 구조 (Structure)
-- [ ] 함수/클래스가 하나의 책임만 가지는가? (SRP)
-- [ ] 반복되는 코드가 추출되었는가? (DRY)
-- [ ] 코드가 간단하고 이해하기 쉬운가? (Simplicity)
+### Structure
+- [ ] Do functions/classes have only one responsibility? (SRP)
+- [ ] Has repeated code been extracted? (DRY)
+- [ ] Is the code simple and easy to understand? (Simplicity)
 
-### 기능 (Functionality)
-- [ ] 필요한 기능만 구현되었는가? (YAGNI)
-- [ ] 사용되지 않는 코드가 없는가?
-- [ ] 타입이 안전하게 정의되었는가? (Type Safety)
+### Functionality
+- [ ] Are only needed features implemented? (YAGNI)
+- [ ] Is there no unused code?
+- [ ] Are types safely defined? (Type Safety)
 
-### 스타일 (Style)
-- [ ] 명명규칙이 일관성 있는가?
-- [ ] 코드 형식이 일관성 있는가?
-- [ ] 주석이 적절히 작성되었는가?
+### Style
+- [ ] Are naming conventions consistent?
+- [ ] Is code formatting consistent?
+- [ ] Are comments appropriately written?
 
-### 테스트 (Testing)
-- [ ] 함수가 테스트 가능한 크기인가?
-- [ ] 엣지 케이스가 처리되었는가?
-- [ ] 에러 처리가 적절한가?
+### Testing
+- [ ] Is the function size testable?
+- [ ] Are edge cases handled?
+- [ ] Is error handling appropriate?

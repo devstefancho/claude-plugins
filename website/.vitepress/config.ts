@@ -2,9 +2,39 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Claude Plugins',
-  description: 'Claude Code 플러그인 마켓플레이스',
+  description: 'Claude Code Plugin Marketplace',
 
   locales: {
+    root: {
+      label: 'English',
+      lang: 'en',
+      themeConfig: {
+        nav: [
+          { text: 'Home', link: '/' },
+          { text: 'Plugins', link: '/plugins/' },
+          { text: 'Guide', link: '/guide/getting-started' }
+        ],
+        sidebar: {
+          '/guide/': [
+            {
+              text: 'Getting Started',
+              items: [
+                { text: 'Introduction', link: '/guide/getting-started' },
+                { text: 'Installation', link: '/guide/installation' }
+              ]
+            }
+          ],
+          '/plugins/': [
+            {
+              text: 'Plugins',
+              items: [
+                { text: 'All Plugins', link: '/plugins/' }
+              ]
+            }
+          ]
+        }
+      }
+    },
     ko: {
       label: '한국어',
       lang: 'ko',
@@ -40,37 +70,6 @@ export default defineConfig({
         docFooter: {
           prev: '이전',
           next: '다음'
-        }
-      }
-    },
-    en: {
-      label: 'English',
-      lang: 'en',
-      link: '/en/',
-      themeConfig: {
-        nav: [
-          { text: 'Home', link: '/en/' },
-          { text: 'Plugins', link: '/en/plugins/' },
-          { text: 'Guide', link: '/en/guide/getting-started' }
-        ],
-        sidebar: {
-          '/en/guide/': [
-            {
-              text: 'Getting Started',
-              items: [
-                { text: 'Introduction', link: '/en/guide/getting-started' },
-                { text: 'Installation', link: '/en/guide/installation' }
-              ]
-            }
-          ],
-          '/en/plugins/': [
-            {
-              text: 'Plugins',
-              items: [
-                { text: 'All Plugins', link: '/en/plugins/' }
-              ]
-            }
-          ]
         }
       }
     }

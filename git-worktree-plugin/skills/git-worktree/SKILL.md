@@ -8,8 +8,8 @@ description: Manage git worktrees for parallel branch work. PROACTIVELY USE when
 ## Proactive Usage Triggers
 
 When the user mentions any of these, IMMEDIATELY ask if they want to create a new worktree:
-- Working on a PR (e.g., "PR #9 작업하자", "work on PR #123")
-- Starting a new feature/task (e.g., "새 기능 구현", "이슈 처리")
+- Working on a PR (e.g., "Let's work on PR #9", "work on PR #123")
+- Starting a new feature/task (e.g., "implement new feature", "handle issue")
 - Implementing something new while on main branch
 
 **Ask BEFORE proceeding with implementation work.**

@@ -1,21 +1,21 @@
-# Code Style Examples - 좋은 코드 vs 나쁜 코드
+# Code Style Examples - Good Code vs Bad Code
 
-## TypeScript / JavaScript 예제
+## TypeScript / JavaScript Examples
 
-### 예제 1: 단일책임원칙 (SRP)
+### Example 1: Single Responsibility Principle (SRP)
 
-#### ❌ 나쁜 예
+#### ❌ Bad Example
 ```typescript
 class UserManager {
-  // 여러 책임을 가짐: 사용자 데이터, 검증, 저장, 이메일 발송
+  // Has multiple responsibilities: user data, validation, storage, email sending
 
   async createUser(userData: any) {
-    // 1. 검증
+    // 1. Validation
     if (!userData.email) throw new Error("Email required");
     if (!userData.name) throw new Error("Name required");
     if (userData.email.length < 5) throw new Error("Invalid email");
 
-    // 2. 데이터 변환
+    // 2. Data transformation
     const user = {
       id: Math.random().toString(),
       email: userData.email,
@@ -24,11 +24,11 @@ class UserManager {
       role: 'user'
     };
 
-    // 3. 저장
+    // 3. Storage
     const db = require('./db');
     db.save('users', user);
 
-    // 4. 이메일 발송
+    // 4. Email sending
     const mailer = require('nodemailer');
     await mailer.send({
       to: user.email,
@@ -36,7 +36,7 @@ class UserManager {
       html: `<h1>Welcome ${user.name}</h1>`
     });
 
-    // 5. 로깅
+    // 5. Logging
     console.log(`User created: ${user.id}`);
     const logger = require('./logger');
     logger.log('user_created', { userId: user.id, email: user.email });
@@ -46,9 +46,9 @@ class UserManager {
 }
 ```
 
-#### ✅ 좋은 예
+#### ✅ Good Example
 ```typescript
-// 각각의 책임을 분리
+// Separate responsibilities
 class UserValidator {
   validate(userData: UserInput): void {
     if (!userData.email) throw new Error("Email required");
@@ -124,11 +124,11 @@ class UserService {
 
 ---
 
-### 예제 2: DRY (Don't Repeat Yourself)
+### Example 2: DRY (Don't Repeat Yourself)
 
-#### ❌ 나쁜 예
+#### ❌ Bad Example
 ```typescript
-// 반복되는 검증 로직
+// Repeated validation logic
 function validateUserEmail(email: string): boolean {
   if (!email) return false;
   if (email.trim().length === 0) return false;
@@ -150,7 +150,7 @@ function validateOrganizationEmail(email: string): boolean {
   return true;
 }
 
-// 반복되는 API 호출 패턴
+// Repeated API call pattern
 async function getUsersFromAPI(apiKey: string): Promise<any> {
   const response = await fetch('https://api.example.com/users', {
     headers: { 'Authorization': `Bearer ${apiKey}` }
@@ -176,21 +176,21 @@ async function getOrdersFromAPI(apiKey: string): Promise<any> {
 }
 ```
 
-#### ✅ 좋은 예
+#### ✅ Good Example
 ```typescript
-// 공통 검증 함수
+// Common validation function
 function isValidEmail(email: string): boolean {
   if (!email) return false;
   if (email.trim().length === 0) return false;
   return email.includes('@');
 }
 
-// 모든 곳에서 재사용
+// Reuse everywhere
 const isUserEmailValid = isValidEmail(userEmail);
 const isProductEmailValid = isValidEmail(productEmail);
 const isOrgEmailValid = isValidEmail(orgEmail);
 
-// 공통 API 클라이언트
+// Common API client
 class ApiClient {
   constructor(private apiKey: string, private baseUrl: string) {}
 
@@ -207,7 +207,7 @@ class ApiClient {
   }
 }
 
-// 사용
+// Usage
 const apiClient = new ApiClient(apiKey, 'https://api.example.com');
 const users = await apiClient.fetch<User[]>('/users');
 const products = await apiClient.fetch<Product[]>('/products');
@@ -216,11 +216,11 @@ const orders = await apiClient.fetch<Order[]>('/orders');
 
 ---
 
-### 예제 3: 단순화 우선 (Simplicity First)
+### Example 3: Simplicity First
 
-#### ❌ 나쁜 예
+#### ❌ Bad Example
 ```typescript
-// 불필요한 추상화와 복잡한 로직
+// Unnecessary abstraction and complex logic
 interface DataProcessor {
   process(data: any[]): any[];
 }
@@ -243,7 +243,7 @@ class ComplexDataProcessor implements DataProcessor {
                 }), {}), [])[0], {});
 }
 
-// 깊은 중첩
+// Deep nesting
 function checkPermissions(user: User): boolean {
   if (user) {
     if (user.isActive) {
@@ -264,9 +264,9 @@ function checkPermissions(user: User): boolean {
 }
 ```
 
-#### ✅ 좋은 예
+#### ✅ Good Example
 ```typescript
-// 단순하고 명확한 구현
+// Simple and clear implementation
 function doubleNumbers<T extends Record<string, any>>(data: T[]): T[] {
   return data.map(item => {
     const result = { ...item };
@@ -279,7 +279,7 @@ function doubleNumbers<T extends Record<string, any>>(data: T[]): T[] {
   });
 }
 
-// Early return으로 중첩 제거
+// Remove nesting with early return
 function hasCreateUserPermission(user: User): boolean {
   if (!user?.isActive) return false;
   if (!user.roles || user.roles.length === 0) return false;
@@ -288,7 +288,7 @@ function hasCreateUserPermission(user: User): boolean {
   return adminRole?.permissions?.includes('create_user') ?? false;
 }
 
-// Optional chaining과 nullish coalescing
+// Optional chaining and nullish coalescing
 function canCreateUser(user: User): boolean {
   return user?.isActive &&
          user?.roles?.some(r => r.name === 'admin' && r.permissions?.includes('create_user')) ?? false;
@@ -297,17 +297,17 @@ function canCreateUser(user: User): boolean {
 
 ---
 
-### 예제 4: YAGNI (You Aren't Gonna Need It)
+### Example 4: YAGNI (You Aren't Gonna Need It)
 
-#### ❌ 나쁜 예
+#### ❌ Bad Example
 ```typescript
-// 사용되지 않는 기능들
+// Unused features
 interface UserService {
-  // 현재 사용: 필수
+  // Currently used: required
   getUser(id: string): Promise<User>;
   createUser(email: string, name: string): Promise<User>;
 
-  // 사용 안 함: "나중에 필요할 것 같아서" 추가
+  // Not used: added "just in case"
   archiveUser(id: string): Promise<void>;
   restoreUser(id: string): Promise<void>;
   bulkCreateUsers(users: UserInput[]): Promise<User[]>;
@@ -316,20 +316,20 @@ interface UserService {
   predictChurn(userId: string): Promise<number>;
 }
 
-// 사용되지 않는 매개변수
+// Unused parameters
 function fetchUserData(
   userId: string,
-  includeProfilePicture?: boolean,  // 사용 안 함
-  includeFollowers?: boolean,        // 사용 안 함
-  analyzeActivity?: boolean,         // 사용 안 함
-  includeFuturePreferences?: boolean // 사용 안 함
+  includeProfilePicture?: boolean,  // Not used
+  includeFollowers?: boolean,        // Not used
+  analyzeActivity?: boolean,         // Not used
+  includeFuturePreferences?: boolean // Not used
 ): User {
   const user = getUser(userId);
-  // userId와 기본 정보만 사용
+  // Only uses userId and basic info
   return user;
 }
 
-// 주석 처리된 코드
+// Commented-out code
 function saveData(data: any) {
   // const oldWay = JSON.stringify(data);
   // localStorage.setItem('data', oldWay);
@@ -342,28 +342,28 @@ function saveData(data: any) {
 }
 ```
 
-#### ✅ 좋은 예
+#### ✅ Good Example
 ```typescript
-// 필요한 기능만 정의
+// Define only needed features
 interface UserService {
   getUser(id: string): Promise<User>;
   createUser(email: string, name: string): Promise<User>;
-  // 필요하면 나중에 추가
+  // Add later when needed
 }
 
-// 필요한 매개변수만
+// Only needed parameters
 function fetchUserData(userId: string): User {
   return getUser(userId);
 }
 
-// 필요하면 나중에 새 함수로 추가
+// Add as a new function when needed later
 function fetchUserWithFollowers(userId: string): UserWithFollowers {
   const user = getUser(userId);
   const followers = getFollowers(userId);
   return { ...user, followers };
 }
 
-// 깔끔한 코드: 주석 처리 제거
+// Clean code: remove commented-out code
 function saveData(data: any) {
   sendToNewServer(data);
 }
@@ -371,11 +371,11 @@ function saveData(data: any) {
 
 ---
 
-### 예제 5: 타입 안전성 (Type Safety)
+### Example 5: Type Safety
 
-#### ❌ 나쁜 예
+#### ❌ Bad Example
 ```typescript
-// any 타입 남용
+// any type overuse
 function processData(data: any): any {
   return data.map((item: any) => {
     return {
@@ -385,31 +385,31 @@ function processData(data: any): any {
   });
 }
 
-// 타입이 없는 함수
+// Function without types
 function calculateTotal(items) {
   return items.reduce((sum, item) => sum + item.price, 0);
 }
 
-// 암묵적 any
+// Implicit any
 function filterData(array, key, value) {
   return array.filter(item => item[key] === value);
 }
 
-// 잘못된 타입 사용
+// Wrong type usage
 type UserData = {
-  [key: string]: any  // 이것도 any와 마찬가지
+  [key: string]: any  // Same as any
 };
 
 const user: UserData = {
   name: 'John',
   age: 30,
-  email: true  // 타입 체크 불가
+  email: true  // Cannot type check
 };
 ```
 
-#### ✅ 좋은 예
+#### ✅ Good Example
 ```typescript
-// 명확한 타입 정의
+// Clear type definitions
 interface DataItem {
   name: string;
   value: number;
@@ -422,7 +422,7 @@ function processData(data: DataItem[]): DataItem[] {
   }));
 }
 
-// 명시적 타입과 반환형
+// Explicit types and return type
 interface CartItem {
   price: number;
   quantity: number;
@@ -432,7 +432,7 @@ function calculateTotal(items: CartItem[]): number {
   return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
-// 제네릭으로 유연성 유지
+// Maintain flexibility with generics
 function filterByProperty<T>(
   array: T[],
   key: keyof T,
@@ -441,7 +441,7 @@ function filterByProperty<T>(
   return array.filter(item => item[key] === value);
 }
 
-// 명확한 타입 정의
+// Clear type definition
 interface User {
   name: string;
   age: number;
@@ -454,7 +454,7 @@ const user: User = {
   email: 'john@example.com'
 };
 
-// unknown으로 안전하게 처리
+// Safe handling with unknown
 function process(data: unknown): void {
   if (typeof data === 'string') {
     console.log(data.toUpperCase());
@@ -468,79 +468,79 @@ function process(data: unknown): void {
 
 ---
 
-### 예제 6: 명명규칙 (Naming Conventions)
+### Example 6: Naming Conventions
 
-#### ❌ 나쁜 예
+#### ❌ Bad Example
 ```typescript
-// 의미없는 이름
+// Meaningless names
 const x = 10;
 const temp = user;
 const tmp1 = calculateTotal(items);
 const a = getData();
 const fn = (b) => b * 2;
 
-// 일관성 없는 명명
+// Inconsistent naming
 const max_count = 100;
 const itemTotal = 50;
 const MaxValue = 200;
 const user_status = 'active';
 
-// 너무 긴 이름
+// Name too long
 const userDataThatWillBeProcessedAndStoredButNotDeletedOrModifiedInAnyWayShapeOrForm = user;
 
-// 약어 남용
+// Abbreviation overuse
 const usr = getUser();
 const adr = getAddress();
 const phn = getPhone();
 const nps = calculateScore();
 
-// 부정확한 이름
-const userData = items;  // userData인데 items를 저장?
-const getTotalPrice = () => items.length;  // getTotalPrice인데 길이를 반환?
+// Inaccurate names
+const userData = items;  // userData but stores items?
+const getTotalPrice = () => items.length;  // getTotalPrice but returns length?
 ```
 
-#### ✅ 좋은 예
+#### ✅ Good Example
 ```typescript
-// 명확한 이름
+// Clear names
 const maxRetries = 10;
 const userProfile = user;
 const cartTotal = calculateTotal(items);
 const userData = getData();
 const doubleValue = (value: number) => value * 2;
 
-// 일관성 있는 명명 (camelCase)
+// Consistent naming (camelCase)
 const maxCount = 100;
 const itemTotal = 50;
 const maxValue = 200;
 const userStatus = 'active';
 
-// 적절한 길이의 이름
+// Appropriate length names
 const userForProcessing = user;
 
-// 완전한 이름 사용
+// Use complete names
 const user = getUser();
 const address = getAddress();
 const phone = getPhone();
 const netPromoterScore = calculateScore();
 
-// 정확한 이름
+// Accurate names
 const cartItems = items;
 const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
 ```
 
 ---
 
-## 함수 크기 비교
+## Function Size Comparison
 
-### ❌ 나쁜 예 - 너무 큰 함수
+### ❌ Bad Example - Function too large
 ```typescript
-// 함수가 50줄 이상
+// Function over 50 lines
 async function handleUserRegistration(request: any) {
   const { email, password, firstName, lastName, phone, address, city, state, zip, country, dateOfBirth, acceptTerms } = request.body;
 
   if (!email) throw new Error('Email is required');
   if (!password) throw new Error('Password is required');
-  // ... 더 많은 검증
+  // ... more validation
 
   const hashedPassword = await hashPassword(password);
   const user = {
@@ -577,13 +577,13 @@ async function handleUserRegistration(request: any) {
     html: `<a href="...">Verify</a>`
   });
 
-  // ... 더 많은 코드
+  // ... more code
 
   return { success: true, userId: user.id };
 }
 ```
 
-### ✅ 좋은 예 - 작고 집중된 함수들
+### ✅ Good Example - Small, focused functions
 ```typescript
 async function handleUserRegistration(request: RegisterRequest): Promise<RegisterResponse> {
   const userData = request.body;
@@ -598,7 +598,7 @@ async function handleUserRegistration(request: RegisterRequest): Promise<Registe
   return { success: true, userId: user.id };
 }
 
-// 각 함수는 한 가지 일만 함
+// Each function does one thing
 function validateUserInput(userData: UserInput): void {
   if (!userData.email) throw new Error('Email is required');
   if (!userData.password) throw new Error('Password is required');
@@ -622,19 +622,19 @@ async function sendVerificationEmail(user: User): Promise<void> {
 
 ---
 
-## 종합 예제: 실제 개선 사례
+## Comprehensive Example: Real Improvement Case
 
-### 요구사항
-"상품 주문 처리 함수를 작성하세요"
+### Requirements
+"Write a product order processing function"
 
-#### ❌ 나쁜 구현 (30줄 이상)
+#### ❌ Bad Implementation (30+ lines)
 ```typescript
 async function processOrder(orderData: any) {
-  // SRP 위반: 여러 책임
-  // DRY 위반: 반복되는 검증
-  // YAGNI 위반: 불필요한 기능
-  // 명명규칙: 일관성 없음
-  // 타입 안전: any 사용
+  // SRP violation: multiple responsibilities
+  // DRY violation: repeated validation
+  // YAGNI violation: unnecessary features
+  // Naming convention: inconsistent
+  // Type safety: any usage
 
   if (!orderData) throw new Error("Order data required");
   if (!orderData.userId) throw new Error("User ID required");
@@ -673,9 +673,9 @@ async function processOrder(orderData: any) {
 }
 ```
 
-#### ✅ 좋은 구현 (SRP, DRY, 단순화, YAGNI, 타입 안전)
+#### ✅ Good Implementation (SRP, DRY, Simplicity, YAGNI, Type Safety)
 ```typescript
-// === 타입 정의 ===
+// === Type Definitions ===
 interface OrderItem {
   productId: string;
   quantity: number;
@@ -700,7 +700,7 @@ interface CreateOrderResponse {
   total: number;
 }
 
-// === 검증 계층 (SRP: 검증만 담당) ===
+// === Validation Layer (SRP: validation only) ===
 class OrderValidator {
   validateCreateRequest(request: CreateOrderRequest): void {
     this.validateNotEmpty(request, 'Order data');
@@ -724,7 +724,7 @@ class OrderValidator {
   }
 }
 
-// === 가격 계산 계층 (SRP: 계산만 담당, DRY: 중복 로직 제거) ===
+// === Pricing Layer (SRP: calculation only, DRY: removes duplicate logic) ===
 class OrderPricingService {
   async calculateTotal(items: OrderItem[]): Promise<number> {
     let total = 0;
@@ -738,11 +738,11 @@ class OrderPricingService {
   }
 
   private async getProduct(productId: string): Promise<{ price: number }> {
-    return getProduct(productId);  // 외부 함수 호출
+    return getProduct(productId);  // External function call
   }
 }
 
-// === 주문 생성 계층 (SRP: 주문 생성만 담당) ===
+// === Order Creation Layer (SRP: order creation only) ===
 class OrderFactory {
   create(userId: string, items: OrderItem[], total: number): Order {
     return {
@@ -760,7 +760,7 @@ class OrderFactory {
   }
 }
 
-// === 저장소 계층 (SRP: 저장만 담당) ===
+// === Repository Layer (SRP: storage only) ===
 class OrderRepository {
   async save(order: Order): Promise<void> {
     await db.insert('orders', order);
@@ -771,7 +771,7 @@ class OrderRepository {
   }
 }
 
-// === 메인 서비스 (조율만 담당) ===
+// === Main Service (orchestration only) ===
 class OrderService {
   constructor(
     private validator: OrderValidator,
@@ -781,23 +781,23 @@ class OrderService {
   ) {}
 
   async createOrder(request: CreateOrderRequest): Promise<CreateOrderResponse> {
-    // 1. 검증
+    // 1. Validate
     this.validator.validateCreateRequest(request);
 
-    // 2. 사용자 확인
+    // 2. Verify user
     const user = await getUser(request.userId);
     if (!user) throw new Error('User not found');
 
-    // 3. 가격 계산
+    // 3. Calculate price
     const total = await this.pricingService.calculateTotal(request.items);
 
-    // 4. 주문 생성
+    // 4. Create order
     const order = this.factory.create(request.userId, request.items, total);
 
-    // 5. 저장
+    // 5. Save
     await this.repository.save(order);
 
-    // 6. 응답
+    // 6. Response
     return {
       orderId: order.id,
       total: order.total
@@ -805,7 +805,7 @@ class OrderService {
   }
 }
 
-// === 사용 예 ===
+// === Usage Example ===
 const orderService = new OrderService(
   new OrderValidator(),
   new OrderPricingService(),
@@ -822,16 +822,16 @@ const response = await orderService.createOrder({
 });
 ```
 
-**개선 사항:**
+**Improvements:**
 
-1. **SRP**: 각 클래스가 하나의 책임만 가짐
-2. **DRY**: 검증 로직이 한 곳에서만 정의됨
-3. **단순화**: 메인 로직이 명확하고 읽기 쉬움
-4. **YAGNI**: 필요한 기능만 구현
-5. **타입 안전**: 모든 함수에 명확한 타입 정의
-6. **명명규칙**: 일관성 있는 네이밍
-7. **테스트 용이**: 각 클래스를 독립적으로 테스트 가능
+1. **SRP**: Each class has only one responsibility
+2. **DRY**: Validation logic defined in one place
+3. **Simplicity**: Main logic is clear and easy to read
+4. **YAGNI**: Only needed features implemented
+5. **Type Safety**: Clear type definitions for all functions
+6. **Naming Conventions**: Consistent naming
+7. **Testability**: Each class can be tested independently
 
 ---
 
-이 예제들을 참고하여 코드를 작성하고 검토해보세요!
+Use these examples as references when writing and reviewing code!
