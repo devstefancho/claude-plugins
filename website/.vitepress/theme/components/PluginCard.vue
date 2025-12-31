@@ -78,53 +78,56 @@ const getCategoryIcon = (categoryId: string) => {
 </script>
 
 <template>
-  <div class="plugin-card">
+  <article class="plugin-card">
     <div class="plugin-card-header">
-      <h3 class="plugin-card-title">{{ plugin.name }}</h3>
-      <span class="plugin-card-version">v{{ plugin.version }}</span>
+      <div class="plugin-card-meta">
+        <span class="plugin-card-category">
+          <component :is="getCategoryIcon(plugin.category)" :size="16" />
+        </span>
+        <span class="plugin-card-version">v{{ plugin.version }}</span>
+      </div>
     </div>
+
+    <h3 class="plugin-card-title">{{ plugin.name }}</h3>
 
     <p class="plugin-card-description">{{ plugin.description }}</p>
 
     <ul v-if="plugin.features.length > 0" class="plugin-card-features">
       <li v-for="feature in plugin.features.slice(0, 3)" :key="feature">
+        <span class="feature-bullet"></span>
         {{ feature }}
       </li>
     </ul>
 
     <div class="plugin-card-badges">
       <span v-if="plugin.components.skills.length > 0" class="badge badge-skill">
-        <Brain :size="14" />
+        <Brain :size="12" />
         Skills ({{ plugin.components.skills.length }})
       </span>
       <span v-if="plugin.components.commands.length > 0" class="badge badge-command">
-        <Terminal :size="14" />
+        <Terminal :size="12" />
         Commands ({{ plugin.components.commands.length }})
       </span>
       <span v-if="plugin.components.hooks" class="badge badge-hook">
-        <Webhook :size="14" />
+        <Webhook :size="12" />
         Hooks
       </span>
       <span v-if="plugin.components.mcpServers.length > 0" class="badge badge-mcp">
-        <Plug :size="14" />
+        <Plug :size="12" />
         MCP ({{ plugin.components.mcpServers.length }})
-      </span>
-      <span class="badge badge-category">
-        <component :is="getCategoryIcon(plugin.category)" :size="14" />
-        {{ getCategoryName(plugin.category) }}
       </span>
     </div>
 
     <div class="plugin-card-actions">
       <button class="btn btn-primary" @click="copyInstallCommand">
-        <Copy v-if="!copied" :size="16" />
-        <Check v-else :size="16" />
-        {{ lang === 'en' ? 'Copy' : '복사' }}
+        <Copy v-if="!copied" :size="14" />
+        <Check v-else :size="14" />
+        {{ copied ? (lang === 'en' ? 'Copied!' : '복사됨!') : (lang === 'en' ? 'Install' : '설치') }}
       </button>
-      <a :href="`https://github.com/devstefancho/claude-plugins/tree/main/${plugin.id}`" target="_blank" class="btn btn-outline">
-        <ExternalLink :size="16" />
+      <a :href="`https://github.com/devstefancho/claude-plugins/tree/main/${plugin.id}`" target="_blank" class="btn btn-ghost">
         {{ lang === 'en' ? 'Details' : '상세' }}
+        <ExternalLink :size="14" />
       </a>
     </div>
-  </div>
+  </article>
 </template>

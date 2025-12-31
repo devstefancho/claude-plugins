@@ -15,18 +15,31 @@ hero:
 
 <HomeFeatures lang="en" />
 
-<div style="padding: 2rem; text-align: center;">
+<div class="quick-start-section">
 
 ## Quick Start
 
+<div class="quick-start-steps">
+  <div class="step">
+    <span class="step-number">1</span>
+    <span class="step-text">Register marketplace</span>
+  </div>
+  <div class="step">
+    <span class="step-number">2</span>
+    <span class="step-text">Install plugin</span>
+  </div>
+  <div class="step">
+    <span class="step-number">3</span>
+    <span class="step-text">Restart Claude Code</span>
+  </div>
+</div>
+
 ```bash
-# 1. Register marketplace (one-time)
+# Register marketplace (one-time)
 /plugin marketplace add devstefancho/claude-plugins
 
-# 2. Install desired plugin
+# Install desired plugin
 /plugin install code-style-plugin@devstefancho-claude-plugins
-
-# 3. Restart Claude Code
 ```
 
 [View All Plugins →](/en/plugins/)

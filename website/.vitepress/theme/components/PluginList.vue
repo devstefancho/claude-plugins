@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { Search, Package } from 'lucide-vue-next'
 import pluginData from '../../../data/plugins.json'
+import PluginCard from './PluginCard.vue'
 
 const props = defineProps<{
   lang?: 'ko' | 'en'
@@ -78,6 +80,16 @@ const filteredPlugins = computed(() => {
   })
 })
 
+const hasActiveFilters = computed(() => {
+  return searchQuery.value || selectedCategory.value || selectedComponent.value
+})
+
+const clearFilters = () => {
+  searchQuery.value = ''
+  selectedCategory.value = ''
+  selectedComponent.value = ''
+}
+
 const getCategoryLabel = (categoryId: string) => {
   const lang = props.lang || 'ko'
   return categoryNames[categoryId]?.[lang] || categoryId
@@ -91,45 +103,63 @@ const labels = computed(() => {
     allComponents: lang === 'ko' ? '모든 컴포넌트' : 'All Components',
     pluginCount: lang === 'ko'
       ? `총 ${filteredPlugins.value.length}개의 플러그인`
-      : `${filteredPlugins.value.length} plugins found`
+      : `${filteredPlugins.value.length} plugins found`,
+    clearFilters: lang === 'ko' ? '필터 초기화' : 'Clear filters',
+    noPlugins: lang === 'ko' ? '플러그인을 찾을 수 없습니다' : 'No plugins found'
   }
 })
 </script>
 
 <template>
   <div class="plugin-list">
-    <div class="plugin-list-filters">
-      <input
-        type="text"
-        v-model="searchQuery"
-        :placeholder="labels.searchPlaceholder"
-      />
+    <div class="plugin-list-header">
+      <div class="search-container">
+        <Search :size="18" class="search-icon" />
+        <input
+          type="text"
+          v-model="searchQuery"
+          :placeholder="labels.searchPlaceholder"
+          class="search-input"
+        />
+      </div>
 
-      <select v-model="selectedCategory">
-        <option value="">{{ labels.allCategories }}</option>
-        <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-          {{ getCategoryLabel(cat.id) }}
-        </option>
-      </select>
+      <div class="filter-group">
+        <select v-model="selectedCategory" class="filter-select">
+          <option value="">{{ labels.allCategories }}</option>
+          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+            {{ getCategoryLabel(cat.id) }}
+          </option>
+        </select>
 
-      <select v-model="selectedComponent">
-        <option value="">{{ labels.allComponents }}</option>
-        <option value="skills">Skills</option>
-        <option value="commands">Commands</option>
-        <option value="hooks">Hooks</option>
-        <option value="mcp">MCP Servers</option>
-      </select>
+        <select v-model="selectedComponent" class="filter-select">
+          <option value="">{{ labels.allComponents }}</option>
+          <option value="skills">Skills</option>
+          <option value="commands">Commands</option>
+          <option value="hooks">Hooks</option>
+          <option value="mcp">MCP Servers</option>
+        </select>
+      </div>
     </div>
 
-    <p class="plugin-count">{{ labels.pluginCount }}</p>
+    <div class="plugin-results-meta">
+      <span class="plugin-count">{{ labels.pluginCount }}</span>
+      <button v-if="hasActiveFilters" @click="clearFilters" class="clear-filters">
+        {{ labels.clearFilters }}
+      </button>
+    </div>
 
-    <div class="plugin-grid">
+    <div v-if="filteredPlugins.length > 0" class="plugin-grid">
       <PluginCard
         v-for="plugin in filteredPlugins"
         :key="plugin.id"
         :plugin="plugin"
         :lang="lang"
       />
+    </div>
+
+    <div v-else class="empty-state">
+      <Package :size="48" />
+      <p>{{ labels.noPlugins }}</p>
     </div>
   </div>
 </template>

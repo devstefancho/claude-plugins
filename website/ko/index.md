@@ -15,18 +15,31 @@ hero:
 
 <HomeFeatures lang="ko" />
 
-<div style="padding: 2rem; text-align: center;">
+<div class="quick-start-section">
 
 ## 빠른 시작
 
+<div class="quick-start-steps">
+  <div class="step">
+    <span class="step-number">1</span>
+    <span class="step-text">마켓플레이스 등록</span>
+  </div>
+  <div class="step">
+    <span class="step-number">2</span>
+    <span class="step-text">플러그인 설치</span>
+  </div>
+  <div class="step">
+    <span class="step-number">3</span>
+    <span class="step-text">Claude Code 재시작</span>
+  </div>
+</div>
+
 ```bash
-# 1. 마켓플레이스 등록 (최초 1회)
+# 마켓플레이스 등록 (최초 1회)
 /plugin marketplace add devstefancho/claude-plugins
 
-# 2. 원하는 플러그인 설치
+# 원하는 플러그인 설치
 /plugin install code-style-plugin@devstefancho-claude-plugins
-
-# 3. Claude Code 재시작
 ```
 
 [모든 플러그인 보기 →](/ko/plugins/)
