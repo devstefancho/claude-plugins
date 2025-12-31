@@ -59,6 +59,11 @@
       "name": "stop-notification-plugin",
       "source": "./stop-notification-plugin",
       "description": "macOS notification when Claude finishes working (Stop hook)"
+    },
+    {
+      "name": "worktrace-plugin",
+      "source": "./worktrace-plugin",
+      "description": "Extract Claude Code work history and generate daily summaries grouped by project and ticket"
     }
   ]
 }

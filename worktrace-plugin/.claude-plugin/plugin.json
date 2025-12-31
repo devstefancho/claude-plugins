@@ -1,0 +1,8 @@
+{
+  "name": "worktrace-plugin",
+  "description": "Extract Claude Code work history and generate daily summaries grouped by project and ticket",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}

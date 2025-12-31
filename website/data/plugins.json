@@ -276,6 +276,35 @@
       "uninstallCommand": "/plugin uninstall stop-notification-plugin@devstefancho-claude-plugins",
       "readmePath": "stop-notification-plugin/README.md",
       "hasReadme": true
+    },
+    {
+      "id": "worktrace-plugin",
+      "name": "worktrace-plugin",
+      "version": "1.0.0",
+      "description": "Extract Claude Code work history and generate daily summaries grouped by project and ticket",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [
+          "worktrace"
+        ],
+        "commands": [
+          "trace"
+        ],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "~/.claude/history.jsonl에서 작업 히스토리 추출",
+        "티켓 번호 및 프로젝트별 자동 그룹화",
+        "마크다운 또는 JSON 출력 지원",
+        "기존 데일리 파일 업데이트 시 다른 섹션 보존",
+        "타임존 지원"
+      ],
+      "installCommand": "/plugin install worktrace-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall worktrace-plugin@devstefancho-claude-plugins",
+      "readmePath": "worktrace-plugin/README.md",
+      "hasReadme": true
     }
   ],
   "categories": [

@@ -1,0 +1,14 @@
+{
+  "history_file": "~/.claude/history.jsonl",
+  "output_dir": "./daily",
+  "ticket_patterns": [
+    "[A-Z]+-\\d+"
+  ],
+  "timezone": "UTC",
+  "section_title": "## Claude Code Work History",
+  "frontmatter": {
+    "published": false,
+    "tags": ["daily"],
+    "categories": ["daily"]
+  }
+}
