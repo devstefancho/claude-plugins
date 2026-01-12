@@ -100,6 +100,24 @@ Note: User can select "Other" for custom path
 
 2. Create worktree: `git worktree add {path} -b {branch-name} origin/{base-branch}`
 
+### Step 7: Set Remote Tracking
+
+Use AskUserQuestion:
+
+```
+Question: "Push branch to remote and set tracking?"
+Header: "Remote"
+Options:
+- "Yes (Recommended)" - Push and set upstream to origin/{branch-name}
+- "No" - Keep local only for now
+```
+
+If "Yes":
+1. Change to worktree: `cd {path}`
+2. Push with upstream: `git push -u origin {branch-name}`
+
+This ensures proper tracking: `{branch-name}` → `origin/{branch-name}` (instead of tracking the base branch)
+
 ## Cleanup Worktree
 
 1. List worktrees: `git worktree list`

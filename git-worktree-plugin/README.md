@@ -32,3 +32,38 @@ Branch naming:
 - Features: `{prefix}/{feature-name}` (e.g., `feat/user-authentication`)
 
 Prefixes: feat, fix, bug, chore, docs, test
+
+## Commands
+
+### /bare-setup
+
+Set up a new repository with bare clone structure for git worktree workflow.
+
+```bash
+# With URL argument
+/bare-setup git@github.com:org/repo.git
+
+# Interactive mode (prompts for URL)
+/bare-setup
+```
+
+**What it does:**
+1. Clones repository as bare (`.bare/`)
+2. Creates gitdir pointer (`.git` file)
+3. Configures fetch refspec for proper remote tracking (enables git pull/push)
+4. Creates initial worktree in `trees/` directory
+
+**Resulting structure:**
+```
+project-name/
+├── .bare/              # Bare git repository
+├── .git                # File pointing to .bare
+└── trees/
+    └── main/           # Initial worktree (your working directory)
+```
+
+**Benefits:**
+- Multiple branches can be checked out simultaneously
+- Each worktree is a separate working directory
+- No need to stash/switch when working on multiple features
+- Single shared git object store reduces disk usage
