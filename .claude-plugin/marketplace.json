@@ -64,6 +64,11 @@
       "name": "worktrace-plugin",
       "source": "./worktrace-plugin",
       "description": "Extract Claude Code work history and generate daily summaries grouped by project and ticket"
+    },
+    {
+      "name": "frontend-plugin",
+      "source": "./frontend-plugin",
+      "description": "React.js 프론트엔드 개발을 위한 코드 리뷰 및 설계 원칙 검사 플러그인"
     }
   ]
 }

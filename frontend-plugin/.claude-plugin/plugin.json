@@ -1,0 +1,8 @@
+{
+  "name": "frontend-plugin",
+  "description": "React/Next.js 프론트엔드 개발을 위한 코드 리뷰 및 설계 원칙 검사 플러그인",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}
