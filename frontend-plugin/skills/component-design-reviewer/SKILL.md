@@ -1,6 +1,6 @@
 ---
 name: component-design-reviewer
-description: React component design review - SRP, Props, Composition, Reusability, Custom Hooks. Use when reviewing components, splitting components, improving structure, checking Props drilling, or refactoring UI.
+description: Reviews React components and provides improvement suggestions. Use when you need code review, component review, structure improvement, refactoring, or component separation.
 allowed-tools: Read, Grep, Glob
 ---
 
