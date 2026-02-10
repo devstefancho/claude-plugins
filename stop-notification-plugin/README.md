@@ -1,17 +1,43 @@
 # Stop Notification Plugin
 
-Display macOS notifications when Claude Code finishes working.
+TTS voice notification with macOS modal dialog and tmux navigation when Claude Code stops or needs attention.
 
 ## Features
 
-- Display macOS native dialog notification when Claude completes a response
-- Auto-closes after 3 seconds
-- Customizable message
+- **TTS Voice Notification** - Uses `edge-tts` (Azure Neural voices) with fallback to macOS `say`
+- **macOS Modal Dialog** - Native dialog showing session/window/project/branch info
+- **Tmux Navigation** - "Go" button navigates to the correct tmux pane
+- **Terminal Activation** - Automatically brings your terminal app to the foreground
+- **Notification Events** - Alerts on permission prompts and idle prompts
+
+## Supported Events
+
+| Event | Trigger | TTS Message |
+|-------|---------|-------------|
+| Stop | Claude finishes a response | "Task completed." |
+| Notification (permission_prompt) | Claude needs permission approval | "Permission needed." |
+| Notification (idle_prompt) | Claude is waiting for user input | "Waiting for input." |
 
 ## Requirements
 
-- macOS (uses osascript)
-- Claude Code
+- macOS (uses `osascript`, `afplay`, `say`)
+- `jq` - JSON processing
+- `edge-tts` (optional) - High-quality Azure Neural TTS. Falls back to macOS `say` if not installed.
+- `tmux` (optional) - For pane navigation and session info display
+
+### Installing edge-tts
+
+```bash
+pip install edge-tts
+```
+
+## Supported Terminals
+
+- iTerm2
+- Alacritty
+- kitty
+- WezTerm
+- Terminal.app
 
 ## Installation
 
@@ -29,16 +55,23 @@ Restart Claude Code after installation to activate.
 
 ## How It Works
 
-This plugin uses Claude Code's `Stop` event hook. Each time Claude completes a response, a notification is displayed:
+### Stop Event
 
-- **Title:** Claude Code Task Complete
-- **Message:** Claude has finished working
-- **Button:** OK
-- **Auto-close:** 3 seconds
+When Claude finishes a response:
+1. TTS announces "Task completed."
+2. A macOS dialog shows `session / window / project (branch)` with "Dismiss" and "Go" buttons
+3. Clicking "Go" navigates to the tmux pane and activates the terminal
 
-## Customization
+### Notification Event
 
-To change the notification message or behavior, modify the `hooks/stop-notification.sh` script.
+When Claude needs attention (permission prompt or idle):
+1. TTS announces the notification type
+2. A macOS warning alert shows context info with "Dismiss" and "Go" buttons
+3. Clicking "Go" navigates to the tmux pane and activates the terminal
+
+## Note
+
+If you have similar Stop/Notification hooks in `~/.claude/settings.json`, remove them after installing this plugin to avoid duplicate notifications.
 
 ## License
 
