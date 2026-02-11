@@ -1,0 +1,6 @@
+{
+  "name": "test-commit-push-pr-clean-plugin",
+  "description": "Automates lint, test, commit, push, PR creation, and worktree cleanup workflow",
+  "version": "1.0.0",
+  "author": "devstefancho"
+}
