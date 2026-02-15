@@ -51,6 +51,23 @@ claude
 # 설치된 플러그인 목록 확인
 ```
 
+## 대체 방법: npx skills
+
+`npx skills` CLI를 사용하면 일반 터미널에서도 스킬을 설치할 수 있습니다:
+
+```bash
+# 사용 가능한 스킬 목록 확인
+npx skills add devstefancho/claude-plugins --list
+
+# 모든 스킬 설치
+npx skills add devstefancho/claude-plugins
+
+# 특정 스킬 설치
+npx skills add devstefancho/claude-plugins --skill code-style-reviewer
+```
+
+> 참고: `npx skills`는 Agent Skills만 설치합니다. Commands, Hooks, MCP Servers는 위의 `/plugin` 방법을 사용하세요.
+
 ## 다음 단계
 
 - [설치 가이드](/ko/guide/installation) - 상세한 설치 방법

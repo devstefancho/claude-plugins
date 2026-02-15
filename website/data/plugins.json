@@ -79,6 +79,27 @@
       "hasReadme": true
     },
     {
+      "id": "frontend-plugin",
+      "name": "frontend-plugin",
+      "version": "1.0.0",
+      "description": "React/Next.js 프론트엔드 개발을 위한 코드 리뷰 및 설계 원칙 검사 플러그인",
+      "author": "Stefan Cho",
+      "category": "code-review",
+      "components": {
+        "skills": [
+          "component-design-reviewer"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install frontend-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall frontend-plugin@devstefancho-claude-plugins",
+      "readmePath": "frontend-plugin/README.md",
+      "hasReadme": true
+    },
+    {
       "id": "git-commit-plugin",
       "name": "git-commit-plugin",
       "version": "1.0.0",
@@ -107,7 +128,7 @@
     {
       "id": "git-worktree-plugin",
       "name": "git-worktree-plugin",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Manage git worktrees for parallel branch work. Proactively suggests worktree creation when working on PRs or new features",
       "author": "Stefan Cho",
       "category": "workflow",
@@ -115,7 +136,9 @@
         "skills": [
           "git-worktree"
         ],
-        "commands": [],
+        "commands": [
+          "bare-setup"
+        ],
         "hooks": false,
         "mcpServers": []
       },
@@ -157,7 +180,7 @@
     {
       "id": "scaffold-claude-feature",
       "name": "scaffold-claude-feature",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "description": "Generate Claude Code features (slash commands, skills, subagents, hooks, output styles) with proper structure and best practices",
       "author": "Stefan Cho",
       "category": "code-review",
@@ -165,7 +188,9 @@
         "skills": [
           "scaffold-claude-feature"
         ],
-        "commands": [],
+        "commands": [
+          "prime"
+        ],
         "hooks": false,
         "mcpServers": []
       },
@@ -232,6 +257,33 @@
       "hasReadme": false
     },
     {
+      "id": "smart-commit-plugin",
+      "name": "smart-commit-plugin",
+      "version": "1.0.0",
+      "description": "Analyze Claude Code session history to split uncommitted changes into logical commits",
+      "author": "Stefan Cho",
+      "category": "workflow",
+      "components": {
+        "skills": [
+          "smart-commit"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Parse current session's conversation to understand what was built",
+        "Automatically group file changes by user intent and topic boundaries",
+        "Merge overlapping file groups for safe, conflict-free commits",
+        "Present commit plan for user review before execution",
+        "Execute commits sequentially via TaskCreate workflow"
+      ],
+      "installCommand": "/plugin install smart-commit-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall smart-commit-plugin@devstefancho-claude-plugins",
+      "readmePath": "smart-commit-plugin/README.md",
+      "hasReadme": true
+    },
+    {
       "id": "spec-manager-plugin",
       "name": "spec-manager-plugin",
       "version": "1.0.0",
@@ -260,8 +312,8 @@
     {
       "id": "stop-notification-plugin",
       "name": "stop-notification-plugin",
-      "version": "1.1.0",
-      "description": "macOS notification when Claude finishes working",
+      "version": "2.0.0",
+      "description": "macOS TTS voice notification with modal dialog and tmux navigation when Claude stops or needs attention",
       "author": "Stefan Cho",
       "category": "utility",
       "components": {
@@ -271,13 +323,42 @@
         "mcpServers": []
       },
       "features": [
-        "Display macOS native dialog notification when Claude completes a response",
-        "Auto-closes after 3 seconds",
-        "Customizable message"
+        "TTS Voice Notification - Uses edge-tts (Azure Neural voices) with fallback to macOS say",
+        "macOS Modal Dialog - Native dialog showing session/window/project/branch info",
+        "Tmux Navigation - \"Go\" button navigates to the correct tmux pane",
+        "Terminal Activation - Automatically brings your terminal app to the foreground",
+        "Notification Events - Alerts on permission prompts and idle prompts"
       ],
       "installCommand": "/plugin install stop-notification-plugin@devstefancho-claude-plugins",
       "uninstallCommand": "/plugin uninstall stop-notification-plugin@devstefancho-claude-plugins",
       "readmePath": "stop-notification-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "test-commit-push-pr-clean-plugin",
+      "name": "test-commit-push-pr-clean-plugin",
+      "version": "1.0.0",
+      "description": "Automates lint, test, commit, push, PR creation, and worktree cleanup workflow",
+      "author": "devstefancho",
+      "category": "workflow",
+      "components": {
+        "skills": [],
+        "commands": [
+          "test-commit-push-pr-clean"
+        ],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Branch Safety - Prevents accidental commits to default branches (main/master/develop)",
+        "Lint & Format - Runs lint and format checks automatically",
+        "Test Coverage - Runs tests targeting 100% coverage (if configured)",
+        "Smart Commits - Organizes changes into logical conventional commits",
+        "Auto Push - Pushes branch to remote with upstream tracking"
+      ],
+      "installCommand": "/plugin install test-commit-push-pr-clean-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall test-commit-push-pr-clean-plugin@devstefancho-claude-plugins",
+      "readmePath": "test-commit-push-pr-clean-plugin/README.md",
       "hasReadme": true
     },
     {
@@ -292,7 +373,7 @@
           "worktrace"
         ],
         "commands": [
-          "trace"
+          "trigger-trace"
         ],
         "hooks": false,
         "mcpServers": []

@@ -35,11 +35,14 @@ hero:
 </div>
 
 ```bash
-# 마켓플레이스 등록 (최초 1회)
+# Claude Code CLI 사용
 /plugin marketplace add devstefancho/claude-plugins
-
-# 원하는 플러그인 설치
 /plugin install code-style-plugin@devstefancho-claude-plugins
+```
+
+```bash
+# 또는 npx 사용 (일반 터미널에서)
+npx skills add devstefancho/claude-plugins
 ```
 
 [모든 플러그인 보기 →](/ko/plugins/)

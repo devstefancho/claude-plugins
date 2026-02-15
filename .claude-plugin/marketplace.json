@@ -8,12 +8,14 @@
     {
       "name": "code-style-plugin",
       "source": "./code-style-plugin",
-      "description": "AI code review plugin based on code style principles - checks SRP (Single Responsibility Principle), DRY, Simplicity First, YAGNI, and Type Safety"
+      "description": "AI code review plugin based on code style principles - checks SRP (Single Responsibility Principle), DRY, Simplicity First, YAGNI, and Type Safety",
+      "skills": ["./skills/code-style-reviewer/SKILL.md"]
     },
     {
       "name": "code-quality-plugin",
       "source": "./code-quality-plugin",
-      "description": "Code quality review skill focusing on DRY, KISS, and Clean Code principles for comprehensive code assessment"
+      "description": "Code quality review skill focusing on DRY, KISS, and Clean Code principles for comprehensive code assessment",
+      "skills": ["./skills/code-quality-reviewer/SKILL.md"]
     },
     {
       "name": "simple-sdd-plugin",
@@ -28,22 +30,26 @@
     {
       "name": "scaffold-claude-feature",
       "source": "./scaffold-claude-feature",
-      "description": "Generate Claude Code features (slash commands, skills, subagents, hooks, output styles) with proper structure"
+      "description": "Generate Claude Code features (slash commands, skills, subagents, hooks, output styles) with proper structure",
+      "skills": ["./skills/scaffold-claude-feature/SKILL.md"]
     },
     {
       "name": "git-worktree-plugin",
       "source": "./git-worktree-plugin",
-      "description": "Manage git worktrees for parallel branch work with proactive suggestions"
+      "description": "Manage git worktrees for parallel branch work with proactive suggestions",
+      "skills": ["./skills/git-worktree/SKILL.md"]
     },
     {
       "name": "session-reporter-plugin",
       "source": "./session-reporter-plugin",
-      "description": "Generate HTML reports to visualize work sessions with conversation history and code changes"
+      "description": "Generate HTML reports to visualize work sessions with conversation history and code changes",
+      "skills": ["./skills/session-reporter/SKILL.md"]
     },
     {
       "name": "spec-manager-plugin",
       "source": "./spec-manager-plugin",
-      "description": "Manage specification files for spec-driven development workflow"
+      "description": "Manage specification files for spec-driven development workflow",
+      "skills": ["./skills/spec-manager/SKILL.md"]
     },
     {
       "name": "git-commit-plugin",
@@ -63,12 +69,25 @@
     {
       "name": "worktrace-plugin",
       "source": "./worktrace-plugin",
-      "description": "Extract Claude Code work history and generate daily summaries grouped by project and ticket"
+      "description": "Extract Claude Code work history and generate daily summaries grouped by project and ticket",
+      "skills": ["./skills/worktrace/SKILL.md"]
     },
     {
       "name": "frontend-plugin",
       "source": "./frontend-plugin",
-      "description": "React.js 프론트엔드 개발을 위한 코드 리뷰 및 설계 원칙 검사 플러그인"
+      "description": "React.js 프론트엔드 개발을 위한 코드 리뷰 및 설계 원칙 검사 플러그인",
+      "skills": ["./skills/component-design-reviewer/SKILL.md"]
+    },
+    {
+      "name": "smart-commit-plugin",
+      "source": "./smart-commit-plugin",
+      "description": "Analyze Claude Code session history to split uncommitted changes into logical commits",
+      "skills": ["./skills/smart-commit/SKILL.md"]
+    },
+    {
+      "name": "test-commit-push-pr-clean-plugin",
+      "source": "./test-commit-push-pr-clean-plugin",
+      "description": "Automates lint, test, commit, push, PR creation, and worktree cleanup workflow"
     }
   ]
 }

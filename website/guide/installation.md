@@ -17,6 +17,26 @@ Detailed guide for plugin installation and management.
 # Shows 'devstefancho-claude-plugins' marketplace
 ```
 
+## Alternative: npx skills
+
+Install skills from any terminal using [Vercel Skills CLI](https://github.com/vercel-labs/skills):
+
+```bash
+# List available skills
+npx skills add devstefancho/claude-plugins --list
+
+# Install all skills
+npx skills add devstefancho/claude-plugins
+
+# Install a specific skill
+npx skills add devstefancho/claude-plugins --skill code-style-reviewer
+
+# Install globally (user-wide)
+npx skills add devstefancho/claude-plugins -g
+```
+
+> Note: `npx skills` installs Agent Skills only. For commands, hooks, and MCP servers, use the `/plugin install` method below.
+
 ## Plugin Installation
 
 ### Install Single Plugin

@@ -51,6 +51,23 @@ claude
 # Check installed plugins list
 ```
 
+## Alternative: npx skills
+
+You can also install skills using the `npx skills` CLI from any terminal:
+
+```bash
+# List available skills
+npx skills add devstefancho/claude-plugins --list
+
+# Install all skills
+npx skills add devstefancho/claude-plugins
+
+# Install a specific skill
+npx skills add devstefancho/claude-plugins --skill code-style-reviewer
+```
+
+> Note: `npx skills` installs Agent Skills only. For commands, hooks, and MCP servers, use the `/plugin` method above.
+
 ## Next Steps
 
 - [Installation Guide](/en/guide/installation) - Detailed installation instructions

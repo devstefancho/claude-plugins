@@ -17,6 +17,26 @@
 # 'devstefancho-claude-plugins' 마켓플레이스가 표시됩니다
 ```
 
+## 대체 방법: npx skills
+
+[Vercel Skills CLI](https://github.com/vercel-labs/skills)를 사용하여 일반 터미널에서 스킬을 설치할 수 있습니다:
+
+```bash
+# 사용 가능한 스킬 목록 확인
+npx skills add devstefancho/claude-plugins --list
+
+# 모든 스킬 설치
+npx skills add devstefancho/claude-plugins
+
+# 특정 스킬 설치
+npx skills add devstefancho/claude-plugins --skill code-style-reviewer
+
+# 전역 설치 (사용자 전체)
+npx skills add devstefancho/claude-plugins -g
+```
+
+> 참고: `npx skills`는 Agent Skills만 설치합니다. Commands, Hooks, MCP Servers는 아래의 `/plugin install` 방법을 사용하세요.
+
 ## 플러그인 설치
 
 ### 단일 플러그인 설치

@@ -18,6 +18,10 @@ const categoryMapping = {
   'spec-manager-plugin': 'specification',
   'session-reporter-plugin': 'utility',
   'stop-notification-plugin': 'utility',
+  'worktrace-plugin': 'utility',
+  'frontend-plugin': 'code-review',
+  'smart-commit-plugin': 'workflow',
+  'test-commit-push-pr-clean-plugin': 'workflow',
   'common-mcp-plugin': 'infrastructure'
 }
 

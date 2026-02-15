@@ -35,11 +35,14 @@ hero:
 </div>
 
 ```bash
-# Register marketplace (one-time)
+# Using Claude Code CLI
 /plugin marketplace add devstefancho/claude-plugins
-
-# Install desired plugin
 /plugin install code-style-plugin@devstefancho-claude-plugins
+```
+
+```bash
+# Or using npx (from any terminal)
+npx skills add devstefancho/claude-plugins
 ```
 
 [View All Plugins →](/en/plugins/)
