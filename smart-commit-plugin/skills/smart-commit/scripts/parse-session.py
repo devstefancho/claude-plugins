@@ -264,6 +264,10 @@ def main():
 
     # Determine session ID
     session_id = args.session
+    if session_id and not re.match(r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$", session_id):
+        print(f"[ERROR] Invalid session ID format: {session_id}", file=sys.stderr)
+        print("[HINT] Session ID must be a UUID (e.g., abc12345-1234-5678-9abc-def012345678).", file=sys.stderr)
+        sys.exit(1)
     if not session_id:
         history_file = Path.home() / ".claude" / "history.jsonl"
         session_id = find_latest_session(project_path, history_file)
