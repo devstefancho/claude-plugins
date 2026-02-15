@@ -20,13 +20,14 @@ hero:
 ## Quick Start
 
 ```bash
-# 1. Register marketplace (one-time setup)
+# Using Claude Code CLI
 /plugin marketplace add devstefancho/claude-plugins
-
-# 2. Install desired plugin
 /plugin install code-style-plugin@devstefancho-claude-plugins
+```
 
-# 3. Restart Claude Code
+```bash
+# Or using npx (from any terminal)
+npx skills add devstefancho/claude-plugins
 ```
 
 [View All Plugins →](/plugins/)
