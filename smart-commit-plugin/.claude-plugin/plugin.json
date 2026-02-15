@@ -1,0 +1,9 @@
+{
+  "name": "smart-commit-plugin",
+  "description": "Analyze Claude Code session history to split uncommitted changes into logical commits",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  },
+  "skills": ["./skills/smart-commit/SKILL.md"]
+}
