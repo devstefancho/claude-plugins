@@ -23,7 +23,7 @@ All scripts are located in the plugin's `scripts/` directory. Resolve the path:
 
 ```bash
 # Find the plugin's scripts directory
-PLUGIN_DIR=$(dirname "$(find ~/.claude -path "*/git-worktree-plugin/scripts/detect.sh" 2>/dev/null | head -1)")/..
+PLUGIN_DIR=$(dirname "$(find ~/.claude -path "*/git-worktree-plugin/*/scripts/detect.sh" 2>/dev/null | head -1)")/..
 ```
 
 If the above fails (e.g., local development), fall back to the repository root where this SKILL.md is located.
