@@ -1,12 +1,14 @@
-# Git Worktree Plugin
+# Git Worktree Plugin v2.0
 
-Manage git worktrees for parallel branch work.
+Manage git worktrees for parallel branch work with shell script automation.
 
 ## Features
 
 - **Proactive Suggestions** - Automatically suggests creating worktrees when working on PRs or new features
-- **Easy Creation** - Creates worktrees with proper branch naming conventions
-- **Cleanup Management** - Lists and removes worktrees safely
+- **Bare Repository Support** - Clone as bare or convert existing repos for optimal worktree workflow
+- **Backup & Rollback** - Safe bare conversion with automatic backup and rollback on failure
+- **Shell Script Based** - Reliable execution via tested shell scripts instead of inline commands
+- **Cleanup Management** - Remove worktrees and associated branches safely
 
 ## Installation
 
@@ -14,12 +16,44 @@ Manage git worktrees for parallel branch work.
 /plugin install git-worktree-plugin@devstefancho-claude-plugins
 ```
 
-## Usage
+Or install via npx:
+```bash
+npx @anthropic-ai/claude-code@latest /plugin install git-worktree-plugin@devstefancho-claude-plugins
+```
+
+## Workflows
+
+### A. Create Worktree
 
 The skill is proactively invoked when you mention:
-- Working on a PR (e.g., "Let's work on PR #9", "work on PR #123")
+- Working on a PR (e.g., "Let's work on PR #9")
 - Starting a new feature/task
 - Implementing something while on main branch
+
+Supports both **PR checkout** and **new branch** modes.
+
+### B-1. Bare Clone (New Project)
+
+Set up a new project with bare repository structure:
+
+```
+project-name/
+├── .bare/              # Bare git repository
+├── .git                # File pointing to .bare
+└── trees/
+    └── main/           # Initial worktree
+```
+
+### B-2. Convert to Bare (Existing Project)
+
+Convert an existing clone to bare structure:
+- Backs up `.git` to `.git-backup/` before conversion
+- Automatic rollback on any failure
+- Preserves all commit history and branches
+
+### C. Cleanup
+
+Remove worktrees individually or all at once, with associated branch cleanup.
 
 ## Worktree Structure
 
@@ -31,39 +65,31 @@ Branch naming:
 - PR: `pr-{number}` (e.g., `pr-123`)
 - Features: `{prefix}/{feature-name}` (e.g., `feat/user-authentication`)
 
-Prefixes: feat, fix, bug, chore, docs, test
+Prefixes: feat, fix, chore, refactor, docs, test
 
-## Commands
+## Scripts
 
-### /bare-setup
+All operations are implemented as shell scripts in `scripts/`:
 
-Set up a new repository with bare clone structure for git worktree workflow.
+| Script | Purpose |
+|--------|---------|
+| `detect.sh` | Detect repo type (bare/normal/none) |
+| `create-worktree.sh` | Create worktree with branch or PR |
+| `bare-clone.sh` | Clone repo as bare with worktree structure |
+| `convert-to-bare.sh` | Convert existing clone to bare (with backup/rollback) |
+| `cleanup-worktree.sh` | Remove worktree(s) and branches |
+
+## Testing
 
 ```bash
-# With URL argument
-/bare-setup git@github.com:org/repo.git
-
-# Interactive mode (prompts for URL)
-/bare-setup
+bash tests/run-all.sh
 ```
 
-**What it does:**
-1. Clones repository as bare (`.bare/`)
-2. Creates gitdir pointer (`.git` file)
-3. Configures fetch refspec for proper remote tracking (enables git pull/push)
-4. Creates initial worktree in `trees/` directory
-
-**Resulting structure:**
+Individual tests:
+```bash
+bash tests/test-detect.sh
+bash tests/test-create-worktree.sh
+bash tests/test-bare-clone.sh
+bash tests/test-convert-to-bare.sh
+bash tests/test-cleanup.sh
 ```
-project-name/
-├── .bare/              # Bare git repository
-├── .git                # File pointing to .bare
-└── trees/
-    └── main/           # Initial worktree (your working directory)
-```
-
-**Benefits:**
-- Multiple branches can be checked out simultaneously
-- Each worktree is a separate working directory
-- No need to stash/switch when working on multiple features
-- Single shared git object store reduces disk usage

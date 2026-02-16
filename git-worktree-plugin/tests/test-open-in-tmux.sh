@@ -1,0 +1,132 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+SCRIPTS_DIR="$SCRIPT_DIR/../scripts"
+TMPDIR_BASE=$(mktemp -d)
+ERRORS=0
+
+cleanup() {
+  rm -rf "$TMPDIR_BASE"
+}
+trap cleanup EXIT
+
+assert_eq() {
+  local label="$1" expected="$2" actual="$3"
+  if [ "$expected" != "$actual" ]; then
+    echo "  FAIL: $label - expected '$expected', got '$actual'"
+    ((ERRORS++))
+  else
+    echo "  OK: $label"
+  fi
+}
+
+assert_file_exists() {
+  local label="$1" path="$2"
+  if [ -f "$path" ]; then
+    echo "  OK: $label"
+  else
+    echo "  FAIL: $label - file does not exist: $path"
+    ((ERRORS++))
+  fi
+}
+
+assert_file_contains() {
+  local label="$1" path="$2" expected="$3"
+  if grep -qF "$expected" "$path" 2>/dev/null; then
+    echo "  OK: $label"
+  else
+    echo "  FAIL: $label - '$expected' not found in $path"
+    ((ERRORS++))
+  fi
+}
+
+# ── Test 1: CLAUDE.local.md is created with context ──
+echo "Test 1: CLAUDE.local.md is created with context"
+WORKTREE="$TMPDIR_BASE/test-worktree-1"
+mkdir -p "$WORKTREE"
+
+# Unset TMUX to test non-tmux path
+unset TMUX 2>/dev/null || true
+
+bash "$SCRIPTS_DIR/open-in-tmux.sh" \
+  --path "$WORKTREE" \
+  --name "test-window" \
+  --context "PR #42: Fix login bug
+
+This PR fixes the login timeout issue."
+
+assert_file_exists "CLAUDE.local.md created" "$WORKTREE/CLAUDE.local.md"
+assert_file_contains "contains task context header" "$WORKTREE/CLAUDE.local.md" "# Task Context"
+assert_file_contains "contains PR number" "$WORKTREE/CLAUDE.local.md" "PR #42: Fix login bug"
+assert_file_contains "contains PR body" "$WORKTREE/CLAUDE.local.md" "This PR fixes the login timeout issue."
+
+# ── Test 2: Non-tmux environment outputs path ──
+echo "Test 2: Non-tmux environment outputs path"
+WORKTREE2="$TMPDIR_BASE/test-worktree-2"
+mkdir -p "$WORKTREE2"
+
+unset TMUX 2>/dev/null || true
+
+OUTPUT=$(bash "$SCRIPTS_DIR/open-in-tmux.sh" \
+  --path "$WORKTREE2" \
+  --name "feat-auth" \
+  --context "Branch: feat/auth, Base: origin/main")
+
+if echo "$OUTPUT" | grep -q "Not in tmux session"; then
+  echo "  OK: non-tmux message shown"
+else
+  echo "  FAIL: expected non-tmux message"
+  ((ERRORS++))
+fi
+
+if echo "$OUTPUT" | grep -q "$WORKTREE2"; then
+  echo "  OK: worktree path printed"
+else
+  echo "  FAIL: expected worktree path in output"
+  ((ERRORS++))
+fi
+
+# ── Test 3: Missing required arguments → error ──
+echo "Test 3: Missing required arguments"
+OUTPUT=$(bash "$SCRIPTS_DIR/open-in-tmux.sh" --path "$WORKTREE2" 2>&1 || true)
+if echo "$OUTPUT" | grep -q "ERROR"; then
+  echo "  OK: error on missing args"
+else
+  echo "  FAIL: expected error for missing args"
+  ((ERRORS++))
+fi
+
+# ── Test 4: Non-existent path → error ──
+echo "Test 4: Non-existent worktree path"
+OUTPUT=$(bash "$SCRIPTS_DIR/open-in-tmux.sh" \
+  --path "$TMPDIR_BASE/does-not-exist" \
+  --name "test" \
+  --context "test" 2>&1 || true)
+if echo "$OUTPUT" | grep -q "ERROR.*does not exist"; then
+  echo "  OK: error on missing path"
+else
+  echo "  FAIL: expected error for non-existent path"
+  ((ERRORS++))
+fi
+
+# ── Test 5: Branch context format ──
+echo "Test 5: Branch context format"
+WORKTREE5="$TMPDIR_BASE/test-worktree-5"
+mkdir -p "$WORKTREE5"
+
+bash "$SCRIPTS_DIR/open-in-tmux.sh" \
+  --path "$WORKTREE5" \
+  --name "feat-auth" \
+  --context "Branch: feat/auth, Base: origin/main
+Feature: User authentication system"
+
+assert_file_contains "contains branch info" "$WORKTREE5/CLAUDE.local.md" "Branch: feat/auth, Base: origin/main"
+assert_file_contains "contains feature desc" "$WORKTREE5/CLAUDE.local.md" "Feature: User authentication system"
+
+# ── Summary ──
+if [ "$ERRORS" -gt 0 ]; then
+  echo "test-open-in-tmux: $ERRORS error(s)"
+  exit 1
+fi
+echo "test-open-in-tmux: all passed"
