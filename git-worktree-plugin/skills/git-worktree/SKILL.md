@@ -2,6 +2,8 @@
 name: git-worktree
 description: Manage git worktrees for parallel branch work. PROACTIVELY USE when user mentions working on a PR, new feature, or new task - ask if they want to create a worktree BEFORE starting implementation.
 allowed-tools: Bash, AskUserQuestion
+context: fork
+agent: general-purpose
 ---
 
 # Git Worktree Manager
@@ -41,6 +43,28 @@ When the user mentions any of these, IMMEDIATELY ask if they want to create a ne
 source "$PLUGIN_DIR/scripts/detect.sh"
 # Sets: WORKTREE_STYLE ("bare"|"normal"|"none"), WORKTREE_ROOT, PROJECT_ROOT
 ```
+
+## Workflow Selection (Manual Trigger)
+
+After detection, use AskUserQuestion to let the user choose a workflow. Filter options based on `WORKTREE_STYLE`:
+
+| WORKTREE_STYLE | Available Options |
+|----------------|-------------------|
+| `bare` | Create Worktree, Cleanup, Bare Clone |
+| `normal` | Create Worktree, Convert to Bare, Cleanup, Bare Clone |
+| `none` | Bare Clone only |
+
+```
+Question: "어떤 작업을 하시겠습니까?"
+Header: "Workflow"
+Options: (filtered by WORKTREE_STYLE)
+- "Create Worktree" - PR 체크아웃 또는 새 브랜치로 worktree 생성
+- "Convert to Bare" - 현재 repo를 bare 구조로 변환
+- "Cleanup" - 불필요한 worktree 제거
+- "Bare Clone" - 새 프로젝트를 bare repo로 clone
+```
+
+Then proceed to the selected workflow section below.
 
 ## Workflow A: Create Worktree
 
@@ -111,6 +135,35 @@ Options:
 ```
 
 If "Yes": `cd {worktree-path} && git push -u origin {branch-name}`
+
+### Step 5: Open in tmux + Create CLAUDE.local.md
+
+After worktree creation, open a new tmux window with claude auto-started.
+
+**PR Checkout:**
+```bash
+# Get PR info for context
+PR_INFO=$(gh pr view {NUMBER} --json title,body --jq '"PR #\(.number // "{NUMBER}"): \(.title)\n\n\(.body)"' 2>/dev/null || echo "PR #{NUMBER}")
+
+bash "$PLUGIN_DIR/scripts/open-in-tmux.sh" \
+  --path "{worktree-path}" \
+  --name "pr-{NUMBER}" \
+  --context "$PR_INFO"
+```
+
+**New Branch:**
+```bash
+bash "$PLUGIN_DIR/scripts/open-in-tmux.sh" \
+  --path "{worktree-path}" \
+  --name "{dir-name}" \
+  --context "Branch: {branch}, Base: {base}
+Feature: {user's feature description}"
+```
+
+The script:
+- Creates `CLAUDE.local.md` with task context so Claude Code understands the work
+- If inside tmux (`$TMUX` set): opens new window named after branch/PR, runs `claude`
+- If not in tmux: prints the worktree path only
 
 ## Workflow B-1: Bare Clone
 

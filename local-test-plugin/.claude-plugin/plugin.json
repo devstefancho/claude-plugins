@@ -1,0 +1,6 @@
+{
+  "name": "local-test-plugin",
+  "description": "Symlink-based local plugin testing for development workflow",
+  "version": "1.0.0",
+  "author": { "name": "Stefan Cho" }
+}
