@@ -33,7 +33,7 @@ When the user mentions any of these, **skip the Workflow/Type selection** and pr
 | User says | Action |
 |-----------|--------|
 | PR number (e.g., "PR #9", "work on PR 123") | → Workflow A: PR Checkout (0 questions) |
-| New feature/task (e.g., "implement auth", "add dark mode") | → Workflow A: New Branch (2 questions) |
+| New feature/task (e.g., "implement auth", "add dark mode") | → Workflow A: New Branch (3-4 questions) |
 | `/git-worktree` manual trigger | → Workflow Selection (show menu) |
 
 **Ask BEFORE proceeding with implementation work.**
@@ -113,30 +113,78 @@ bash "$PLUGIN_DIR/scripts/create-and-open.sh" \
   --context "$PR_INFO"
 ```
 
-### Smart Path: New Branch (2 questions)
+### Smart Path: New Branch (3-4 questions)
 
-When user mentions a new feature/task, ask only 2 questions:
+When user mentions a new feature/task, ask 3-4 questions:
 
-**Question 1: Branch type (combines prefix + base)**
+**Question 1: Branch type**
 ```
 Question: "브랜치 타입을 선택하세요"
 Header: "Branch"
 Options:
-- "feat/ from main (Recommended)" - 새 기능 개발
-- "fix/ from main" - 버그 수정
-- "chore/ from main" - 유지보수 작업
-- "refactor/ from main" - 코드 리팩토링
+- "feat/ (Recommended)" - 새 기능 개발
+- "fix/" - 버그 수정
+- "chore/" - 유지보수 작업
+- "refactor/" - 코드 리팩토링
 ```
 
-Parse the selection: prefix = first word before `/`, base = `origin/main`.
-If user selects "Other", ask for custom prefix and base branch separately.
+Parse the selection: prefix = first word before `/`.
+If user selects "Other", ask for custom prefix.
 
-**Question 2: Feature name**
+**Question 2: Base branch**
+```
+Question: "어느 브랜치에서 분기하시겠습니까?"
+Header: "Base"
+Options:
+- "main (Recommended)" - main 브랜치의 최신 remote 상태에서 분기
+- "develop" - develop 브랜치의 최신 remote 상태에서 분기
+```
+
+Parse the selection: base = `origin/{selection}`.
+If user selects "Other", ask for custom base (e.g., `origin/release/v2`).
+
+**Question 3: Feature name**
 ```
 Ask user to briefly describe the feature. Format: lowercase, spaces/underscores → dashes.
 ```
 
-Then run this **complete** Bash block. Replace `{prefix}`, `{feature-name}`, `{dir-name}`, and `{description}`:
+**Question 4: Context interview (optional)**
+```
+Question: "Worktree에서 작업할 내용을 상세히 입력하시겠습니까?"
+Header: "Context"
+Options:
+- "입력하기" - 해결할 문제, 할 일, 참고사항을 입력
+- "건너뛰기" - 기본 컨텍스트만 사용
+```
+
+If user selects "입력하기", ask a follow-up free-text question:
+```
+"작업 컨텍스트를 자유롭게 입력해주세요. 예시:
+- 해결할 문제: 로그인 세션 만료 시 자동 갱신이 안 됨
+- 할 일: 토큰 갱신 로직 추가, 미들웨어 수정, 테스트 작성
+- 참고: src/auth/ 디렉토리, v2 API 호환 필요"
+```
+
+Organize the user's response into `## Problem`, `## Tasks`, `## Notes` sections and append to the `--context` parameter.
+
+**`--context` format when interview is completed:**
+```
+Branch: {prefix}/{feature-name}, Base: origin/{base-branch}
+Feature: {description}
+
+## Problem
+{organized problem description}
+
+## Tasks
+{organized task list}
+
+## Notes
+{organized notes}
+```
+
+**`--context` format when skipped:** same as before (Branch + Feature only).
+
+Then run this **complete** Bash block. Replace `{prefix}`, `{feature-name}`, `{base-branch}`, `{dir-name}`, and `{description}`:
 
 ```bash
 # === PLUGIN_DIR Resolution ===
@@ -169,10 +217,10 @@ bash "$PLUGIN_DIR/scripts/create-and-open.sh" \
   --project-root "$PROJECT_ROOT" \
   --worktree-root "$WORKTREE_ROOT" \
   --branch "{prefix}/{feature-name}" \
-  --base "origin/main" \
+  --base "origin/{base-branch}" \
   --push \
   --tmux-name "{dir-name}" \
-  --context "Branch: {prefix}/{feature-name}, Base: origin/main
+  --context "Branch: {prefix}/{feature-name}, Base: origin/{base-branch}
 Feature: {description}"
 ```
 

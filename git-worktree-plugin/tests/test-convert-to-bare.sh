@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-SCRIPTS_DIR="$SCRIPT_DIR/../scripts"
+SCRIPTS_DIR="$SCRIPT_DIR/../skills/git-worktree/scripts"
 TMPDIR_BASE=$(mktemp -d)
 ERRORS=0
 
