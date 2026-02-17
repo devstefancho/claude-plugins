@@ -40,11 +40,16 @@ git clone --bare "$URL" "$TARGET_PATH/.bare"
 # 3. Create gitdir pointer
 echo "gitdir: ./.bare" > "$TARGET_PATH/.git"
 
-# 4. Configure fetch refspec
-git -C "$TARGET_PATH" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+# 4. Ensure bare flag is set (worktree 추가 시 false로 바뀔 수 있으므로 명시적 설정)
+git -C "$TARGET_PATH" config core.bare true
 
-# 5. Fetch all remote branches
-git -C "$TARGET_PATH" fetch origin
+# 5. Configure fetch refspec and map local refs to remote tracking refs
+# (git clone --bare already fetched data, so no network fetch needed)
+git -C "$TARGET_PATH" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+cd "$TARGET_PATH"
+for ref in $(git for-each-ref --format='%(refname:short)' refs/heads/); do
+  git update-ref "refs/remotes/origin/$ref" "refs/heads/$ref"
+done
 
 # 6. Create trees directory
 mkdir -p "$TARGET_PATH/trees"

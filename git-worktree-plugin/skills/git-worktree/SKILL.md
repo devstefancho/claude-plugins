@@ -12,41 +12,35 @@ agent: general-purpose
 
 | Workflow | Trigger | Scripts |
 |----------|---------|---------|
-| A. Create Worktree | PR/새 기능 작업 언급 | detect.sh → create-worktree.sh |
+| A. Create Worktree | PR/새 기능 작업 언급 | create-and-open.sh |
 | B-1. Bare Clone | 새 프로젝트 세팅 요청 | bare-clone.sh |
 | B-2. Convert to Bare | bare 전환 요청 | detect.sh → convert-to-bare.sh |
 | C. Cleanup | worktree 정리 요청 | cleanup-worktree.sh |
 
-## PLUGIN_DIR Resolution
+## CRITICAL: Script-Only Execution
 
-All scripts are located in the plugin's `scripts/` directory. Resolve the path:
+**절대 git worktree/tmux 명령어를 직접 실행하지 마세요.**
+모든 워크플로우는 반드시 `$PLUGIN_DIR/scripts/` 의 스크립트를 통해 실행해야 합니다.
+스크립트가 worktree 생성, push, CLAUDE.local.md 생성, tmux 윈도우 열기를 모두 처리합니다.
 
-```bash
-# Find the plugin's scripts directory
-PLUGIN_DIR=$(dirname "$(find ~/.claude -path "*/git-worktree-plugin/*/scripts/detect.sh" 2>/dev/null | head -1)")/..
-```
+금지 명령어: `git worktree add`, `tmux new-window`, `tmux split-window` 등을 직접 호출하지 마세요.
+반드시 아래 Bash 코드블록을 그대로 복사하여 플레이스홀더(`{...}`)만 치환 후 실행하세요.
 
-If the above fails (e.g., local development), fall back to the repository root where this SKILL.md is located.
+## Smart Detection (Proactive Trigger)
 
-## Proactive Usage Triggers
+When the user mentions any of these, **skip the Workflow/Type selection** and proceed directly:
 
-When the user mentions any of these, IMMEDIATELY ask if they want to create a new worktree:
-- Working on a PR (e.g., "Let's work on PR #9", "work on PR #123")
-- Starting a new feature/task (e.g., "implement new feature", "handle issue")
-- Implementing something new while on main branch
+| User says | Action |
+|-----------|--------|
+| PR number (e.g., "PR #9", "work on PR 123") | → Workflow A: PR Checkout (0 questions) |
+| New feature/task (e.g., "implement auth", "add dark mode") | → Workflow A: New Branch (2 questions) |
+| `/git-worktree` manual trigger | → Workflow Selection (show menu) |
 
 **Ask BEFORE proceeding with implementation work.**
 
-## Detection (Run before all workflows)
+## Workflow Selection (Manual Trigger Only)
 
-```bash
-source "$PLUGIN_DIR/scripts/detect.sh"
-# Sets: WORKTREE_STYLE ("bare"|"normal"|"none"), WORKTREE_ROOT, PROJECT_ROOT
-```
-
-## Workflow Selection (Manual Trigger)
-
-After detection, use AskUserQuestion to let the user choose a workflow. Filter options based on `WORKTREE_STYLE`:
+Only show when `/git-worktree` is explicitly invoked. First run the Inline Detection block below to determine `WORKTREE_STYLE`, then filter options:
 
 | WORKTREE_STYLE | Available Options |
 |----------------|-------------------|
@@ -64,111 +58,145 @@ Options: (filtered by WORKTREE_STYLE)
 - "Bare Clone" - 새 프로젝트를 bare repo로 clone
 ```
 
-Then proceed to the selected workflow section below.
+To detect `WORKTREE_STYLE`, run this single Bash call:
+
+```bash
+TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$TOPLEVEL" ]; then
+  echo "WORKTREE_STYLE=none"
+elif [ -f "$TOPLEVEL/.git" ]; then
+  echo "WORKTREE_STYLE=bare"
+else
+  echo "WORKTREE_STYLE=normal"
+fi
+```
 
 ## Workflow A: Create Worktree
 
-### Step 1: Detect repo type
-Run detection (above). If WORKTREE_STYLE is "none", inform user they're not in a git repository.
+### Smart Path: PR Checkout (0 questions)
 
-### Step 2: Determine creation type
-Use AskUserQuestion:
-```
-Question: "How would you like to create the worktree?"
-Header: "Type"
-Options:
-- "Checkout PR" - Create worktree from existing PR
-- "New branch" - Create worktree with new branch
-```
+When user mentions a PR number, extract it and run this **complete** Bash block. Replace `{NUMBER}` with the actual PR number:
 
-### Step 3a: PR Checkout (if "Checkout PR")
-Ask for PR number, then run:
 ```bash
-bash "$PLUGIN_DIR/scripts/create-worktree.sh" \
+# === PLUGIN_DIR Resolution ===
+PLUGIN_DIR=$(find ~/.claude/plugins/cache -maxdepth 6 -path "*/git-worktree-plugin/*/scripts/create-and-open.sh" 2>/dev/null \
+  | sed 's|/scripts/create-and-open.sh||' \
+  | sort -V \
+  | tail -1)
+if [ -z "$PLUGIN_DIR" ]; then
+  _SKILL_SCRIPTS=$(find ~/.agents/skills -maxdepth 4 -path "*/git-worktree/scripts/create-and-open.sh" 2>/dev/null | head -1)
+  [ -n "$_SKILL_SCRIPTS" ] && PLUGIN_DIR=$(dirname "$_SKILL_SCRIPTS")/..
+fi
+if [ -z "$PLUGIN_DIR" ]; then echo "ERROR: Plugin scripts not found" >&2; exit 1; fi
+
+# === Inline Detection ===
+TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$TOPLEVEL" ]; then
+  echo "ERROR: Not in a git repository" >&2; exit 1
+elif [ -f "$TOPLEVEL/.git" ]; then
+  GIT_COMMON=$(cd "$TOPLEVEL" && git rev-parse --git-common-dir)
+  BARE_DIR=$(cd "$TOPLEVEL" && cd "$GIT_COMMON" && pwd)
+  PROJECT_ROOT=$(dirname "$BARE_DIR")
+  WORKTREE_ROOT="$PROJECT_ROOT/trees"
+else
+  PROJECT_ROOT="$TOPLEVEL"
+  WORKTREE_ROOT="$TOPLEVEL/trees"
+fi
+
+# === Execute ===
+PR_INFO=$(gh pr view {NUMBER} --json title,body --jq '"PR #\(.number): \(.title)\n\n\(.body)"' 2>/dev/null || echo "PR #{NUMBER}")
+bash "$PLUGIN_DIR/scripts/create-and-open.sh" \
   --project-root "$PROJECT_ROOT" \
   --worktree-root "$WORKTREE_ROOT" \
-  --pr {NUMBER}
-```
-
-### Step 3b: New Branch (if "New branch")
-Use AskUserQuestion for prefix, feature name, and base branch:
-
-**Prefix:**
-```
-Question: "Select a branch prefix"
-Header: "Prefix"
-Options:
-- "feat" - New feature
-- "fix" - Bug fix
-- "chore" - Maintenance
-- "refactor" - Code refactoring
-```
-
-**Feature Name:** Ask user to describe briefly. Format: lowercase, spaces/underscores → dashes.
-
-**Base Branch:**
-```
-Question: "Select base branch"
-Header: "Base"
-Options:
-- "origin/main (Recommended)" - Main branch
-- "origin/develop" - Development branch
-```
-
-Then run:
-```bash
-bash "$PLUGIN_DIR/scripts/create-worktree.sh" \
-  --project-root "$PROJECT_ROOT" \
-  --worktree-root "$WORKTREE_ROOT" \
-  --branch "{prefix}/{feature-name}" \
-  --base "origin/{base}"
-```
-
-### Step 4: Set Remote Tracking (optional)
-Use AskUserQuestion:
-```
-Question: "Push branch to remote and set tracking?"
-Header: "Remote"
-Options:
-- "Yes (Recommended)" - Push and set upstream
-- "No" - Keep local only
-```
-
-If "Yes": `cd {worktree-path} && git push -u origin {branch-name}`
-
-### Step 5: Open in tmux + Create CLAUDE.local.md
-
-After worktree creation, open a new tmux window with claude auto-started.
-
-**PR Checkout:**
-```bash
-# Get PR info for context
-PR_INFO=$(gh pr view {NUMBER} --json title,body --jq '"PR #\(.number // "{NUMBER}"): \(.title)\n\n\(.body)"' 2>/dev/null || echo "PR #{NUMBER}")
-
-bash "$PLUGIN_DIR/scripts/open-in-tmux.sh" \
-  --path "{worktree-path}" \
-  --name "pr-{NUMBER}" \
+  --pr {NUMBER} \
+  --tmux-name "pr-{NUMBER}" \
   --context "$PR_INFO"
 ```
 
-**New Branch:**
-```bash
-bash "$PLUGIN_DIR/scripts/open-in-tmux.sh" \
-  --path "{worktree-path}" \
-  --name "{dir-name}" \
-  --context "Branch: {branch}, Base: {base}
-Feature: {user's feature description}"
+### Smart Path: New Branch (2 questions)
+
+When user mentions a new feature/task, ask only 2 questions:
+
+**Question 1: Branch type (combines prefix + base)**
+```
+Question: "브랜치 타입을 선택하세요"
+Header: "Branch"
+Options:
+- "feat/ from main (Recommended)" - 새 기능 개발
+- "fix/ from main" - 버그 수정
+- "chore/ from main" - 유지보수 작업
+- "refactor/ from main" - 코드 리팩토링
 ```
 
-The script:
-- Creates `CLAUDE.local.md` with task context so Claude Code understands the work
-- If inside tmux (`$TMUX` set): opens new window named after branch/PR, runs `claude`
-- If not in tmux: prints the worktree path only
+Parse the selection: prefix = first word before `/`, base = `origin/main`.
+If user selects "Other", ask for custom prefix and base branch separately.
+
+**Question 2: Feature name**
+```
+Ask user to briefly describe the feature. Format: lowercase, spaces/underscores → dashes.
+```
+
+Then run this **complete** Bash block. Replace `{prefix}`, `{feature-name}`, `{dir-name}`, and `{description}`:
+
+```bash
+# === PLUGIN_DIR Resolution ===
+PLUGIN_DIR=$(find ~/.claude/plugins/cache -maxdepth 6 -path "*/git-worktree-plugin/*/scripts/create-and-open.sh" 2>/dev/null \
+  | sed 's|/scripts/create-and-open.sh||' \
+  | sort -V \
+  | tail -1)
+if [ -z "$PLUGIN_DIR" ]; then
+  _SKILL_SCRIPTS=$(find ~/.agents/skills -maxdepth 4 -path "*/git-worktree/scripts/create-and-open.sh" 2>/dev/null | head -1)
+  [ -n "$_SKILL_SCRIPTS" ] && PLUGIN_DIR=$(dirname "$_SKILL_SCRIPTS")/..
+fi
+if [ -z "$PLUGIN_DIR" ]; then echo "ERROR: Plugin scripts not found" >&2; exit 1; fi
+
+# === Inline Detection ===
+TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$TOPLEVEL" ]; then
+  echo "ERROR: Not in a git repository" >&2; exit 1
+elif [ -f "$TOPLEVEL/.git" ]; then
+  GIT_COMMON=$(cd "$TOPLEVEL" && git rev-parse --git-common-dir)
+  BARE_DIR=$(cd "$TOPLEVEL" && cd "$GIT_COMMON" && pwd)
+  PROJECT_ROOT=$(dirname "$BARE_DIR")
+  WORKTREE_ROOT="$PROJECT_ROOT/trees"
+else
+  PROJECT_ROOT="$TOPLEVEL"
+  WORKTREE_ROOT="$TOPLEVEL/trees"
+fi
+
+# === Execute ===
+bash "$PLUGIN_DIR/scripts/create-and-open.sh" \
+  --project-root "$PROJECT_ROOT" \
+  --worktree-root "$WORKTREE_ROOT" \
+  --branch "{prefix}/{feature-name}" \
+  --base "origin/main" \
+  --push \
+  --tmux-name "{dir-name}" \
+  --context "Branch: {prefix}/{feature-name}, Base: origin/main
+Feature: {description}"
+```
+
+### Manual Path: Create Worktree
+
+If reached via Workflow Selection, first ask Type (PR or New Branch), then follow the appropriate Smart Path above.
 
 ## Workflow B-1: Bare Clone
 
-Use AskUserQuestion to collect URL and path, then run:
+Use AskUserQuestion to collect URL and path, then run this **complete** Bash block. Replace `{URL}` and `{PATH}`:
+
 ```bash
+# === PLUGIN_DIR Resolution ===
+PLUGIN_DIR=$(find ~/.claude/plugins/cache -maxdepth 6 -path "*/git-worktree-plugin/*/scripts/create-and-open.sh" 2>/dev/null \
+  | sed 's|/scripts/create-and-open.sh||' \
+  | sort -V \
+  | tail -1)
+if [ -z "$PLUGIN_DIR" ]; then
+  _SKILL_SCRIPTS=$(find ~/.agents/skills -maxdepth 4 -path "*/git-worktree/scripts/create-and-open.sh" 2>/dev/null | head -1)
+  [ -n "$_SKILL_SCRIPTS" ] && PLUGIN_DIR=$(dirname "$_SKILL_SCRIPTS")/..
+fi
+if [ -z "$PLUGIN_DIR" ]; then echo "ERROR: Plugin scripts not found" >&2; exit 1; fi
+
+# === Execute ===
 bash "$PLUGIN_DIR/scripts/bare-clone.sh" \
   --url "{URL}" \
   --path "{PATH}" \
@@ -178,7 +206,7 @@ bash "$PLUGIN_DIR/scripts/bare-clone.sh" \
 ## Workflow B-2: Convert to Bare
 
 ### Step 1: Detect and confirm
-Run detection. If WORKTREE_STYLE is already "bare", inform user it's already a bare repo.
+Run inline detection. If WORKTREE_STYLE is already "bare", inform user it's already a bare repo.
 
 Use AskUserQuestion:
 ```
@@ -190,7 +218,34 @@ Options:
 ```
 
 ### Step 2: Execute
+
+Run this **complete** Bash block:
+
 ```bash
+# === PLUGIN_DIR Resolution ===
+PLUGIN_DIR=$(find ~/.claude/plugins/cache -maxdepth 6 -path "*/git-worktree-plugin/*/scripts/create-and-open.sh" 2>/dev/null \
+  | sed 's|/scripts/create-and-open.sh||' \
+  | sort -V \
+  | tail -1)
+if [ -z "$PLUGIN_DIR" ]; then
+  _SKILL_SCRIPTS=$(find ~/.agents/skills -maxdepth 4 -path "*/git-worktree/scripts/create-and-open.sh" 2>/dev/null | head -1)
+  [ -n "$_SKILL_SCRIPTS" ] && PLUGIN_DIR=$(dirname "$_SKILL_SCRIPTS")/..
+fi
+if [ -z "$PLUGIN_DIR" ]; then echo "ERROR: Plugin scripts not found" >&2; exit 1; fi
+
+# === Inline Detection ===
+TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$TOPLEVEL" ]; then
+  echo "ERROR: Not in a git repository" >&2; exit 1
+elif [ -f "$TOPLEVEL/.git" ]; then
+  GIT_COMMON=$(cd "$TOPLEVEL" && git rev-parse --git-common-dir)
+  BARE_DIR=$(cd "$TOPLEVEL" && cd "$GIT_COMMON" && pwd)
+  PROJECT_ROOT=$(dirname "$BARE_DIR")
+else
+  PROJECT_ROOT="$TOPLEVEL"
+fi
+
+# === Execute ===
 bash "$PLUGIN_DIR/scripts/convert-to-bare.sh" --project-root "$PROJECT_ROOT"
 ```
 
@@ -199,7 +254,23 @@ bash "$PLUGIN_DIR/scripts/convert-to-bare.sh" --project-root "$PROJECT_ROOT"
 ## Workflow C: Cleanup
 
 ### Step 1: List worktrees
+
+Run this **complete** Bash block to detect and list:
+
 ```bash
+# === Inline Detection ===
+TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$TOPLEVEL" ]; then
+  echo "ERROR: Not in a git repository" >&2; exit 1
+elif [ -f "$TOPLEVEL/.git" ]; then
+  GIT_COMMON=$(cd "$TOPLEVEL" && git rev-parse --git-common-dir)
+  BARE_DIR=$(cd "$TOPLEVEL" && cd "$GIT_COMMON" && pwd)
+  PROJECT_ROOT=$(dirname "$BARE_DIR")
+else
+  PROJECT_ROOT="$TOPLEVEL"
+fi
+
+# === List ===
 git -C "$PROJECT_ROOT" worktree list
 ```
 
@@ -207,16 +278,43 @@ git -C "$PROJECT_ROOT" worktree list
 Use AskUserQuestion to ask which worktree(s) to remove.
 
 ### Step 3: Execute
+
+Run this **complete** Bash block. Replace `{WORKTREE_PATH}` with the selected path, or use `--all`:
+
 ```bash
-# Single worktree
+# === PLUGIN_DIR Resolution ===
+PLUGIN_DIR=$(find ~/.claude/plugins/cache -maxdepth 6 -path "*/git-worktree-plugin/*/scripts/create-and-open.sh" 2>/dev/null \
+  | sed 's|/scripts/create-and-open.sh||' \
+  | sort -V \
+  | tail -1)
+if [ -z "$PLUGIN_DIR" ]; then
+  _SKILL_SCRIPTS=$(find ~/.agents/skills -maxdepth 4 -path "*/git-worktree/scripts/create-and-open.sh" 2>/dev/null | head -1)
+  [ -n "$_SKILL_SCRIPTS" ] && PLUGIN_DIR=$(dirname "$_SKILL_SCRIPTS")/..
+fi
+if [ -z "$PLUGIN_DIR" ]; then echo "ERROR: Plugin scripts not found" >&2; exit 1; fi
+
+# === Inline Detection ===
+TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$TOPLEVEL" ]; then
+  echo "ERROR: Not in a git repository" >&2; exit 1
+elif [ -f "$TOPLEVEL/.git" ]; then
+  GIT_COMMON=$(cd "$TOPLEVEL" && git rev-parse --git-common-dir)
+  BARE_DIR=$(cd "$TOPLEVEL" && cd "$GIT_COMMON" && pwd)
+  PROJECT_ROOT=$(dirname "$BARE_DIR")
+else
+  PROJECT_ROOT="$TOPLEVEL"
+fi
+
+# === Execute (choose one) ===
+# Single worktree:
 bash "$PLUGIN_DIR/scripts/cleanup-worktree.sh" \
   --project-root "$PROJECT_ROOT" \
   --path "{WORKTREE_PATH}"
 
-# All worktrees
-bash "$PLUGIN_DIR/scripts/cleanup-worktree.sh" \
-  --project-root "$PROJECT_ROOT" \
-  --all
+# All worktrees:
+# bash "$PLUGIN_DIR/scripts/cleanup-worktree.sh" \
+#   --project-root "$PROJECT_ROOT" \
+#   --all
 ```
 
 ## Format Rules

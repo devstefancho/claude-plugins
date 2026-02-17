@@ -73,6 +73,9 @@ cd "$PROJECT_ROOT"
 mv .git .bare
 echo "gitdir: ./.bare" > .git
 
+# Mark as bare repository (원래 .git/config에는 bare=false이므로 반드시 설정 필요)
+git config core.bare true
+
 # Configure fetch
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 git fetch origin
