@@ -48,7 +48,11 @@ if [ -n "$PR" ]; then
 
   if [ -n "$PR_BRANCH" ]; then
     # Same-repo PR: fetch the branch and create worktree directly
+    echo "Fetching PR branch '$PR_BRANCH' from origin..."
     git -C "$PROJECT_ROOT" fetch origin "$PR_BRANCH"
+    FETCHED_COMMIT=$(git -C "$PROJECT_ROOT" rev-parse --short "origin/$PR_BRANCH" 2>/dev/null || echo "unknown")
+    echo "Fetched: origin/$PR_BRANCH → $FETCHED_COMMIT ($(date '+%Y-%m-%d %H:%M:%S'))"
+
     git -C "$PROJECT_ROOT" worktree add "$WORKTREE_PATH" -b "pr-$PR" "origin/$PR_BRANCH"
   else
     # Fork PR or gh unavailable: fallback to detach + gh pr checkout
@@ -77,7 +81,10 @@ else
 
   # Targeted fetch: only the base branch instead of all refs
   BASE_BRANCH=$(echo "$BASE" | sed 's|^origin/||')
+  echo "Fetching latest '$BASE_BRANCH' from origin..."
   git -C "$PROJECT_ROOT" fetch origin "$BASE_BRANCH"
+  FETCHED_COMMIT=$(git -C "$PROJECT_ROOT" rev-parse --short "$BASE" 2>/dev/null || echo "unknown")
+  echo "Fetched: $BASE → $FETCHED_COMMIT ($(date '+%Y-%m-%d %H:%M:%S'))"
 
   git -C "$PROJECT_ROOT" worktree add "$WORKTREE_PATH" -b "$BRANCH" "$BASE"
 

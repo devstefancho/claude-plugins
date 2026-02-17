@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-SCRIPTS_DIR="$SCRIPT_DIR/../scripts"
+SCRIPTS_DIR="$SCRIPT_DIR/../skills/git-worktree/scripts"
 TMPDIR_BASE=$(mktemp -d)
 ERRORS=0
 
@@ -42,13 +42,27 @@ echo "Test 1: Normal clone - create branch worktree"
 NORMAL_REPO="$TMPDIR_BASE/normal-clone"
 git clone "$SOURCE_REPO" "$NORMAL_REPO" --quiet
 
-bash "$SCRIPTS_DIR/create-worktree.sh" \
+OUTPUT=$(bash "$SCRIPTS_DIR/create-worktree.sh" \
   --project-root "$NORMAL_REPO" \
   --worktree-root "$NORMAL_REPO/trees" \
   --branch "feat/auth" \
-  --base "origin/main"
+  --base "origin/main" 2>&1)
 
 assert_dir_exists "worktree directory created" "$NORMAL_REPO/trees/feat-auth"
+
+# Verify fetch output messages
+if echo "$OUTPUT" | grep -q "Fetching latest"; then
+  echo "  OK: fetch progress message shown"
+else
+  echo "  FAIL: expected 'Fetching latest' message in output"
+  ((ERRORS++))
+fi
+if echo "$OUTPUT" | grep -q "Fetched:"; then
+  echo "  OK: fetch result message shown"
+else
+  echo "  FAIL: expected 'Fetched:' message in output"
+  ((ERRORS++))
+fi
 
 # Verify branch exists (+ prefix means checked out in a worktree)
 BRANCH_EXISTS=$(git -C "$NORMAL_REPO" branch --list "feat/auth" | sed 's/^[* +]*//')
@@ -65,13 +79,27 @@ git -C "$BARE_PROJECT" fetch origin --quiet
 mkdir -p "$BARE_PROJECT/trees"
 git -C "$BARE_PROJECT" worktree add "./trees/main" main --quiet
 
-bash "$SCRIPTS_DIR/create-worktree.sh" \
+OUTPUT=$(bash "$SCRIPTS_DIR/create-worktree.sh" \
   --project-root "$BARE_PROJECT" \
   --worktree-root "$BARE_PROJECT/trees" \
   --branch "fix/bug-123" \
-  --base "origin/main"
+  --base "origin/main" 2>&1)
 
 assert_dir_exists "bare repo worktree created" "$BARE_PROJECT/trees/fix-bug-123"
+
+# Verify fetch output messages for bare repo
+if echo "$OUTPUT" | grep -q "Fetching latest"; then
+  echo "  OK: bare repo fetch progress message shown"
+else
+  echo "  FAIL: expected 'Fetching latest' message in bare repo output"
+  ((ERRORS++))
+fi
+if echo "$OUTPUT" | grep -q "Fetched:"; then
+  echo "  OK: bare repo fetch result message shown"
+else
+  echo "  FAIL: expected 'Fetched:' message in bare repo output"
+  ((ERRORS++))
+fi
 
 # ── Test 3: Duplicate path → error ──
 echo "Test 3: Duplicate path raises error"
