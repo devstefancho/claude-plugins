@@ -1,7 +1,7 @@
 {
   "name": "git-worktree-plugin",
   "description": "Manage git worktrees for parallel branch work with shell script automation. Supports bare repo setup, conversion, worktree creation/cleanup with backup and rollback safety.",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "author": {
     "name": "Stefan Cho"
   }

@@ -32,7 +32,7 @@
     },
     {
       "name": "git-worktree-plugin",
-      "source": "./git-worktree-plugin",
+      "source": "./git-worktree-plugin/dist",
       "description": "Manage git worktrees for parallel branch work with proactive suggestions"
     },
     {
