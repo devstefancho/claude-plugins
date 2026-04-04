@@ -84,6 +84,11 @@
       "name": "local-test-plugin",
       "source": "./local-test-plugin",
       "description": "Symlink-based local plugin testing for development workflow"
+    },
+    {
+      "name": "writing-specs-plugin",
+      "source": "./writing-specs-plugin",
+      "description": "Spec-driven development with search, conflict detection, and reporting"
     }
   ]
 }

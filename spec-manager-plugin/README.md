@@ -1,3 +1,5 @@
+> **Deprecated**: Use `writing-specs-plugin` instead. This plugin is no longer maintained.
+
 # Spec Manager Plugin
 
 Manage specification files for spec-driven development workflow.

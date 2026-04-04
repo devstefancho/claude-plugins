@@ -1,0 +1,46 @@
+{
+  "skill_name": "writing-specs",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "JWT 토큰 기반 인증 시스템 스펙 생성해줘",
+      "expected_output": "specs/ 하위에 jwt 관련 spec.md 파일이 생성되고, 4개 섹션(Purpose, Requirements, Approach, Verification)이 모두 포함되며, 마지막에 Spec Report가 출력된다.",
+      "files": [],
+      "expectations": [
+        "A markdown file is created under specs/ directory",
+        "The file contains a '## Purpose' section with 1-2 sentences",
+        "The file contains a '## Requirements' section with bullet points",
+        "The file contains a '## Approach' section without code snippets",
+        "The file contains a '## Verification' section with bullet points",
+        "A Spec Report table is output with Action, File, and Title fields",
+        "The report includes a Search Results section"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "인증 관련 스펙 업데이트해줘 - OAuth2 지원 추가",
+      "expected_output": "기존 specs/jwt-authentication.md가 검색되어 발견되고, 사용자에게 업데이트/생성/취소 선택지가 제공된다.",
+      "files": [],
+      "expectations": [
+        "The skill searches for existing specs before proceeding",
+        "The existing jwt-authentication.md spec is found during search",
+        "The user is asked how to proceed (update existing or create new)",
+        "The report shows Action as 'Updated'",
+        "OAuth2 appears in the updated spec content"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "specs/api 디렉토리에 REST API 에러 핸들링 스펙 만들어줘",
+      "expected_output": "specs/api/ 1-depth 서브디렉토리가 생성되고 그 안에 스펙 파일이 작성된다.",
+      "files": [],
+      "expectations": [
+        "A subdirectory specs/api/ is created",
+        "The spec file is placed inside specs/api/ (not deeper)",
+        "The filename uses lowercase-with-hyphens format",
+        "All 4 template sections are present in the created file",
+        "The Spec Report correctly shows the file path under specs/api/"
+      ]
+    }
+  ]
+}
