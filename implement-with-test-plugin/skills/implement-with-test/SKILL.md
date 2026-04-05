@@ -29,7 +29,12 @@ Implements planned work (spec files or user requests) into production code with 
 Determine what to implement:
 
 1. **Spec file provided as argument** → Read and parse the spec file directly
-2. **No argument but `specs/` exists** → Run `Glob specs/**/*.md` to list available specs. Present the list and ask the user which spec to implement via `AskUserQuestion`
+2. **No argument but `specs/` exists** → git diff로 변경된 스펙을 우선 감지:
+   a. `git diff --name-only HEAD -- specs/` 로 새로 추가되거나 수정된 스펙 파일 확인
+   b. untracked 파일도 확인: `git ls-files --others --exclude-standard specs/`
+   c. 변경된 스펙이 1개 → 해당 스펙을 자동으로 선택하여 진행
+   d. 변경된 스펙이 여러 개 → 변경된 스펙 목록만 보여주고 `AskUserQuestion`으로 선택 요청
+   e. 변경된 스펙이 없으면 → 전체 `Glob specs/**/*.md` fallback하여 목록 표시
 3. **Direct request (no spec)** → Extract structured information from the user's request:
    - Purpose: What needs to be done and why (1-2 sentences)
    - Requirements: Concrete requirements (3-5 bullets)
