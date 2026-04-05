@@ -1,0 +1,62 @@
+{
+  "skill_name": "implement-with-test",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "specs/todo-filter.md 스펙을 구현해줘",
+      "expected_output": "src/utils/ 하위에 todo-filter 관련 TypeScript 모듈과 colocated 테스트 파일이 생성되고, vitest로 테스트가 통과됨",
+      "files": [
+        "evals/files/project-ts-vitest/package.json",
+        "evals/files/project-ts-vitest/vitest.config.ts",
+        "evals/files/project-ts-vitest/src/utils/validator.ts",
+        "evals/files/project-ts-vitest/src/utils/validator.test.ts",
+        "evals/files/project-ts-vitest/specs/todo-filter.md"
+      ],
+      "expectations": [
+        "A TypeScript implementation file is created under src/utils/",
+        "A test file is created following the colocated pattern (*.test.ts in same directory)",
+        "The test file imports from vitest (describe, it, expect) matching existing test patterns",
+        "Tests cover all 5 Verification items from the spec",
+        "The implementation uses a class or chainable pattern as specified in the Approach",
+        "A structured Implementation Report is output at the end"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "rate limiting 미들웨어를 구현해줘. IP 기반으로 분당 100회 요청 제한하고, 제한 초과시 429 응답 반환해야 해. 테스트도 같이 작성해줘.",
+      "expected_output": "src/services/ 또는 src/middleware/ 하위에 rate limiter 모듈과 __tests__/ 디렉토리에 jest 테스트 파일이 생성됨",
+      "files": [
+        "evals/files/project-ts-jest/package.json",
+        "evals/files/project-ts-jest/src/services/auth.service.ts",
+        "evals/files/project-ts-jest/src/services/__tests__/auth.service.test.ts"
+      ],
+      "expectations": [
+        "Implementation file is created under src/services/ or src/middleware/",
+        "Test file is created under __tests__/ directory matching the existing pattern",
+        "Test file uses jest patterns (describe/it/expect) without vitest imports",
+        "Tests verify the 100 requests/minute limit behavior",
+        "Tests verify 429 response when limit is exceeded",
+        "The skill extracted requirements from the direct request without a spec file"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "specs/csv-parser.md 구현해줘",
+      "expected_output": "src/transformers/ 하위에 csv_parser.py 모듈과 tests/ 디렉토리에 test_csv_parser.py가 생성되고, pytest로 테스트가 통과됨",
+      "files": [
+        "evals/files/project-py-pytest/pyproject.toml",
+        "evals/files/project-py-pytest/src/transformers/normalizer.py",
+        "evals/files/project-py-pytest/tests/test_normalizer.py",
+        "evals/files/project-py-pytest/specs/csv-parser.md"
+      ],
+      "expectations": [
+        "A Python implementation file is created under src/transformers/",
+        "A test file is created under tests/ directory matching existing pattern (test_*.py)",
+        "The test file uses pytest class-based pattern matching existing test_normalizer.py",
+        "Tests cover all 5 Verification items from the spec",
+        "The implementation reuses the existing normalizer utility for key normalization",
+        "A structured Implementation Report is output at the end"
+      ]
+    }
+  ]
+}
