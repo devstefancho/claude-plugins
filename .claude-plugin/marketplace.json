@@ -99,6 +99,15 @@
       "name": "implement-with-test-plugin",
       "source": "./implement-with-test-plugin",
       "description": "Implement code with tests from specs or direct requests"
+    },
+      "name": "brain-storm-plugin",
+      "source": "./brain-storm-plugin",
+      "description": "Brainstorm future features and improvements with wireframes and implementation detection"
+    },
+    {
+      "name": "create-team-plugin",
+      "source": "./create-team-plugin",
+      "description": "Auto-create planner + implementer agent team for worktree sessions"
     }
   ]
 }

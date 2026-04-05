@@ -1,0 +1,8 @@
+{
+  "name": "create-team-plugin",
+  "description": "Auto-create planner + implementer agent team for worktree sessions",
+  "version": "1.0.0",
+  "author": {
+    "name": "Stefan Cho"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "skill_name": "brain-storm",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "이 프로젝트에서 앞으로 뭐 더 만들면 좋을지 브레인스톰 해줘",
+      "expected_output": "Codebase scan, 3-5 ideas presented, user selection prompt, idea files created in brain-storm/",
+      "files": [],
+      "expectations": [
+        "Codebase scan performed before ideation",
+        "At least 3 ideas presented with title, description, and complexity",
+        "User asked to select ideas via AskUserQuestion",
+        "Selected ideas saved as markdown under brain-storm/",
+        "Each idea file follows the template structure (Summary, Motivation, Proposed Approach, Complexity, Open Questions)",
+        "Report output with Saved Ideas table"
+      ],
+      "assertions": [
+        {"id": "a1", "text": "At least 3 idea files created in brain-storm/ directory"},
+        {"id": "a2", "text": "Each idea file contains ## Summary section with 1-2 sentences"},
+        {"id": "a3", "text": "Each idea file contains ## Motivation section referencing actual codebase"},
+        {"id": "a4", "text": "Each idea file contains ## Proposed Approach with 3-7 bullet points"},
+        {"id": "a5", "text": "Each idea file contains ## Complexity with Low/Medium/High rating"},
+        {"id": "a6", "text": "Each idea file contains ## Open Questions section"},
+        {"id": "a7", "text": "Report file exists with Brain Storm Report table format"},
+        {"id": "a8", "text": "Filenames use lowercase-with-hyphens convention"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "대시보드 UI를 개선할 아이디어 좀 내줘. 차트랑 필터 기능 관련으로",
+      "expected_output": "UI-focused ideas with [UI] tag, wireframe included in saved files",
+      "files": [],
+      "expectations": [
+        "Ideas tagged with [UI] for UI-related concepts",
+        "Saved idea files include Wireframe section",
+        "Wireframe uses ASCII art with box-drawing characters",
+        "Wireframe is at least 10 lines",
+        "Non-UI ideas omit Wireframe section entirely"
+      ],
+      "assertions": [
+        {"id": "b1", "text": "At least 2 idea files created for UI improvement ideas"},
+        {"id": "b2", "text": "Each idea file contains ## Wireframe section"},
+        {"id": "b3", "text": "Wireframe uses ASCII box-drawing characters"},
+        {"id": "b4", "text": "Wireframe is at least 10 lines long"},
+        {"id": "b5", "text": "Wireframe includes interactive elements like [ Button ] or [ input ]"},
+        {"id": "b6", "text": "Ideas are specifically about dashboard, charts, or filters"},
+        {"id": "b7", "text": "Report file exists with proper format"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "브레인스톰 아이디어 정리해줘. 이미 구현된 거 있으면 삭제하고",
+      "expected_output": "Existing brain-storm files scanned, implementation check via source code grep, user confirmation before deletion",
+      "files": [],
+      "expectations": [
+        "All brain-storm/**/*.md files listed and read",
+        "Keywords extracted from each idea and grepped in source code",
+        "Implemented ideas identified and presented to user",
+        "User confirmation requested before any deletion",
+        "Report includes Implementation Check section"
+      ],
+      "assertions": [
+        {"id": "c1", "text": "git-worktree-management.md correctly identified as implemented and deleted"},
+        {"id": "c2", "text": "ai-code-review.md correctly identified as implemented and deleted"},
+        {"id": "c3", "text": "plugin-dependency-graph.md correctly identified as NOT implemented and kept"},
+        {"id": "c4", "text": "Report includes Implementation Check section with correct statuses"},
+        {"id": "c5", "text": "Report file exists with proper format"}
+      ]
+    }
+  ]
+}
