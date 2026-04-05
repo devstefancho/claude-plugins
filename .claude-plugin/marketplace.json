@@ -89,6 +89,11 @@
       "name": "writing-specs-plugin",
       "source": "./writing-specs-plugin",
       "description": "Spec-driven development with search, conflict detection, and reporting"
+    },
+    {
+      "name": "brain-storm-plugin",
+      "source": "./brain-storm-plugin",
+      "description": "Brainstorm future features and improvements with wireframes and implementation detection"
     }
   ]
 }
