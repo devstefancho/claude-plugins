@@ -89,6 +89,16 @@
       "name": "writing-specs-plugin",
       "source": "./writing-specs-plugin",
       "description": "Spec-driven development with search, conflict detection, and reporting"
+    },
+    {
+      "name": "computer-use-plugin",
+      "source": "./computer-use-plugin",
+      "description": "Computer Use MCP app testing with scenario execution and feedback reporting"
+    },
+    {
+      "name": "implement-with-test-plugin",
+      "source": "./implement-with-test-plugin",
+      "description": "Implement code with tests from specs or direct requests"
     }
   ]
 }
