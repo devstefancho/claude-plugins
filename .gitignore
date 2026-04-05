@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+.claude/
+.playwright-cli/
+plans/
+work-journal-plugin/
