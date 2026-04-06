@@ -77,7 +77,7 @@ Goal → planner(spec) → TaskCreate → team-lead review → implementer(code)
 ## 전제 조건
 
 - `claude -w`로 워크트리 세션 시작 필요
-- `writing-specs-plugin` 설치 권장 (planner의 spec 작성에 활용)
+- `writing-specs-plugin` 설치 권장 (planner의 spec 작성에 활용, 없어도 동작함)
 
 ## Teammate 1M Context 설정
 

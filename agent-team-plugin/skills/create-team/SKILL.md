@@ -46,7 +46,7 @@ Spawn both teammates **in parallel** using the Agent tool in a single message wi
 ### Step 4: Loop setup
 
 Send loop configuration via SendMessage:
-- To "planner": "Run `/loop 10m /writing-specs update spec` to periodically check and update specs."
+- To "planner": If `/writing-specs` skill is available, "Run `/loop 10m /writing-specs update spec` to periodically check and update specs." Otherwise skip this loop setup.
 - To "implementer": "After completing assigned work, check TaskList for new tasks. You can run `/loop 10m check TaskList for unassigned tasks and report to team-lead` to automate this."
 
 ### Step 5: Display work guide
