@@ -10,7 +10,6 @@ export default defineConfig({
       lang: 'en',
       themeConfig: {
         nav: [
-          { text: 'Home', link: '/' },
           { text: 'Plugins', link: '/plugins/' },
           { text: 'Guide', link: '/guide/getting-started' }
         ],
@@ -41,7 +40,6 @@ export default defineConfig({
       link: '/ko/',
       themeConfig: {
         nav: [
-          { text: '홈', link: '/ko/' },
           { text: '플러그인', link: '/ko/plugins/' },
           { text: '가이드', link: '/ko/guide/getting-started' }
         ],
@@ -82,10 +80,6 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/devstefancho/claude-plugins' }
     ],
 
-    search: {
-      provider: 'local'
-    },
-
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2024 devstefancho'
@@ -93,7 +87,10 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }]
+    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    ['link', { href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap', rel: 'stylesheet' }]
   ],
 
   markdown: {

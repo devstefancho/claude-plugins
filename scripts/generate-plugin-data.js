@@ -193,8 +193,8 @@ function generatePluginData() {
         category: categoryId,
         components,
         features,
-        installCommand: `/plugin install ${dir}@devstefancho-claude-plugins`,
-        uninstallCommand: `/plugin uninstall ${dir}@devstefancho-claude-plugins`,
+        installCommand: `/plugin install ${metadata.name || dir}@devstefancho-claude-plugins`,
+        uninstallCommand: `/plugin uninstall ${metadata.name || dir}@devstefancho-claude-plugins`,
         readmePath: `${dir}/README.md`,
         hasReadme: fs.existsSync(path.join(rootDir, dir, 'README.md'))
       })

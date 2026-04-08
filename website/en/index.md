@@ -1,18 +1,9 @@
 ---
-layout: home
-hero:
-  name: Claude Plugins
-  text: Claude Code Plugin Marketplace
-  tagline: Extend Claude Code with Skills, Commands, Hooks, and MCP Servers
-  actions:
-    - theme: brand
-      text: Browse Plugins
-      link: /en/plugins/
-    - theme: alt
-      text: Get Started
-      link: /en/guide/getting-started
+layout: page
 ---
 
+<HeroSection lang="en" />
+<StatsBar lang="en" />
 <HomeFeatures lang="en" />
 
 <div class="quick-start-section">
