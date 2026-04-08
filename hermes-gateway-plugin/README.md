@@ -2,6 +2,8 @@
 
 Interact with Hermes Agent via local or SSH-tunneled connection. Provides commands for messaging, async task execution, health checks, and cron job management.
 
+https://github.com/user-attachments/assets/aeecb2de-813f-484a-9de6-d266316f0fcd
+
 ## Installation
 
 ```bash
