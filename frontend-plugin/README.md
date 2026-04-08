@@ -1,51 +1,40 @@
 # Frontend Plugin
 
-React/Next.js 컴포넌트 설계 원칙 기반 코드 리뷰를 제공하는 Claude Code 플러그인입니다.
+Code review skill for React/Next.js component design based on established design principles.
 
-## 설치
+## Installation
 
 ```bash
+/plugin marketplace add .
 /plugin install frontend-plugin@devstefancho-claude-plugins
 ```
 
-## 포함된 Skills
+## Included Skills
 
 ### Component Design Reviewer
 
-React/Next.js 컴포넌트의 설계 품질을 검사하는 Skill입니다.
+Reviews the design quality of React/Next.js components against the following principles:
 
-**검사 원칙:**
-- 단일 책임 원칙 (SRP)
-- Props 설계 원칙 (Props drilling 탐지)
-- 합성(Composition) 패턴
-- 재사용성 원칙
-- Custom Hooks 분리
+- **Single Responsibility Principle (SRP)** - One component, one responsibility
+- **Props Design** - Props drilling detection and interface design
+- **Composition Pattern** - Proper use of composition over inheritance
+- **Reusability** - Component reuse opportunities
+- **Custom Hooks Separation** - Logic extraction into custom hooks
 
-**사용 예시:**
-```
-이 컴포넌트의 설계를 리뷰해주세요.
-```
+## Trigger Keywords
 
-```
-UserDashboard.tsx 파일의 컴포넌트 구조를 분석해주세요.
-```
+- "Review this component's design"
+- "Analyze the component structure of UserDashboard.tsx"
+- "Check for props drilling issues"
 
-```
-Props drilling 문제가 있는지 확인해주세요.
-```
+**Auto-activates on:**
+- React/Next.js component review requests
+- Component structure analysis
+- Props design reviews
+- Component refactoring suggestions
 
-**자동 활성화 시나리오:**
-- React/Next.js 컴포넌트 리뷰 요청
-- 컴포넌트 구조 분석 요청
-- Props 설계 검토 요청
-- 컴포넌트 리팩토링 제안
+## See Also
 
-## 관련 문서
-
-- [SKILL.md](skills/component-design-reviewer/SKILL.md) - Skill 정의
-- [PRINCIPLES.md](skills/component-design-reviewer/PRINCIPLES.md) - 원칙 상세 설명
-- [EXAMPLES.md](skills/component-design-reviewer/EXAMPLES.md) - 코드 예시
-
-## 버전
-
-- 1.0.0: 초기 릴리스 - Component Design Reviewer Skill
+- [SKILL.md](skills/component-design-reviewer/SKILL.md) - Skill definition
+- [PRINCIPLES.md](skills/component-design-reviewer/PRINCIPLES.md) - Detailed principles
+- [EXAMPLES.md](skills/component-design-reviewer/EXAMPLES.md) - Code examples
