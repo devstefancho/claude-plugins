@@ -1,97 +1,89 @@
-# agent-team-plugin
+# Agent Team Plugin
 
-워크트리 세션에서 agent team을 생성, 확장, 정리하는 플러그인.
+Create, expand, and manage agent teams for worktree sessions. Orchestrates multi-agent collaboration with a task-driven workflow.
 
-## 설치
+## Installation
 
 ```bash
 /plugin marketplace add .
 /plugin install agent-team-plugin@devstefancho-claude-plugins
 ```
 
-## 커맨드 목록
+## Prerequisites
+
+- Must start with `claude -w` (worktree session)
+- `writing-specs-plugin` recommended for planner's spec writing (optional)
+
+## Commands
 
 | Command | Description |
 |---------|-------------|
-| `create team` (스킬) | planner + implementer 기본 팀 생성 |
-| `/expand-team` | 기존 팀에 새 팀원 추가 |
-| `/cleanup-team` | 팀원 종료 및 팀 정리 |
+| `create team` (skill) | Create a default team with planner + implementer |
+| `/expand-team` | Add specialized roles to existing team |
+| `/cleanup-team` | Terminate members and clean up team |
 
-## 팀 생성
+## Trigger Keywords
 
-워크트리 세션에서 다음과 같이 트리거:
+- "create team", "agent team"
 
-```
-팀 생성해줘
-create team
-agent team 만들어줘
-```
-
-### 기본 팀 구성
+## Default Team Structure
 
 | Member | Role |
 |--------|------|
-| team-lead | 오케스트레이션, 작업 할당 |
-| planner | 브레인스톰, spec 작성 |
-| implementer | 코드 구현, 테스트 작성 |
+| team-lead | Orchestration, task assignment |
+| planner | Brainstorming, spec writing |
+| implementer | Code implementation, test writing |
 
-### 작업 흐름
+### Workflow
 
 ```
 Goal → planner(spec) → TaskCreate → team-lead review → implementer(code) → Done
 ```
 
-## 팀 확장 (Expand)
-
-기존 팀에 전문 역할 팀원을 추가:
+## Expanding the Team
 
 ```
-/expand-team           # 역할 카탈로그에서 선택 (추천 포함)
-/expand-team tester    # 직접 역할 지정
+/expand-team           # Show role catalog with recommendations
+/expand-team tester    # Add a specific role directly
 ```
 
-### 역할 카탈로그
+### Available Roles
 
 | Role | Description | Best For |
 |------|-------------|----------|
-| **tester** | 테스트 작성, 커버리지 분석 | 구현 완료 후 품질 검증 |
-| **reviewer** | 코드 리뷰, 보안/성능 체크 | PR 전 코드 품질 게이트 |
-| **researcher** | 코드베이스 탐색, 기술 조사 | 새 기술 도입, 레거시 분석 |
-| **architect** | 시스템 설계, API 설계 | 대규모 기능, 리팩토링 |
-| **devops** | CI/CD, Docker, IaC | 인프라 작업, 파이프라인 |
-| **ui-designer** | UI 컴포넌트, 디자인 시스템 | 프론트엔드 중심 작업 |
-| **security-auditor** | 보안 취약점, CVE 검사 | 보안 감사, 릴리스 전 점검 |
-| **custom** | 사용자 정의 역할 | 특수 작업 |
+| **tester** | Test writing, coverage analysis | Post-implementation quality checks |
+| **reviewer** | Code review, security/performance | Pre-PR quality gate |
+| **researcher** | Codebase exploration, tech research | New tech adoption, legacy analysis |
+| **architect** | System design, API design | Large features, refactoring |
+| **devops** | CI/CD, Docker, IaC | Infrastructure, pipelines |
+| **ui-designer** | UI components, design systems | Frontend-focused work |
+| **security-auditor** | Security vulnerabilities, CVE checks | Security audits, pre-release |
+| **custom** | User-defined role | Special tasks |
 
-## 팀 정리 (Cleanup)
-
-팀 작업이 완료되면 팀원을 종료:
+## Cleaning Up
 
 ```
-/cleanup-team           # 팀원 목록 보여주고 선택
-/cleanup-team --all     # 모든 팀원 종료 + 팀 삭제
-/cleanup-team --unused  # 유휴 팀원만 종료
-/cleanup-team --default # planner/implementer만 유지, 나머지 종료
+/cleanup-team           # Show members and select who to remove
+/cleanup-team --all     # Terminate all members and delete team
+/cleanup-team --unused  # Terminate idle members only
+/cleanup-team --default # Keep planner/implementer, remove others
 ```
 
-## 전제 조건
+## Configuration
 
-- `claude -w`로 워크트리 세션 시작 필요
-- `writing-specs-plugin` 설치 권장 (planner의 spec 작성에 활용, 없어도 동작함)
+### 1M Context for Teammates
 
-## Teammate 1M Context 설정
-
-Teammate는 기본적으로 표준 Opus 모델(1M 아님)을 사용합니다. 1M context를 사용하려면:
+Teammates use the standard Opus model by default. To enable 1M context:
 
 ```bash
 export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-6[1m]'
 ```
 
-`.zshrc`에 추가하면 영구 적용됩니다.
+Add to `.zshrc` for permanent use.
 
-## 자동 설정
+### Auto-Setup
 
-팀 생성 시 자동으로 설정되는 항목:
+When a team is created, the following are configured automatically:
 - Planner: `/loop 10m /writing-specs update spec`
-- Implementer: TaskList 주기적 확인
-- 색상: 자동 할당 (프로그래밍 설정 불가)
+- Implementer: Periodic TaskList checks
+- Colors: Auto-assigned (not programmable)
