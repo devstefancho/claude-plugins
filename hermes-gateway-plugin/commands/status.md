@@ -1,5 +1,5 @@
 ---
-description: Hermes 연결 상태, tunnel 상태, 최근 작업 목록을 확인한다
+description: Check Hermes connection status, tunnel status, and recent jobs
 argument-hint: "[job-id] [--json]"
 allowed-tools: Bash(node:*)
 ---

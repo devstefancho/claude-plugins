@@ -1,5 +1,5 @@
 ---
-description: Hermes Agent에 비동기 작업을 실행하고 이벤트를 스트리밍한다
+description: Run an async task on Hermes Agent and stream events
 argument-hint: "<task> [--background]"
 allowed-tools: Bash(node:*), AskUserQuestion
 ---

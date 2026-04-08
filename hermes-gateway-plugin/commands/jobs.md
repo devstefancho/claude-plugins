@@ -1,5 +1,5 @@
 ---
-description: Hermes cron job 목록 조회, 생성, 삭제
+description: List, create, or delete Hermes cron jobs
 argument-hint: "[list|delete <id>] [--json]"
 allowed-tools: Bash(node:*), AskUserQuestion
 ---

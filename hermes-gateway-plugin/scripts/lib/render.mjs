@@ -100,10 +100,14 @@ export function renderJobs(jobs) {
   }
 
   const lines = ["# Hermes Cron Jobs\n"];
-  lines.push("| ID | Schedule | Status |");
-  lines.push("|---|---|---|");
+  lines.push("| ID | Name | Schedule | Status |");
+  lines.push("|---|---|---|---|");
   for (const job of jobs) {
-    lines.push(`| ${job.id || job.job_id} | ${job.schedule || job.cron || "N/A"} | ${job.status || "active"} |`);
+    const sched = job.schedule_display
+      || (typeof job.schedule === "object" ? (job.schedule?.display || job.schedule?.expr || JSON.stringify(job.schedule)) : job.schedule)
+      || job.cron
+      || "N/A";
+    lines.push(`| ${job.id || job.job_id} | ${job.name || "-"} | ${sched} | ${job.status || job.state || "active"} |`);
   }
   return lines.join("\n");
 }
