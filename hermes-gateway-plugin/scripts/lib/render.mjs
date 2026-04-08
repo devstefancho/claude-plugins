@@ -48,6 +48,7 @@ export function renderRunStarted(runInfo) {
   const lines = [];
   lines.push(`**Run started:** ${runInfo.run_id || runInfo.id}`);
   lines.push(`**Status:** ${runInfo.status}`);
+  lines.push(`\nCheck status with \`/hermes:status\``);
   return lines.join("\n");
 }
 
