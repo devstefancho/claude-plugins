@@ -95,6 +95,13 @@ export function listJobRecords() {
   return manifest.jobs;
 }
 
+export function getLatestJobRecord() {
+  const manifest = loadManifest();
+  if (manifest.jobs.length === 0) return null;
+  const latest = manifest.jobs[manifest.jobs.length - 1];
+  return readJobRecord(latest.id);
+}
+
 export function appendLog(id, line) {
   ensureDirs();
   fs.appendFileSync(path.join(LOGS_DIR, `${id}.log`), line + "\n");
