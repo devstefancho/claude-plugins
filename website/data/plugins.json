@@ -389,6 +389,39 @@
       "uninstallCommand": "/plugin uninstall worktrace-plugin@devstefancho-claude-plugins",
       "readmePath": "worktrace-plugin/README.md",
       "hasReadme": true
+    },
+    {
+      "id": "hermes-gateway-plugin",
+      "name": "hermes",
+      "version": "1.0.0",
+      "description": "Interact with Hermes Agent via local or SSH-tunneled connection",
+      "author": "Stefan Cho",
+      "category": "integration",
+      "components": {
+        "skills": [
+          "hermes-runtime"
+        ],
+        "commands": [
+          "setup",
+          "chat",
+          "run",
+          "status",
+          "jobs"
+        ],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [
+        "Chat with Hermes Agent (streaming supported)",
+        "Async task execution with SSE event streaming",
+        "SSH tunnel auto-management for remote Hermes",
+        "Connection mode: auto/local/ssh",
+        "Cron job management"
+      ],
+      "installCommand": "/plugin install hermes@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall hermes@devstefancho-claude-plugins",
+      "readmePath": "hermes-gateway-plugin/README.md",
+      "hasReadme": false
     }
   ],
   "categories": [
