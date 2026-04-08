@@ -109,6 +109,11 @@
       "name": "agent-team-plugin",
       "source": "./agent-team-plugin",
       "description": "Agent team management - create, expand, and cleanup teams for worktree sessions"
+    },
+    {
+      "name": "hermes",
+      "source": "./hermes-gateway-plugin",
+      "description": "Interact with Hermes Agent via local or SSH-tunneled connection"
     }
   ]
 }
