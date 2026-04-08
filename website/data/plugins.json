@@ -6,6 +6,51 @@
   },
   "plugins": [
     {
+      "id": "agent-team-plugin",
+      "name": "agent-team-plugin",
+      "version": "2.0.0",
+      "description": "Agent team management - create, expand, and cleanup teams for worktree sessions",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [
+          "create-team"
+        ],
+        "commands": [
+          "cleanup-team",
+          "expand-team"
+        ],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install agent-team-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall agent-team-plugin@devstefancho-claude-plugins",
+      "readmePath": "agent-team-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "brain-storm-plugin",
+      "name": "brain-storm-plugin",
+      "version": "1.0.0",
+      "description": "Brainstorm future features and improvements with wireframes and implementation detection",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [
+          "brain-storm"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install brain-storm-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall brain-storm-plugin@devstefancho-claude-plugins",
+      "readmePath": "brain-storm-plugin/README.md",
+      "hasReadme": true
+    },
+    {
       "id": "code-quality-plugin",
       "name": "code-quality-plugin",
       "version": "1.0.0",
@@ -79,6 +124,27 @@
       "hasReadme": true
     },
     {
+      "id": "computer-use-plugin",
+      "name": "computer-use-plugin",
+      "version": "1.0.0",
+      "description": "Computer Use MCP app testing with scenario execution and feedback reporting",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [
+          "computer-use-test"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install computer-use-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall computer-use-plugin@devstefancho-claude-plugins",
+      "readmePath": "computer-use-plugin/README.md",
+      "hasReadme": true
+    },
+    {
       "id": "frontend-plugin",
       "name": "frontend-plugin",
       "version": "1.0.0",
@@ -126,29 +192,72 @@
       "hasReadme": true
     },
     {
-      "id": "git-worktree-plugin",
-      "name": "git-worktree-plugin",
-      "version": "1.1.0",
-      "description": "Manage git worktrees for parallel branch work. Proactively suggests worktree creation when working on PRs or new features",
+      "id": "hermes-gateway-plugin",
+      "name": "hermes",
+      "version": "1.0.0",
+      "description": "Interact with Hermes Agent via local or SSH-tunneled connection",
       "author": "Stefan Cho",
-      "category": "workflow",
+      "category": "utility",
       "components": {
         "skills": [
-          "git-worktree"
+          "hermes-runtime"
         ],
         "commands": [
-          "bare-setup"
+          "chat",
+          "jobs",
+          "run",
+          "setup",
+          "status"
         ],
         "hooks": false,
         "mcpServers": []
       },
-      "features": [
-        "Easy Creation - Creates worktrees with proper branch naming conventions",
-        "Cleanup Management - Lists and removes worktrees safely"
-      ],
-      "installCommand": "/plugin install git-worktree-plugin@devstefancho-claude-plugins",
-      "uninstallCommand": "/plugin uninstall git-worktree-plugin@devstefancho-claude-plugins",
-      "readmePath": "git-worktree-plugin/README.md",
+      "features": [],
+      "installCommand": "/plugin install hermes-gateway-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall hermes-gateway-plugin@devstefancho-claude-plugins",
+      "readmePath": "hermes-gateway-plugin/README.md",
+      "hasReadme": false
+    },
+    {
+      "id": "implement-with-test-plugin",
+      "name": "implement-with-test-plugin",
+      "version": "1.0.0",
+      "description": "Implement code with tests from specs or direct requests",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [
+          "implement-with-test"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install implement-with-test-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall implement-with-test-plugin@devstefancho-claude-plugins",
+      "readmePath": "implement-with-test-plugin/README.md",
+      "hasReadme": true
+    },
+    {
+      "id": "local-test-plugin",
+      "name": "local-test-plugin",
+      "version": "1.0.0",
+      "description": "Symlink-based local plugin testing for development workflow",
+      "author": "Stefan Cho",
+      "category": "utility",
+      "components": {
+        "skills": [
+          "local-test"
+        ],
+        "commands": [],
+        "hooks": false,
+        "mcpServers": []
+      },
+      "features": [],
+      "installCommand": "/plugin install local-test-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall local-test-plugin@devstefancho-claude-plugins",
+      "readmePath": "local-test-plugin/README.md",
       "hasReadme": true
     },
     {
@@ -391,37 +500,25 @@
       "hasReadme": true
     },
     {
-      "id": "hermes-gateway-plugin",
-      "name": "hermes",
+      "id": "writing-specs-plugin",
+      "name": "writing-specs-plugin",
       "version": "1.0.0",
-      "description": "Interact with Hermes Agent via local or SSH-tunneled connection",
+      "description": "Spec-driven development with search, conflict detection, and reporting",
       "author": "Stefan Cho",
-      "category": "integration",
+      "category": "utility",
       "components": {
         "skills": [
-          "hermes-runtime"
+          "writing-specs"
         ],
-        "commands": [
-          "setup",
-          "chat",
-          "run",
-          "status",
-          "jobs"
-        ],
+        "commands": [],
         "hooks": false,
         "mcpServers": []
       },
-      "features": [
-        "Chat with Hermes Agent (streaming supported)",
-        "Async task execution with SSE event streaming",
-        "SSH tunnel auto-management for remote Hermes",
-        "Connection mode: auto/local/ssh",
-        "Cron job management"
-      ],
-      "installCommand": "/plugin install hermes@devstefancho-claude-plugins",
-      "uninstallCommand": "/plugin uninstall hermes@devstefancho-claude-plugins",
-      "readmePath": "hermes-gateway-plugin/README.md",
-      "hasReadme": false
+      "features": [],
+      "installCommand": "/plugin install writing-specs-plugin@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall writing-specs-plugin@devstefancho-claude-plugins",
+      "readmePath": "writing-specs-plugin/README.md",
+      "hasReadme": true
     }
   ],
   "categories": [

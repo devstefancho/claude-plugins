@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { Search, Package, LayoutGrid, List } from 'lucide-vue-next'
 import pluginData from '../../../data/plugins.json'
 import PluginCard from './PluginCard.vue'
@@ -30,6 +30,46 @@ const searchQuery = ref('')
 const selectedCategory = ref('')
 const selectedComponent = ref('')
 const viewMode = ref<'card' | 'list'>('card')
+
+// URL parameter sync
+function readUrlParams() {
+  if (typeof window === 'undefined') return
+  const params = new URLSearchParams(window.location.search)
+  searchQuery.value = params.get('search') || ''
+  selectedCategory.value = params.get('category') || ''
+  selectedComponent.value = params.get('component') || ''
+  const view = params.get('view')
+  if (view === 'list' || view === 'card') {
+    viewMode.value = view
+  }
+}
+
+function updateUrlParams() {
+  if (typeof window === 'undefined') return
+  const params = new URLSearchParams()
+  if (searchQuery.value) params.set('search', searchQuery.value)
+  if (selectedCategory.value) params.set('category', selectedCategory.value)
+  if (selectedComponent.value) params.set('component', selectedComponent.value)
+  if (viewMode.value !== 'card') params.set('view', viewMode.value)
+
+  const queryString = params.toString()
+  const newUrl = window.location.pathname + (queryString ? '?' + queryString : '')
+  window.history.replaceState({}, '', newUrl)
+}
+
+onMounted(() => {
+  readUrlParams()
+})
+
+// Debounced search URL sync
+let searchDebounceTimer: ReturnType<typeof setTimeout>
+watch(searchQuery, () => {
+  clearTimeout(searchDebounceTimer)
+  searchDebounceTimer = setTimeout(updateUrlParams, 300)
+})
+
+// Immediate URL sync for non-search filters
+watch([selectedCategory, selectedComponent, viewMode], updateUrlParams)
 
 const categories = pluginData.categories
 const plugins = pluginData.plugins as Plugin[]
