@@ -182,8 +182,10 @@ async function cmdStatus(flags, text) {
   const jobs = state.listJobRecords();
 
   if (text) {
-    // status for a specific job/run
-    const job = state.readJobRecord(text);
+    // "latest" shortcut resolves to the most recent job
+    const job = text === "latest"
+      ? state.getLatestJobRecord()
+      : state.readJobRecord(text);
     if (job) {
       output(flags.json ? job : JSON.stringify(job, null, 2), flags.json);
     } else {

@@ -18,7 +18,7 @@ node "${CLAUDE_PLUGIN_ROOT}/scripts/hermes-companion.mjs" run $ARGUMENTS
 
 ## Important: Status check guidance
 
-- **Async runs** (created by `/hermes:run`): check status with `/hermes:status [job-id]`
+- **Async runs** (created by `/hermes:run`): check status with `/hermes:status latest` or `/hermes:status [job-id]`
 - **Cron jobs** (scheduled repeating tasks): list with `/hermes:jobs`
 
 These are different concepts. NEVER tell the user to use `/hermes:jobs` to check the status of an async run. Always guide them to `/hermes:status`.
