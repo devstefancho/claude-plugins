@@ -213,8 +213,8 @@
         "mcpServers": []
       },
       "features": [],
-      "installCommand": "/plugin install hermes-gateway-plugin@devstefancho-claude-plugins",
-      "uninstallCommand": "/plugin uninstall hermes-gateway-plugin@devstefancho-claude-plugins",
+      "installCommand": "/plugin install hermes@devstefancho-claude-plugins",
+      "uninstallCommand": "/plugin uninstall hermes@devstefancho-claude-plugins",
       "readmePath": "hermes-gateway-plugin/README.md",
       "hasReadme": false
     },
