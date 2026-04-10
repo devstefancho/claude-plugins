@@ -109,6 +109,11 @@
       "name": "agent-team-plugin",
       "source": "./agent-team-plugin",
       "description": "Agent team management - create, expand, and cleanup teams for worktree sessions"
+    },
+    {
+      "name": "llm-wiki-plugin",
+      "source": "./llm-wiki-plugin",
+      "description": "LLM-maintained personal wiki with ingest, query, lint, update operations"
     }
   ]
 }
