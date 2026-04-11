@@ -2,6 +2,7 @@
 title: Index
 slug: index
 type: index
+created: {date}
 updated: {date}
 ---
 

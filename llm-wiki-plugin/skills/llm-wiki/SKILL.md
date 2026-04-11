@@ -44,6 +44,7 @@ After config is loaded, find the target wiki domain.
    > 1. {domain_1}
    > 2. {domain_2}
 5. Read `SCHEMA.md` of selected domain for conventions
+6. Set `{domain_path}` = `{wiki_root}/{domain}` — all subsequent paths in operations are relative to this absolute path
 
 ## Operation: init
 
@@ -100,7 +101,7 @@ Processes a new source and integrates it into the wiki.
    - Pasted text → use directly
 2. **Save raw source**:
    - Generate slug from source title (see PRINCIPLES.md slug rules)
-   - Save to `raw/{slug}.md` with metadata header:
+   - **Text/markdown content** → save to `{domain_path}/raw/{slug}.md` with metadata header:
      ```markdown
      ---
      source_url: {url_if_applicable}
@@ -110,6 +111,7 @@ Processes a new source and integrates it into the wiki.
      
      {full_source_content}
      ```
+   - **Binary files (PDF, images)** → copy original to `{domain_path}/raw/{slug}.{ext}` preserving format, then create a companion `{domain_path}/raw/{slug}.meta.md` with the metadata header above (content field = file path reference)
 3. **Surface takeaways** — present to user with `AskUserQuestion`:
    > 📖 **{source_title}** 분석 완료
    >
@@ -127,22 +129,22 @@ Processes a new source and integrates it into the wiki.
    - Include: URL/path, ingest date, 2-3 paragraph synthesis, key takeaways, entity/concept links
 5. **Update entity/concept pages**:
    - For each entity/concept mentioned in the source:
-     - `Grep` for existing page in `wiki/pages/`
+     - `Grep` for existing page in `{domain_path}/wiki/pages/`
      - **Exists**: Read page, append source to `sources` frontmatter, add new information to content, update `updated` date
      - **Not exists**: Create new page with `type: entity` or `type: concept`
 6. **Bidirectional backlink audit** (CRITICAL):
    - For every `[[slug]]` in newly created/updated pages:
      - Read target page
      - If target doesn't link back → add `[[new-slug]]` to target's Related section
-   - `Grep` all files in `wiki/pages/` for mentions of entities/concepts from the new source that lack `[[links]]`
+   - `Grep` all files in `{domain_path}/wiki/pages/` for mentions of entities/concepts from the new source that lack `[[links]]`
    - Add missing wikilinks
 7. **Update index.md**:
-   - Read current `wiki/index.md`
+   - Read current `{domain_path}/wiki/index.md`
    - Add entry under appropriate category (Sources/Entities/Concepts):
      `- [[{slug}]] — {one-line summary} _(ingested {today})_`
    - Update Recent section with latest 5 entries
 8. **Update overview.md**:
-   - Read current `wiki/overview.md`
+   - Read current `{domain_path}/wiki/overview.md`
    - If new source shifts understanding: update Key Themes, add Open Questions
    - Update Statistics counts
    - Update `updated` frontmatter date
@@ -167,7 +169,7 @@ Searches the wiki and synthesizes an answer with citations.
 ### Steps
 
 1. **Index scan**:
-   - Read `wiki/index.md` completely
+   - Read `{domain_path}/wiki/index.md` completely
    - Identify relevant pages from the user's question
    - Prioritize wiki content over general knowledge
 2. **Page retrieval**:
@@ -195,8 +197,8 @@ Audits wiki health and offers fixes.
 ### Steps
 
 1. **Build inventory**:
-   - `Glob wiki/pages/*.md` for all pages
-   - Read `wiki/index.md` and `wiki/overview.md`
+   - `Glob {domain_path}/wiki/pages/*.md` for all pages
+   - Read `{domain_path}/wiki/index.md` and `{domain_path}/wiki/overview.md`
    - Collect: all slugs, all `[[slug]]` references, all frontmatter fields
 2. **Run checks**:
 
@@ -251,7 +253,7 @@ Revises wiki pages when knowledge changes or contradictions arise.
 
 1. **Identify targets**:
    - From user's request: specific page names, topics, or from lint recommendations
-   - `Grep` to locate relevant pages in `wiki/pages/`
+   - `Grep` to locate relevant pages in `{domain_path}/wiki/pages/`
 2. **Propose changes**:
    - For each target page, show:
      > **{page_title}** (`[[{slug}]]`)
