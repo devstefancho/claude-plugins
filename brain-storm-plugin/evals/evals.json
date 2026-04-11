@@ -1,70 +1,57 @@
 {
-  "skill_name": "brain-storm",
+  "skill_name": "brain-storm-plugin",
   "evals": [
     {
-      "id": 1,
-      "prompt": "이 프로젝트에서 앞으로 뭐 더 만들면 좋을지 브레인스톰 해줘",
-      "expected_output": "Codebase scan, 3-5 ideas presented, user selection prompt, idea files created in brain-storm/",
+      "id": "brainstorm-1",
+      "skill": "brain-storm",
+      "prompt": "Brainstorm what we should build next in this project.",
+      "expected_output": "Codebase scan, 3-5 grounded ideas, user selection prompt, idea files created in brain-storm/",
       "files": [],
       "expectations": [
         "Codebase scan performed before ideation",
-        "At least 3 ideas presented with title, description, and complexity",
+        "At least 3 ideas presented with title, description, complexity, and quick wireframe sketch",
         "User asked to select ideas via AskUserQuestion",
         "Selected ideas saved as markdown under brain-storm/",
-        "Each idea file follows the template structure (Summary, Motivation, Proposed Approach, Complexity, Open Questions)",
-        "Report output with Saved Ideas table"
-      ],
-      "assertions": [
-        {"id": "a1", "text": "At least 3 idea files created in brain-storm/ directory"},
-        {"id": "a2", "text": "Each idea file contains ## Summary section with 1-2 sentences"},
-        {"id": "a3", "text": "Each idea file contains ## Motivation section referencing actual codebase"},
-        {"id": "a4", "text": "Each idea file contains ## Proposed Approach with 3-7 bullet points"},
-        {"id": "a5", "text": "Each idea file contains ## Complexity with Low/Medium/High rating"},
-        {"id": "a6", "text": "Each idea file contains ## Open Questions section"},
-        {"id": "a7", "text": "Report file exists with Brain Storm Report table format"},
-        {"id": "a8", "text": "Filenames use lowercase-with-hyphens convention"}
+        "Final report includes next-step guidance for spec writing and HTML preview generation"
       ]
     },
     {
-      "id": 2,
-      "prompt": "대시보드 UI를 개선할 아이디어 좀 내줘. 차트랑 필터 기능 관련으로",
-      "expected_output": "UI-focused ideas with [UI] tag, wireframe included in saved files",
+      "id": "brainstorm-2",
+      "skill": "brain-storm",
+      "prompt": "Clean up brainstorm notes and remove anything already implemented.",
+      "expected_output": "Existing brainstorm files scanned, implementation check performed, confirmation requested before deletion",
       "files": [],
       "expectations": [
-        "Ideas tagged with [UI] for UI-related concepts",
-        "Saved idea files include Wireframe section",
-        "Wireframe uses ASCII art with box-drawing characters",
-        "Wireframe is at least 10 lines",
-        "Non-UI ideas omit Wireframe section entirely"
-      ],
-      "assertions": [
-        {"id": "b1", "text": "At least 2 idea files created for UI improvement ideas"},
-        {"id": "b2", "text": "Each idea file contains ## Wireframe section"},
-        {"id": "b3", "text": "Wireframe uses ASCII box-drawing characters"},
-        {"id": "b4", "text": "Wireframe is at least 10 lines long"},
-        {"id": "b5", "text": "Wireframe includes interactive elements like [ Button ] or [ input ]"},
-        {"id": "b6", "text": "Ideas are specifically about dashboard, charts, or filters"},
-        {"id": "b7", "text": "Report file exists with proper format"}
+        "All brainstorm files are listed and read",
+        "Implementation evidence is gathered from the source code",
+        "User confirmation is requested before deletion",
+        "Final report includes cleanup status for reviewed ideas"
       ]
     },
     {
-      "id": 3,
-      "prompt": "브레인스톰 아이디어 정리해줘. 이미 구현된 거 있으면 삭제하고",
-      "expected_output": "Existing brain-storm files scanned, implementation check via source code grep, user confirmation before deletion",
+      "id": "prototype-1",
+      "skill": "ui-prototype-preview",
+      "prompt": "Create an HTML prototype preview for the saved dashboard analytics idea.",
+      "expected_output": "Saved brainstorm idea located, HTML preview generated under brain-storm/previews/, concise report returned",
       "files": [],
       "expectations": [
-        "All brain-storm/**/*.md files listed and read",
-        "Keywords extracted from each idea and grepped in source code",
-        "Implemented ideas identified and presented to user",
-        "User confirmation requested before any deletion",
-        "Report includes Implementation Check section"
-      ],
-      "assertions": [
-        {"id": "c1", "text": "git-worktree-management.md correctly identified as implemented and deleted"},
-        {"id": "c2", "text": "ai-code-review.md correctly identified as implemented and deleted"},
-        {"id": "c3", "text": "plugin-dependency-graph.md correctly identified as NOT implemented and kept"},
-        {"id": "c4", "text": "Report includes Implementation Check section with correct statuses"},
-        {"id": "c5", "text": "Report file exists with proper format"}
+        "A saved brainstorm idea is located before HTML generation",
+        "Output file is written to brain-storm/previews/{idea-name}.html",
+        "Generated HTML is standalone with embedded CSS",
+        "Final report includes source idea path and output HTML path"
+      ]
+    },
+    {
+      "id": "prototype-2",
+      "skill": "ui-prototype-preview",
+      "prompt": "Turn this UI brainstorm into three variants using our brand colors and create a design brief if one does not exist.",
+      "expected_output": "Design brief scaffolded or read, multiple variants generated, final report includes variant files and design brief path",
+      "files": [],
+      "expectations": [
+        "A design brief is created or read before rendering when the request is constraint-heavy",
+        "2-3 meaningful variants are generated rather than shallow palette swaps",
+        "Variant filenames are distinct",
+        "Final report includes design brief path and variant count"
       ]
     }
   ]

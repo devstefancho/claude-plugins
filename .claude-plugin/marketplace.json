@@ -68,7 +68,7 @@
     {
       "name": "frontend-plugin",
       "source": "./frontend-plugin",
-      "description": "React.js 프론트엔드 개발을 위한 코드 리뷰 및 설계 원칙 검사 플러그인"
+      "description": "Frontend code review and design-principles plugin for React.js development"
     },
     {
       "name": "smart-commit-plugin",
@@ -103,7 +103,7 @@
     {
       "name": "brain-storm-plugin",
       "source": "./brain-storm-plugin",
-      "description": "Brainstorm future features and improvements with wireframes and implementation detection"
+      "description": "Brainstorm future features and improvements, then generate standalone HTML previews for UI ideas"
     },
     {
       "name": "agent-team-plugin",

@@ -18,4 +18,5 @@
 - {idea path} - {Implemented (deleted) / Implemented (kept) / Not yet implemented}
 
 ### Next Steps
-- {1-2 actionable items}
+- Refine a saved idea into a spec with `/writing-specs {idea title}`
+- Generate an HTML preview for a UI-focused idea with `/ui-prototype-preview {idea title}`

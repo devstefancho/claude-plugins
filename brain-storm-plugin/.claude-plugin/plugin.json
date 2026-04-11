@@ -1,7 +1,7 @@
 {
   "name": "brain-storm-plugin",
-  "description": "Brainstorm future features and improvements with wireframes and implementation detection",
-  "version": "1.0.0",
+  "description": "Brainstorm future features and improvements, then generate standalone HTML previews for UI ideas",
+  "version": "1.2.0",
   "author": {
     "name": "Stefan Cho"
   }

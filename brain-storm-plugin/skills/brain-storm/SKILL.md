@@ -1,6 +1,6 @@
 ---
 name: brain-storm
-description: Brainstorm future features and improvements based on the current codebase. This is the ideation step BEFORE writing specs (/writing-specs). Use when user asks to brainstorm ideas, generate feature ideas, explore improvements, or mentions 브레인스톰, 아이디어, 기능 제안, 개선 아이디어, 뭐 만들까, 앞으로 뭐 하지. Also trigger for cleanup requests like 브레인스톰 정리, 구현된 아이디어 정리. Proactively trigger when the user wants creative exploration of what COULD be built.
+description: Brainstorm future features and improvements based on the current codebase. This is the ideation step before writing specs. Use when the user asks to brainstorm ideas, generate feature ideas, explore improvements, review future opportunities, or clean up outdated brainstorm notes.
 allowed-tools: Read, Write, Glob, Grep, Bash, AskUserQuestion
 context: fork
 agent: general-purpose
@@ -8,74 +8,72 @@ agent: general-purpose
 
 # Brain Storm
 
-`/writing-specs`로 스펙을 작성하기 전 단계. 사용자가 전달한 아이디어를 바탕으로 추가적이고 구체적인 아이디어를 도출한다. 아이디어마다 대략적인 wireframe을 포함하여 구현 방향을 시각화하고, 선정된 아이디어를 `brain-storm/` 디렉토리에 마크다운으로 저장한다.
+Use this skill before `/writing-specs` to explore what could be built next. The skill scans the codebase, proposes grounded ideas, adds lightweight wireframes, and saves selected ideas into the `brain-storm/` directory for later refinement.
 
 ## Two Modes
 
-이 스킬은 두 가지 모드로 동작한다. 사용자 요청에 따라 적절한 모드를 선택한다.
+This skill supports two modes. Pick the mode that matches the user's request.
 
-- **Brainstorm Mode** (기본): 아이디어 생성 & 저장. "브레인스톰 해줘", "아이디어 내줘" 등
-- **Cleanup Mode**: 이미 구현된 아이디어 감지 & 삭제. "브레인스톰 정리", "구현된 거 삭제" 등
+- **Brainstorm Mode**: Generate, compare, and save new ideas.
+- **Cleanup Mode**: Review existing brainstorm notes, detect already-implemented ideas, and remove them after user confirmation.
 
 ## Principles
 
-1. **Explore before proposing** - 코드베이스를 먼저 파악한 뒤 아이디어를 제안한다. 실제 코드에 기반한 아이디어가 훨씬 유용하다.
-2. **Diverge then converge** - 먼저 여러 아이디어를 자유롭게 생성(최소 3개)한 뒤, 사용자가 선택한다.
-3. **One idea = one file** - 각 아이디어는 별도 파일로 관리한다. 내용이 매우 적은 경우(bullet 3개 이하)에만 합칠 수 있다.
-4. **Always wireframe** - 모든 아이디어에 대략적인 wireframe을 포함한다. 화면 관련 아이디어는 상세한 UI wireframe을, 백엔드/인프라 아이디어는 아키텍처 다이어그램이나 데이터 플로우를 ASCII로 그린다.
-5. **Prune the implemented** - Cleanup Mode에서 기존 아이디어가 이미 구현되었는지 확인하고 정리한다.
+1. **Explore before proposing** - Understand the codebase before suggesting ideas.
+2. **Diverge then converge** - Generate multiple strong options before asking the user to choose.
+3. **One idea = one file** - Store each meaningful idea as its own markdown file.
+4. **Always visualize** - Every saved idea should include a simple ASCII wireframe or system sketch so the implementation direction is easier to discuss.
+5. **Prune the implemented** - Cleanup mode should remove stale brainstorm notes only after evidence-based verification and user approval.
 
 ## Directory Rules
 
-- Ideas live in `brain-storm/` at the project root
-- File format: `brain-storm/{name}.md` or `brain-storm/{subdir}/{name}.md`
-- Only 1-depth subdirectories allowed (e.g., `brain-storm/auth/sso-login.md` OK, `brain-storm/auth/v2/sso.md` NOT OK)
-- Filenames: lowercase-with-hyphens (e.g., `dark-mode-toggle.md`)
-- Create subdirectories only when user requests grouping or 5+ ideas share a domain
+- Ideas live in `brain-storm/` at the project root.
+- File format: `brain-storm/{name}.md` or `brain-storm/{subdir}/{name}.md`.
+- Only one directory level is allowed under `brain-storm/`.
+- Filenames must use lowercase-with-hyphens.
+- Create subdirectories only when the user requests grouping or when five or more ideas share the same domain.
 
 ---
 
 ## Brainstorm Mode
 
-### Step 1: Scan & Ideate
+### Step 1: Scan and Ideate
 
-First understand the codebase, then generate ideas:
-
-1. Run `Glob` on key directories (`src/**`, `app/**`, `pages/**`, `components/**`, `lib/**`, etc.) to map project structure
-2. Run `Glob brain-storm/**/*.md` to list existing brainstorm ideas
-3. Read `package.json`, `README.md`, or equivalent to understand tech stack
-4. Generate 3-5 ideas based on the scan. For each, present:
-   - **Title** (as H3)
+1. Run `Glob` on important project directories such as `src/**`, `app/**`, `pages/**`, `components/**`, and `lib/**` to understand the structure.
+2. Run `Glob brain-storm/**/*.md` to inspect existing brainstorm notes.
+3. Read `package.json`, `README.md`, and any obvious entry-point files to understand the product and stack.
+4. Generate 3-5 ideas based on the scan. For each idea, present:
+   - **Title**
    - **Description**: 1-2 sentences
    - **Complexity**: Low / Medium / High
    - **Quick wireframe sketch**: 3-5 lines of ASCII to give a visual sense of the idea
-5. Ask the user: "어떤 아이디어를 저장할까요? 번호로 선택하세요 (여러 개 가능). 수정하거나 새로운 아이디어를 추가할 수도 있습니다."
+5. Ask the user which ideas to save.
 
-Ideas should be grounded in the actual codebase (reference specific files/patterns), actionable, and varied in scope.
+Ideas must be grounded in the actual codebase, actionable, and varied in scope.
 
-### Step 2: Deduplicate & Write
+### Step 2: Deduplicate and Write
 
 For each selected idea:
 
-1. Extract 3-5 key nouns from the title/description
-2. Run `Grep` across `brain-storm/**/*.md` for those keywords
-3. If duplicate found, ask: "이미 유사한 아이디어가 존재합니다: `{path}`. 업데이트할까요, 새로 생성할까요, 건너뛸까요?"
-4. Read the idea template: [templates/idea-template.md](templates/idea-template.md)
-5. Read the wireframe guide: [templates/wireframe-guide.md](templates/wireframe-guide.md)
-6. Fill in all sections:
+1. Extract 3-5 key nouns from the title and description.
+2. Run `Grep` across `brain-storm/**/*.md` for those keywords.
+3. If a duplicate or near-duplicate exists, ask whether to update the existing file, create a new file, or skip it.
+4. Read the idea template at `templates/idea-template.md`.
+5. Read the wireframe guide at `templates/wireframe-guide.md`.
+6. Fill every section:
    - **Summary**: 1-2 sentences
-   - **Motivation**: 2-4 sentences referencing specific codebase parts
-   - **Proposed Approach**: 3-7 bullet points (no code snippets)
-   - **Wireframe**: ASCII art in fenced code block, minimum 10 lines. For UI ideas: screen layout with interactive elements. For non-UI ideas: architecture diagram, data flow, or system interaction diagram.
-   - **Complexity**: Low/Medium/High with 1-sentence justification
+   - **Motivation**: 2-4 sentences referencing specific codebase areas
+   - **Proposed Approach**: 3-7 bullet points without code snippets
+   - **Wireframe**: ASCII art in a fenced code block, at least 10 lines
+   - **Complexity**: Low / Medium / High with a one-sentence reason
    - **Open Questions**: 1-3 bullets
-7. Write to the appropriate path under `brain-storm/`
+7. Write the completed idea file under `brain-storm/`.
 
 ### Step 3: Report
 
-After writing all idea files, output a summary report directly (no separate file needed):
+After writing all idea files, include this report in the final response:
 
-```
+```markdown
 ## Brain Storm Report
 
 | Field | Value |
@@ -90,39 +88,30 @@ After writing all idea files, output a summary report directly (no separate file
 | `{path}` | {title} | {complexity} |
 
 ### Next Steps
-- 스펙으로 발전시키려면: /writing-specs {idea title}
+- Refine an idea into a spec: `/writing-specs {idea title}`
+- Generate a UI prototype preview for a UI-focused idea: `/ui-prototype-preview {idea title}`
 ```
 
-The report is part of the final response message, not a separate file. This ensures it always gets delivered.
+The report must be part of the final response, not a separate file.
 
 ---
 
 ## Cleanup Mode
 
-Triggered by: "브레인스톰 정리", "구현된 아이디어 정리", "clean up brainstorm"
+Triggered by requests such as "clean up brainstorm notes" or "remove ideas that are already implemented".
 
 ### Step 1: Detect Implemented Ideas
 
-1. Run `Glob brain-storm/**/*.md` to list all idea files
+1. Run `Glob brain-storm/**/*.md` to list all idea files.
 2. For each idea:
-   a. Read the file, extract title + summary
-   b. Extract 3-5 implementation-indicator keywords (component names, function names, route paths, API endpoints)
-   c. Run `Grep` for those keywords in source code (exclude `brain-storm/`, `specs/`, `node_modules/`, `.git/`)
-   d. Mark as **implemented** if 3+ keywords match in source code AND the code actually implements the described functionality (not just naming coincidence or TODOs)
+   a. Read the file and extract the title and summary.
+   b. Extract 3-5 implementation-indicator keywords such as component names, function names, routes, or API endpoints.
+   c. Run `Grep` for those keywords in the source code while excluding `brain-storm/`, `specs/`, `node_modules/`, and `.git/`.
+   d. Mark the idea as implemented only if multiple matches clearly represent the described functionality rather than TODOs or naming coincidence.
 
-### Step 2: Confirm & Delete
+### Step 2: Confirm and Delete
 
-1. Present findings to user: "다음 아이디어가 이미 구현된 것으로 보입니다:"
-   - For each implemented idea: show file path, matched evidence (which files/functions matched)
-2. Ask: "삭제할까요? (전체/선택적/취소)"
-3. Delete only after user confirmation
-4. Report results:
-
-```
-## Cleanup Report
-
-| Idea | Status | Evidence |
-|------|--------|----------|
-| `{path}` | Implemented (deleted) | {matched files} |
-| `{path}` | Not implemented (kept) | - |
-```
+1. Present the implemented candidates with supporting evidence.
+2. Ask the user whether to delete all, delete selected ideas, or cancel.
+3. Delete files only after explicit confirmation.
+4. Report the result with status and evidence for each reviewed idea.
