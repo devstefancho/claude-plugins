@@ -31,7 +31,7 @@ A collection of reusable [Claude Code](https://claude.ai/code) plugins — slash
 | [writing-specs-plugin](./writing-specs-plugin) | Spec writing with conflict detection and reporting |
 | [simple-sdd-plugin](./simple-sdd-plugin) | SDD workflow: spec → plan → tasks → implement |
 | [implement-with-test-plugin](./implement-with-test-plugin) | Implement code with tests from specs or direct requests |
-| [brain-storm-plugin](./brain-storm-plugin) | Brainstorm features and improvements with wireframes |
+| [brain-storm-plugin](./brain-storm-plugin) | Brainstorm features and improvements with wireframes and HTML prototype previews |
 
 ### Git & Workflow
 
@@ -77,7 +77,7 @@ A collection of reusable [Claude Code](https://claude.ai/code) plugins — slash
 
 Each plugin follows this layout:
 
-```
+```text
 plugin-name/
 ├── .claude-plugin/
 │   └── plugin.json         # Plugin metadata (required)
