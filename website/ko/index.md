@@ -1,18 +1,9 @@
 ---
-layout: home
-hero:
-  name: Claude Plugins
-  text: Claude Code 플러그인 마켓플레이스
-  tagline: Skills, Commands, Hooks, MCP Servers를 통해 Claude Code를 확장하세요
-  actions:
-    - theme: brand
-      text: 플러그인 둘러보기
-      link: /ko/plugins/
-    - theme: alt
-      text: 시작하기
-      link: /ko/guide/getting-started
+layout: page
 ---
 
+<HeroSection lang="ko" />
+<StatsBar lang="ko" />
 <HomeFeatures lang="ko" />
 
 <div class="quick-start-section">
@@ -41,10 +32,10 @@ hero:
 ```
 
 ```bash
-# 또는 npx 사용 (일반 터미널에서)
+# 또는 npx 사용 (아무 터미널에서)
 npx skills add devstefancho/claude-plugins
 ```
 
-[모든 플러그인 보기 →](/ko/plugins/)
+[전체 플러그인 보기 →](/ko/plugins/)
 
 </div>

@@ -114,6 +114,11 @@
       "name": "llm-wiki-plugin",
       "source": "./llm-wiki-plugin",
       "description": "LLM-maintained personal wiki with ingest, query, lint, update operations"
+    },
+    {
+      "name": "hermes",
+      "source": "./hermes-gateway-plugin",
+      "description": "Interact with Hermes Agent via local or SSH-tunneled connection"
     }
   ]
 }

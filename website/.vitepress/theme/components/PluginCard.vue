@@ -80,19 +80,33 @@ const getCategoryIcon = (categoryId: string) => {
 
 <template>
   <!-- Card View -->
-  <article v-if="view !== 'list'" class="plugin-card">
+  <article v-if="view !== 'list'" class="plugin-card" :data-category="plugin.category">
     <div class="plugin-card-header">
       <div class="plugin-card-meta">
-        <span class="plugin-card-category">
-          <component :is="getCategoryIcon(plugin.category)" :size="16" />
+        <span class="plugin-card-category" :data-cat="plugin.category">
+          <component :is="getCategoryIcon(plugin.category)" :size="12" />
+          {{ getCategoryName(plugin.category) }}
         </span>
         <span class="plugin-card-version">v{{ plugin.version }}</span>
       </div>
+      <a :href="`https://github.com/devstefancho/claude-plugins/tree/main/${plugin.id}`" target="_blank" class="detail-link" :title="lang === 'en' ? 'View on GitHub' : 'GitHub에서 보기'">
+        <ExternalLink :size="14" />
+      </a>
     </div>
 
     <div class="plugin-card-content">
       <h3 class="plugin-card-title">{{ plugin.name }}</h3>
       <p class="plugin-card-description">{{ plugin.description }}</p>
+    </div>
+
+    <!-- Install command preview with copy -->
+    <div class="install-command-preview" @click="copyInstallCommand">
+      <span class="prompt">$</span>
+      <span class="cmd">{{ plugin.installCommand }}</span>
+      <button class="cmd-copy-btn" @click.stop="copyInstallCommand">
+        <Check v-if="copied" :size="13" />
+        <Copy v-else :size="13" />
+      </button>
     </div>
 
     <ul v-if="plugin.features.length > 0" class="plugin-card-features">
@@ -121,27 +135,14 @@ const getCategoryIcon = (categoryId: string) => {
       </span>
     </div>
 
-    <div class="plugin-card-actions">
-      <button class="btn btn-primary" @click="copyInstallCommand">
-        <Copy v-if="!copied" :size="14" />
-        <Check v-else :size="14" />
-        {{ copied ? (lang === 'en' ? 'Copied!' : '복사됨!') : (lang === 'en' ? 'Install' : '설치') }}
-      </button>
-      <a :href="`https://github.com/devstefancho/claude-plugins/tree/main/${plugin.id}`" target="_blank" class="btn btn-ghost">
-        {{ lang === 'en' ? 'Details' : '상세' }}
-        <ExternalLink :size="14" />
-      </a>
-    </div>
   </article>
 
   <!-- List View -->
-  <article v-else class="plugin-card plugin-card-list">
-    <!-- Left: Icon -->
+  <article v-else class="plugin-card plugin-card-list" :data-category="plugin.category">
     <span class="plugin-list-icon">
       <component :is="getCategoryIcon(plugin.category)" :size="18" />
     </span>
 
-    <!-- Center: Main content -->
     <div class="plugin-list-main">
       <div class="plugin-list-title-row">
         <h3 class="plugin-card-title">{{ plugin.name }}</h3>
@@ -150,7 +151,6 @@ const getCategoryIcon = (categoryId: string) => {
       <p class="plugin-card-description">{{ plugin.description }}</p>
     </div>
 
-    <!-- Right: Badges + Actions -->
     <div class="plugin-list-right">
       <div class="plugin-card-badges">
         <span v-if="plugin.components.skills.length > 0" class="badge badge-skill">
