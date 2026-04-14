@@ -12,6 +12,7 @@ Create, expand, and manage agent teams for worktree sessions. Orchestrates multi
 ## Prerequisites
 
 - Must start with `claude -w` (worktree session)
+- Run `create team` from the active team-lead session, not from a forked helper agent
 - `writing-specs-plugin` recommended for planner's spec writing (optional)
 
 ## Commands
@@ -70,6 +71,10 @@ Goal → planner(spec) → TaskCreate → team-lead review → implementer(code)
 ```
 
 ## Configuration
+
+### Skill model and effort
+
+The `create team` skill is configured to run with `model: sonnet` and `effort: high` for more reliable team orchestration and fallback handling.
 
 ### 1M Context for Teammates
 
