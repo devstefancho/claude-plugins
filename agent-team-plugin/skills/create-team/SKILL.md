@@ -72,4 +72,4 @@ If teammate spawning via the Agent tool fails with `team_name` or another intern
 - `/loop` is session-scoped and expires after 7 days
 - Teammate colors are auto-assigned from hardcoded palette (red, blue, green, yellow...) — not configurable
 - All communication flows through team-lead (planner <-> implementer direct messaging disabled by prompt rules)
-- Teammate model defaults to standard Opus (no 1M context). To use 1M context, set env var before starting: `export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-6[1m]'`
+- Teammate model defaults to standard Opus (no 1M context). For one-off use, prefer `/model opus[1m]`. To make 1M context the default before starting Claude Code, set `export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-6[1m]'` using plain ASCII quotes (`'`), not smart quotes (`‘’`).
