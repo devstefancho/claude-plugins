@@ -2,8 +2,6 @@
 name: create-team
 description: Create an agent team with planner and implementer teammates for spec-driven development. Use when user says "create team", "팀 생성", "팀 만들어줘", "agent team", or wants to set up a planner+implementer workflow in a worktree session.
 allowed-tools: Bash, Agent, SendMessage, TeamCreate, TaskCreate, TaskList, TaskUpdate, Read, AskUserQuestion
-context: fork
-agent: general-purpose
 ---
 
 # Create Team
@@ -56,12 +54,13 @@ Teammate colors are auto-assigned from a hardcoded palette and cannot be configu
 
 ## Fallback
 
-If Agent tool + `team_name` parameter fails with internal error (known issue anthropics/claude-code#40270):
-1. Inform the user about the issue
+If teammate spawning via the Agent tool fails with `team_name` or another internal error in the current session (known issue anthropics/claude-code#40270):
+1. Inform the user that team creation succeeded but teammate spawning failed in the current execution context
 2. Suggest spawning teammates manually:
    - Open separate terminal windows
    - Run `claude` in each with the planner/implementer prompts
    - Use SendMessage for coordination
+3. Do not claim the Agent tool is globally unavailable unless the session explicitly shows that tool is missing
 
 ## Notes
 
