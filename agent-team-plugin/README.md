@@ -72,10 +72,6 @@ Goal → planner(spec) → TaskCreate → team-lead review → implementer(code)
 
 ## Configuration
 
-### Skill model and effort
-
-The `create team` skill is configured to run with `model: sonnet` and `effort: high` for more reliable team orchestration and fallback handling.
-
 ### Teammate model
 
 Teammates use the standard Opus model by default.
