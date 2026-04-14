@@ -1,6 +1,8 @@
 ---
 name: create-team
 description: Create an agent team with planner and implementer teammates for spec-driven development. Use when user says "create team", "팀 생성", "팀 만들어줘", "agent team", or wants to set up a planner+implementer workflow in a worktree session.
+model: sonnet
+effort: high
 allowed-tools: Bash, Agent, SendMessage, TeamCreate, TaskCreate, TaskList, TaskUpdate, Read, AskUserQuestion
 ---
 
