@@ -76,25 +76,9 @@ Goal → planner(spec) → TaskCreate → team-lead review → implementer(code)
 
 The `create team` skill is configured to run with `model: sonnet` and `effort: high` for more reliable team orchestration and fallback handling.
 
-### 1M Context for Teammates
+### Teammate model
 
 Teammates use the standard Opus model by default.
-
-For a single session, prefer switching explicitly with:
-
-```bash
-/model opus[1m]
-```
-
-To make 1M context the default for Opus teammates before starting Claude Code, you can set:
-
-```bash
-export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-6[1m]'
-```
-
-Use plain ASCII quotes (`'`), not smart quotes (`‘’`), when copying that command into your shell.
-
-Add the export to `.zshrc` only if you want this behavior permanently.
 
 ### Auto-Setup
 
