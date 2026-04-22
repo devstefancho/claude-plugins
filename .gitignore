@@ -4,3 +4,4 @@ __pycache__/
 .playwright-cli/
 plans/
 work-journal-plugin/
+llm-wiki-plugin/config.json
