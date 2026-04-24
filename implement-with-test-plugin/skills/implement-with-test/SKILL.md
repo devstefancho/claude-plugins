@@ -1,6 +1,6 @@
 ---
 name: implement-with-test
-description: Implement code with tests from a spec file or direct request. Auto-detects test framework (jest, vitest, pytest, go test, cargo test) and follows existing project patterns. Use when user asks to implement a spec, build a feature with tests, code from a spec, or says "implement", "구현", "구현해줘", "테스트와 함께 구현", "스펙 구현", "implement this spec". Proactively trigger whenever the user wants to turn a specification or requirement into working code with tests.
+description: Implement a task with tests. Task information comes from an argument (task description or path to a task file) or is inferred from the current conversation. Auto-detects test framework (jest, vitest, pytest, go test, cargo test) and follows existing project patterns. Use when user asks to implement a task, build a feature with tests, or says "implement", "구현", "구현해줘", "테스트와 함께 구현". Proactively trigger whenever the user wants to turn a task or requirement into working code with tests.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 context: main
 agent: general-purpose
@@ -8,41 +8,40 @@ agent: general-purpose
 
 # Implement with Test
 
-Implements planned work (spec files or user requests) into production code with accompanying tests. Detects the project's language, test framework, and coding conventions to produce code that fits naturally into the existing codebase.
+Implements a task into production code with accompanying tests. Detects the project's language, test framework, and coding conventions to produce code that fits naturally into the existing codebase.
 
 ## Principles
 
-1. **Spec-first** - Never start coding without a clear understanding of what to build. If working from a spec file, parse its 4 sections (Purpose, Requirements, Approach, Verification). If working from a direct request, extract equivalent structured information first. This prevents aimless coding and scope creep.
+1. **Task-first** - Never start coding without a clear task definition. Extract the task (Purpose / Requirements / Approach / Verification) from the argument or recent conversation before writing any code. This prevents aimless coding and scope creep.
 
 2. **Pattern-follower** - The project already has conventions for imports, naming, directory structure, and test organization. Detect and follow them rather than imposing external conventions. Code that looks foreign to the project creates maintenance burden, even if it's technically correct.
 
-3. **Test-alongside** - Write tests as part of the implementation, not as an afterthought. Each Verification item from the spec maps to at least one test. This ensures the tests actually verify what the spec intended, not just what happened to get implemented.
+3. **Test-alongside** - Write tests as part of the implementation, not as an afterthought. Each Verification item maps to at least one test. This ensures the tests actually verify what the task intended, not just what happened to get implemented.
 
 4. **Run-to-green** - After writing code and tests, run the test suite. If tests fail, diagnose and fix (up to 3 attempts). Do not report success until tests pass. A green test suite is the definition of "done."
 
-5. **Minimal diff** - Only create or modify files necessary for the feature. Do not refactor surrounding code, add unrelated type annotations, or "improve" existing patterns. The goal is a focused, reviewable changeset.
+5. **Minimal diff** - Only create or modify files necessary for the task. Do not refactor surrounding code, add unrelated type annotations, or "improve" existing patterns. The goal is a focused, reviewable changeset.
 
 ## Workflow
 
-### Phase 1: Input Resolution
+### Phase 1: Task Resolution
 
-Determine what to implement:
+Determine what to implement. There are exactly two sources:
 
-1. **Spec file provided as argument** → Read and parse the spec file directly
-2. **No argument but `specs/` exists** → git diff로 변경된 스펙을 우선 감지:
-   a. `git diff --name-only HEAD -- specs/` 로 새로 추가되거나 수정된 스펙 파일 확인
-   b. untracked 파일도 확인: `git ls-files --others --exclude-standard specs/`
-   c. 변경된 스펙이 1개 → 해당 스펙을 자동으로 선택하여 진행
-   d. 변경된 스펙이 여러 개 → 변경된 스펙 목록만 보여주고 `AskUserQuestion`으로 선택 요청
-   e. 변경된 스펙이 없으면 → 전체 `Glob specs/**/*.md` fallback하여 목록 표시
-3. **Direct request (no spec)** → Extract structured information from the user's request:
-   - Purpose: What needs to be done and why (1-2 sentences)
-   - Requirements: Concrete requirements (3-5 bullets)
-   - Approach: Technical approach (2-5 sentences)
-   - Verification: Testable scenarios (2-5 bullets)
-   - Confirm the extracted plan with the user before proceeding
+1. **Argument provided** — The argument is either:
+   - A path to a task/spec file (e.g. `specs/foo.md`, `tasks/bar.md`, any `.md` describing the task) → `Read` the file and parse its content.
+   - A direct task description (natural language) → Parse the description in place.
 
-After resolving input, display the parsed spec summary so the user can verify alignment.
+2. **No argument** — Infer the task from the current conversation context. Summarize what the user has asked for across recent turns.
+
+Regardless of source, extract the task into this structure before proceeding:
+
+- **Purpose**: What needs to be done and why (1-2 sentences)
+- **Requirements**: Concrete requirements (3-5 bullets)
+- **Approach**: Technical approach (2-5 sentences)
+- **Verification**: Testable scenarios (2-5 bullets)
+
+Display the extracted task summary to the user for alignment. If the argument was a file, you can skip confirmation unless something was ambiguous. If the task came from conversation, **always confirm** before moving on — conversation-inferred tasks are the most error-prone.
 
 ### Phase 2: Project Reconnaissance
 
@@ -79,11 +78,11 @@ Scan the project to understand its conventions. This phase determines how to wri
 
 ### Phase 3: Implementation Planning
 
-Based on the spec and reconnaissance:
+Based on the task and reconnaissance:
 
 1. List the production code files to create or modify, with brief descriptions
 2. List the test files to create, following the detected naming convention and location pattern
-3. Map each spec Verification item to the test(s) that will cover it
+3. Map each Verification item to the test(s) that will cover it
 
 Display the file plan to the user as an informational summary (no confirmation needed — just transparency).
 
@@ -91,15 +90,15 @@ Display the file plan to the user as an informational summary (no confirmation n
 
 Write the production code:
 
-- Follow the spec's Approach section for architecture and design decisions
+- Follow the Approach for architecture and design decisions
 - Match existing code patterns: import style, naming conventions, error handling
-- Handle edge cases mentioned in the Requirements section
+- Handle edge cases mentioned in the Requirements
 - Keep functions focused — each should do one thing well
 - Add only necessary exports for testability
 
 ### Phase 5: Test Implementation
 
-Write tests covering the spec's Verification section:
+Write tests covering the Verification section:
 
 - Use the detected test framework and assertion library
 - Follow existing test file patterns (structure, naming, imports)
@@ -124,15 +123,40 @@ Write tests covering the spec's Verification section:
    - Re-run after each fix
 
 3. **Generate report** using the template: [templates/report-template.md](templates/report-template.md)
-   - Fill in all fields: source, title, files, test results, spec coverage
+   - Fill in all five sections: 완료한 기능 / 기술 구현 / 테스트 / 사용자 조치 필요 / 다음 단계
+   - "사용자 조치 필요" 섹션은 env 설정, 마이그레이션, 수동 설치 등 Claude가 실행하지 않은 작업을 명시. 없으면 "없음".
+   - "다음 단계" 섹션은 관련된 후속 작업 1-3개를 구체적으로 제시
    - Output the completed report as the final message
+
+### Phase 7: Task Document Update
+
+Phase 1 argument가 **파일 경로**였을 때만 실행한다. 직접 설명이나 대화 기반 task는 대상 문서가 없으므로 이 단계를 건너뛴다.
+
+목적: 해당 task 문서의 상태를 갱신해 추적 가능하게 만든다. **surgical edit만 허용** — 요청한 필드/체크박스 외의 내용은 수정·정렬·재포맷하지 않는다.
+
+1. **Status 결정**
+   - 모든 Verification 테스트 통과 → `completed`
+   - 일부만 통과 (3회 재시도 후에도 실패 존재) → `partial`
+   - 모든 테스트 실패 → `failed`
+
+2. **Frontmatter 갱신**
+   - Frontmatter 존재 (`---` 블록) → `status: {status}` 와 `completed_at: YYYY-MM-DD` 필드를 설정. 해당 키가 이미 있으면 값만 교체, 없으면 추가.
+   - Frontmatter 없음 → 파일 맨 위에 YAML frontmatter 블록을 새로 만들지 말 것. 대신 파일 최상단 heading 바로 아래에 `> Status: {status} ({YYYY-MM-DD})` 한 줄을 추가(이미 있으면 교체).
+
+3. **Verification 체크리스트 갱신**
+   - 문서에 `- [ ]` 형태의 checklist 항목이 있으면:
+     - 해당 항목에 매핑된 테스트가 **통과**한 경우만 `- [x]` 로 변경
+     - 실패했거나 매핑 불명확한 항목은 그대로 둔다
+   - 체크리스트가 없으면 생성하지 말 것
+
+4. 위 1~3 항목 외의 본문(설명, 섹션, 코드 블록, 기타 frontmatter 필드 등)은 절대 수정하지 않는다.
 
 ## Error Handling
 
 | Situation | Action |
 |-----------|--------|
-| No spec file found and no direct request | Ask user what to implement via `AskUserQuestion` |
+| No argument and conversation has no clear task | Ask user what to implement via `AskUserQuestion` |
 | Test framework not detected | Ask user which framework to use |
 | Existing tests use unfamiliar patterns | Follow patterns as-is; do not "modernize" |
-| Tests fail after 3 fix attempts | Report the current state honestly with error details |
-| Spec is ambiguous | Ask user to clarify before implementing |
+| Tests fail after 3 fix attempts | Report the current state honestly in "테스트" section with error details, and list remaining failures under "다음 단계" |
+| Task is ambiguous | Ask user to clarify before implementing |
