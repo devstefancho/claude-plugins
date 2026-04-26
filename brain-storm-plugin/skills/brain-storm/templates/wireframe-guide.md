@@ -2,6 +2,20 @@
 
 ASCII wireframe conventions for UI ideas. Follow these rules for consistency.
 
+## Project Type Branch (read this first)
+
+Pick the branch that matches the project being brainstormed:
+
+- **GUI / web / mobile UI** → use the box-drawing rules below.
+- **CLI tool / library / backend service** → skip box-drawing. Use one of:
+  - **Terminal session**: a faithful transcript of the proposed commands and their output (see CLI Example).
+  - **Data flow / system sketch**: ASCII arrows between components, JSON/YAML schema snippets, pipeline diagrams.
+  The 10-line minimum still applies; the spirit of the rule is "make the implementation direction visible," not "draw rectangles."
+
+---
+
+## GUI Branch (default sections below)
+
 ## Box Drawing Characters
 
 Use Unicode box-drawing characters for all borders:
@@ -57,3 +71,34 @@ Characters: `┌ ─ ┐ │ └ ┘ ├ ┤ ┬ ┴ ┼`
 │         [ Load More ]               │
 └─────────────────────────────────────┘
 ```
+
+---
+
+## CLI Example (terminal session style)
+
+```
+$ todo add "buy milk" --priority high --due 2026-04-30
+added [1] buy milk  [HIGH] (due 2026-04-30)
+
+$ todo list
+[ ] 1: buy milk        [HIGH] (due 2026-04-30)
+[ ] 2: write spec      [MED]
+[x] 3: ship feature
+
+$ todo list --open --search milk
+[ ] 1: buy milk        [HIGH] (due 2026-04-30)
+
+$ todo list --done --search xyz
+no matching todos
+```
+
+## CLI Example (data flow style)
+
+```
+   stdin / argv ──► parser ──► validator ──► store(JSON)
+                                  │              │
+                                  ▼              ▼
+                              friendly       atomic write
+                              error msgs     (~/.todo.json)
+```
+
