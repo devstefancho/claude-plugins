@@ -1,0 +1,34 @@
+<task id="{번호}">
+  <functional>
+    <goal>
+      한 문단으로 "이 작업이 사용자/조직에게 주는 가치"
+    </goal>
+    <user-scenarios>
+      <scenario>구체적 사용 상황 1</scenario>
+      <scenario>구체적 사용 상황 2</scenario>
+    </user-scenarios>
+    <success-criteria>
+      <item>사용자 관점의 성공 기준</item>
+    </success-criteria>
+    <out-of-scope>이번 작업에 포함되지 않는 영역 (선택)</out-of-scope>
+  </functional>
+
+  <technical>
+    <scope>작업 범위를 한 줄로 (layer/역할 정도만)</scope>
+    <dependencies>선행 task 나 선결 조건 (선택)</dependencies>
+    <constraints>
+      <item>절대 제약 — API 계약, 순수성, 보안, 롤백성 등</item>
+    </constraints>
+    <references>
+      <ref>tasks/task-{번호}.md</ref>
+      <ref>specs/ ({번호} 관련)</ref>
+    </references>
+    <done>
+      <item>완료 판정 기준 (테스트 범위·검증 방법) — 수단은 에이전트 위임</item>
+    </done>
+  </technical>
+
+  <kickoff>
+    스펙과 기존 코드 구조를 먼저 파악한 뒤, 짧게 접근 방안을 제시하고 시작한다.
+  </kickoff>
+</task>
