@@ -54,6 +54,16 @@
       "name": "hermes",
       "source": "./hermes-gateway-plugin",
       "description": "Interact with Hermes Agent via local or SSH-tunneled connection"
+    },
+    {
+      "name": "split-work-plugin",
+      "source": "./split-work-plugin",
+      "description": "Split current project work into parallel-safe task groups with worktree branch names and structured starting prompts"
+    },
+    {
+      "name": "browser-walkthrough-plugin",
+      "source": "./browser-walkthrough-plugin",
+      "description": "Headed browser walkthrough — step-by-step interactive flow for iframe/security-heavy sites. Requires playwright-cli skill"
     }
   ]
 }
