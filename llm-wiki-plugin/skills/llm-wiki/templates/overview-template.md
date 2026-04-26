@@ -1,7 +1,7 @@
 ---
 title: Overview
 slug: overview
-type: index
+type: overview
 created: {date}
 updated: {date}
 ---
