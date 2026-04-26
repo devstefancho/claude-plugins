@@ -103,10 +103,7 @@ Each plugin requires `.claude-plugin/plugin.json`:
   - `marketplace.json` - Marketplace catalog
   - Plugin directories contain `.claude-plugin/plugin.json`
 
-- **`docs/`** - Reference documentation for Claude Code features
-  - Not part of plugins; useful for understanding plugin development patterns
-
-- **Plugin directories** (e.g., `code-style-plugin/`, `simple-sdd-plugin/`)
+- **Plugin directories** (e.g., `agent-team-plugin/`, `writing-specs-plugin/`)
   - Each plugin is self-contained and independently installable
   - Include README.md with installation and usage instructions
 
@@ -216,6 +213,6 @@ Plugins can be shared through:
 
 ## See Also
 
-- Claude Code Plugins Documentation: Check `docs/` directory for feature references
+- Claude Code Plugins Documentation: use the `claude-code-guide` subagent for up-to-date references
 - Individual plugin READMEs: Each plugin contains usage documentation
-- Plugin Structure: Refer to existing plugins as examples (e.g., `code-style-plugin/`)
+- Plugin Structure: refer to existing plugins as examples (e.g., `writing-specs-plugin/`)
