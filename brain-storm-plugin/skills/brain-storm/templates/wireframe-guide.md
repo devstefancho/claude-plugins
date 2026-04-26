@@ -7,10 +7,10 @@ ASCII wireframe conventions for UI ideas. Follow these rules for consistency.
 Pick the branch that matches the project being brainstormed:
 
 - **GUI / web / mobile UI** → use the box-drawing rules below.
-- **CLI tool / library / backend service** → skip box-drawing. Use one of:
+- **CLI tool / library / backend service** → skip the GUI layout style. Use one of:
   - **Terminal session**: a faithful transcript of the proposed commands and their output (see CLI Example).
   - **Data flow / system sketch**: ASCII arrows between components, JSON/YAML schema snippets, pipeline diagrams.
-  The 10-line minimum still applies; the spirit of the rule is "make the implementation direction visible," not "draw rectangles."
+  The 10-line minimum still applies; the spirit of the rule is "make the implementation direction visible." Small flow-chart rectangles wrapping a process step (e.g. boxed pseudo-code in a sequence) are fine — what to avoid is GUI-style layouts (toolbars, button rows, modals, multi-column dashboards) that imply a screen the project does not have.
 
 ---
 
