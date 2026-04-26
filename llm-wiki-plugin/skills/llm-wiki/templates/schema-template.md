@@ -1,41 +1,16 @@
-# {domain} Wiki Schema
+# {wiki_title} Schema
 
 ## Identity
-- **Domain:** {domain_description}
+- **Description:** {description}
 - **Created:** {date}
 - **Source types:** {source_types}
 
-## Page Types
-- **source**: 원본 자료 요약 (논문, 기사, 영상 등)
-- **entity**: 사람, 조직, 도구, 기술
-- **concept**: 아이디어, 패턴, 원칙
+## Conventions
 
-## Frontmatter Format
-```yaml
----
-title: Page Title
-slug: page-title
-type: source | entity | concept
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-sources: [slug1, slug2]
-tags: [tag1, tag2]
----
-```
+이 위키는 LLM Wiki 플러그인의 표준 규약을 따른다.
+페이지 유형, frontmatter 형식, slug 규칙, wikilink 문법, 양방향 링킹 정책,
+불변성 규칙, 로그 항목 형식은 플러그인의 `PRINCIPLES.md`를 단일 정본으로 한다.
 
-## Cross-References
-- Internal links: `[[slug]]` or `[[slug|display text]]`
-- slug = filename without `.md`
-- All links must be bidirectional
+## Wiki-Specific Notes
 
-## Index Categories
-- Sources
-- Entities
-- Concepts
-
-## Governance Rules (immutable)
-1. `raw/` is immutable — never modify source files
-2. `log.md` is append-only — never rewrite, only append
-3. `index.md` updates with every operation adding/changing pages
-4. `wiki/pages/` is flat — all pages as `{slug}.md`, NO subdirectories
-5. `overview.md` reflects current synthesis across all sources
+_(이 위키만의 추가 규약이 있으면 여기에 기록. 예: 특정 태그 컨벤션, 카테고리 변형 등)_

@@ -1,85 +1,75 @@
 # LLM Wiki Principles
 
-## 3-Layer Architecture
+각 operation은 `<refs>`로 필요한 섹션만 명시한다. 미리 다 읽지 않는다.
 
-### Layer 1: Raw Sources (`raw/`)
-- **Immutable** — 한 번 저장된 소스는 절대 수정하지 않는다
-- 논문, 기사, URL 스냅샷, 트랜스크립트, 노트 등 원본 자료
-- 형식: `raw/{slug}.md` 또는 `raw/{slug}.pdf`
-- LLM은 읽기만 가능, 쓰기 불가
+## architecture
 
-### Layer 2: Wiki (`wiki/`)
-- LLM이 생성하고 유지보수하는 컴파일된 지식
-- 구조:
-  - `wiki/index.md` — 전체 페이지 카탈로그 (매 operation마다 갱신)
-  - `wiki/overview.md` — 도메인 전체 요약 (이해가 바뀔 때 갱신)
+위키는 단일 그래프다. `[[slug]]` 교차 참조가 한 그래프 안에서만 유효하므로 위키를 쪼개지 않는다.
+
+- **`raw/`** — 원본 자료 (논문/기사/URL/트랜스크립트/노트). `raw/{slug}.md` 또는 `raw/{slug}.{ext}` (PDF·이미지 등 binary는 동반 `raw/{slug}.meta.md`에 메타 헤더). 추가만 가능, 수정/삭제 금지.
+- **`wiki/`** — LLM이 컴파일·유지보수.
+  - `wiki/index.md` — 페이지 카탈로그
+  - `wiki/overview.md` — 위키 요약
   - `wiki/log.md` — append-only 작업 이력
-  - `wiki/pages/{slug}.md` — 개별 위키 페이지 (flat 구조, 하위 디렉토리 없음)
+  - `wiki/pages/{slug}.md` — flat (하위 디렉토리 없음)
+- **`SCHEMA.md`** — 위키 정체성. Phase 0의 발견 진입점.
 
-### Layer 3: Schema (`SCHEMA.md`)
-- 위키의 계약서. 도메인, 규약, 페이지 유형을 정의
-- 스킬이 위키를 발견하고 이해하는 진입점
+## page-types
 
-## Page Frontmatter
+- `source` — 원본 요약 (논문, 기사, 영상, 코드)
+- `entity` — 사람, 조직, 도구, 기술
+- `concept` — 아이디어, 패턴, 원칙
+- `index`, `overview` — 시스템 페이지. 각 템플릿에서만 사용
 
-모든 위키 페이지는 YAML frontmatter로 시작한다:
+`source` vs `entity` vs `concept`은 페이지가 "무엇을 다루는가"로 판단 — 원본 자체가 주제면 source, 인물/조직/도구가 주제면 entity, 그 외 추상 개념이면 concept.
+
+## frontmatter
 
 ```yaml
 ---
-title: Page Title
-slug: page-title
-type: source | entity | concept
+title: ...
+slug: ...
+type: source|entity|concept|index|overview
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-sources: [slug1, slug2]
-tags: [tag1, tag2]
+sources: [slug, ...]   # optional
+tags: [tag, ...]       # optional
 ---
 ```
 
-### 필수 필드
-- `title`: 페이지 제목
-- `slug`: 파일명과 동일 (확장자 제외)
-- `type`: source(원본 요약), entity(사람/도구/조직), concept(아이디어/패턴)
-- `created`: 생성일
-- `updated`: 최종 수정일
+필수: `title`, `slug`, `type`, `created`, `updated`. lint 스크립트는 이 5개만 검증한다.
 
-### 선택 필드
-- `sources`: 이 페이지가 참조하는 소스 slug 목록
-- `tags`: 분류 태그
+## wikilink
 
-## Wikilink Format
+- `[[slug]]` → `wiki/pages/{slug}.md`
+- `[[slug|표시]]` 커스텀 표시
+- `[[slug#anchor]]` 섹션 앵커 (slug 부분으로만 해석)
+- 외부 URL은 일반 마크다운 링크
+- `slug` = 파일명에서 `.md` 제외
 
-- 기본: `[[slug]]` → `wiki/pages/{slug}.md`로 연결
-- 커스텀 표시: `[[slug|표시 텍스트]]`
-- 위키 내부 링크에만 사용. 외부 URL은 일반 마크다운 링크 사용
+## bidirectional
 
-## Bidirectional Linking Policy
+A가 `[[B]]`를 쓰면 B의 Related 섹션에도 `[[A]]`가 있어야 한다. ingest/update가 페이지를 변경한 직후 `scripts/lint_wiki.py {wiki_root} --json`을 실행해 `missing_backlink`가 0이 될 때까지 보강한다.
 
-- A 페이지가 B를 `[[B]]`로 참조하면, B 페이지의 Related 섹션에도 `[[A]]`가 있어야 함
-- Ingest 시 새 페이지 작성 후 반드시 **백링크 감사** 수행
-- Grep으로 전체 `wiki/pages/`를 스캔하여 누락된 역방향 링크 추가
+## slug-rules
 
-## Slug Rules
+정규식 `^[a-z0-9][a-z0-9-]{0,49}$` (소문자 영숫자·하이픈, 첫 글자 영숫자, 1~50자).
 
-- lowercase-with-hyphens만 허용
-- 최대 50자
-- 특수문자 불가 (알파벳, 숫자, 하이픈만)
-- 예: "Attention Is All You Need" → `attention-is-all-you-need`
-- 충돌 시 숫자 접미사: `concept-2`
+LLM이 직접 생성한다 — 한글/CJK는 의미가 통하는 영어로 transliterate (예: "어텐션 메커니즘" → `attention-mechanism`, "Café" → `cafe`). 기존 페이지와 충돌하면 `-2`, `-3`을 붙인다. 50자 제한은 충돌 접미사 포함 후의 길이.
 
-## Immutability Rules
+## immutability
 
-1. **`raw/` 불변**: 소스 파일은 추가만 가능, 수정/삭제 불가
-2. **`log.md` append-only**: 기존 로그 항목을 수정하거나 삭제하지 않음. 항상 맨 아래에 추가
-3. **SCHEMA.md 보존**: 사용자 확인 없이 SCHEMA.md를 수정하지 않음
+1. `raw/` 추가만 (수정/삭제 금지)
+2. `log.md` append-only — 기존 항목 수정/삭제 금지. **추가는 `scripts/append_log.py`** (단, 위키 최초 생성 시 init이 직접 작성하는 첫 항목은 예외)
+3. `SCHEMA.md` 사용자 명시 확인 없이 수정 금지
+4. `wiki/pages/` flat — 하위 디렉토리 금지
 
-## Log Entry Format
+## log-format
 
-```markdown
-## [YYYY-MM-DD] <operation> | <description>
-- Pages created: [[slug1]], [[slug2]]
-- Pages updated: [[slug3]], [[slug4]]
-- Backlinks added: <count>
+```
+scripts/append_log.py <wiki_root> <op> "<description>"
 ```
 
-Operations: `init`, `ingest`, `query`, `lint`, `update`
+- `<op>` ∈ `init|ingest|query|lint|update`
+- `<description>` 한 줄 (개행 금지 — 스크립트가 거부)
+- 본문 bullet은 stdin으로 전달 (heredoc)
