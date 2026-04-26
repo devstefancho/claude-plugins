@@ -6,7 +6,7 @@ created: {date}
 updated: {date}
 ---
 
-# {domain} Wiki Index
+# {wiki_title} Index
 
 ## Sources
 

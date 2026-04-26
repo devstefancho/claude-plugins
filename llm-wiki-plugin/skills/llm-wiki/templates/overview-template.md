@@ -6,11 +6,11 @@ created: {date}
 updated: {date}
 ---
 
-# {domain} Wiki Overview
+# {wiki_title} Overview
 
 ## Scope
 
-{scope_description}
+{description}
 
 ## Key Themes
 
