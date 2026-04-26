@@ -49,10 +49,13 @@ estimate: "S" | "M" | "L"
 status: "todo" | "in_progress" | "review" | "done" | "blocked"
 owner: ""
 sprint: ""                  # optional, reserved for v2 filtering
+completed_at: ""            # optional, ISO date set by implement-with-test when status flips to done
 ---
 ```
 
 Reject writes if any required field (`id`, `phase`, `title`, `spec`, `depends_on`, `estimate`, `status`) is missing.
+
+Optional fields (`sprint`, `completed_at`) may be absent or empty. `completed_at` is set automatically by `implement-with-test` when the task transitions to `done`; treat any other value as user-authored.
 
 ## Commands
 
@@ -194,6 +197,7 @@ Reject if any fail:
 Warn (non-blocking):
 - Task with `depends_on: []` but body's "의존성" section is empty — prompt to add reasoning or mark as "독립 task".
 - Orphan task — task whose `spec:` was deleted (spec file no longer exists).
+- **Non-schema status value** — if `status` is anything other than the five enum values (e.g. `completed`, `partial`, `failed`), normalize it for dashboard purposes (`completed`→`done`, `failed`→`blocked`, `partial`→`review`) and warn. Do not auto-rewrite the file; surface the file path so the user can fix it.
 
 ## Incremental Updates
 
@@ -232,3 +236,15 @@ The skill detects `.claude/worktrees/task-N.NN-*` branch naming. When invoked in
 - Never create shared files the user didn't ask for. Only `tasks/phase-N-slug/NN-name.md`.
 - All user decisions go through `AskUserQuestion`.
 - When proposing decompositions, show the inference trail (which signal → which dependency) so the user can correct.
+
+## Non-interactive defaults
+
+If `AskUserQuestion` is unavailable (auto mode, headless agent, scheduled run), use these defaults and echo every defaulted decision back in the Step 4 report so the user can override.
+
+| Decision point | Default | Rationale |
+|---|---|---|
+| Decomposition proposal (`proceed/edit/cancel`) | `proceed` | The proposal is already grounded in the four signals; user can edit task files after. |
+| Phase slug for a brand-new phase | Derive from spec filename(s): kebab-case, drop trailing numbers, truncate to 3 words. Example: `specs/phase-3/01-profile-migration.md` → `phase-3-profile`. | Deterministic, recoverable. |
+| Modified spec encountered (resync diff?) | **Skip resync**, surface the orphan-warning style note in the report. | Never silently rewrite a task body that may have been hand-edited. |
+| Manual `/writing-tasks new` (phase / depends_on / estimate) | **Refuse** in non-interactive mode: report "manual task creation requires interactive input." | These are intent-heavy decisions; defaulting them silently produces wrong graphs. |
+| `depends_on: []` warning + empty 의존성 section | Auto-write `독립 task` placeholder in the body and warn in the report. | Keeps validation clean; warning surfaces it for human review. |

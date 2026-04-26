@@ -23,11 +23,14 @@ allowed-tools: Read, Glob, Grep, Bash
    ```
    - `{project-slug}` 결정 (worktree 안에서도 main repo 기준):
      ```bash
-     main_repo="$(dirname "$(git rev-parse --git-common-dir)")"
+     # --path-format=absolute 로 워크트리에서도 main repo 의 .git 절대 경로를 얻는다.
+     git_common_dir="$(git rev-parse --path-format=absolute --git-common-dir)"
+     main_repo="$(dirname "$git_common_dir")"
      slug="$(basename "$(dirname "$main_repo")")-$(basename "$main_repo")"
      # 예: ~/works/runner/web → runner-web
      ```
      basename 만 쓰면 `web` 같은 generic 이름이 다른 repo 와 충돌하므로 부모 한 단계 결합.
+     `--path-format=absolute` 플래그를 빠뜨리면 워크트리 안에서 `git_common_dir` 가 `../../.git` 같은 상대 경로가 되어 슬러그가 `.-.` 으로 망가진다.
    - 디렉토리 없으면 `mkdir -p` 로 생성. 타임스탬프는 KST 기준.
 6. **출력** — 저장한 파일의 **전체 내용을 그대로** 반환한다. 맨 앞에 `💾 저장됨: <절대경로>` 한 줄 추가.
 

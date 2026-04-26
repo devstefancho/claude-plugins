@@ -88,7 +88,9 @@ After writing all idea files, include this report in the final response:
 | `{path}` | {title} | {complexity} |
 
 ### Next Steps
-- Refine an idea into a spec: `/writing-specs {idea title}`
+- Refine an idea into a spec (recommended — pass the file path so writing-specs reads it directly):
+  `/writing-specs brain-storm/{file-name}.md`
+  (Title or keyword also works: `/writing-specs "{idea title}"`)
 - Generate a UI prototype preview for a UI-focused idea: `/ui-prototype-preview {idea title}`
 ```
 
@@ -115,3 +117,15 @@ Triggered by requests such as "clean up brainstorm notes" or "remove ideas that 
 2. Ask the user whether to delete all, delete selected ideas, or cancel.
 3. Delete files only after explicit confirmation.
 4. Report the result with status and evidence for each reviewed idea.
+
+---
+
+## Non-interactive defaults
+
+If the harness signals non-interactive mode (auto mode, scheduled run, headless agent — i.e. `AskUserQuestion` is unavailable or the user has stated "automatic" / "no questions"), use these defaults instead of asking. **Always echo the defaulted decisions back in the final report so the user can override.**
+
+| Decision point | Default | Rationale |
+|---|---|---|
+| Which ideas to save (Brainstorm Step 1) | Save 2 ideas: pick the most diverse pair (1 UX/polish + 1 new capability), preferring Low/Medium complexity. | Diversity beats volume; low-complexity proves out the workflow without committing to large work. |
+| Duplicate detected (Brainstorm Step 2) | Skip writing the new file. | Never overwrite user-authored notes silently. |
+| Cleanup deletion (Cleanup Step 2) | **Refuse**: report candidates only, do not delete. | Deletion is unrecoverable; require an explicit follow-up command. |
