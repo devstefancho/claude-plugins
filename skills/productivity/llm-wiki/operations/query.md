@@ -10,7 +10,7 @@
 
 ## 2. 페이지 회수
 
-식별된 페이지 전체를 Read. 관련 있는 경우 `[[cross-references]]`를 최대 2 hop까지 따라간다.
+식별된 페이지 전체를 Read. 관련 있는 경우 `[[cross-references]]`를 최대 2 hop까지 따라간다. 인덱스가 가리키는 경로에 파일이 없으면(구 flat 경로 등) vault 루트 `MIGRATION.md`(옛→새 경로 표)를 확인한다.
 
 ## 3. 답변 합성
 
@@ -21,14 +21,14 @@
 
 ## 4. 아카이빙 제안
 
-`AskUserQuestion`:
+사용자에게 묻는다:
 
 > 이 답변을 위키 페이지로 저장할까요?
 > 제안 slug: `<suggested-slug>` (PRINCIPLES.md slug-rules 따라 LLM이 미리 생성)
 
 <onaccept>
 1. PRINCIPLES.md frontmatter, slug-rules, bidirectional 추가 Read
-2. `type: concept`, `tags: [query, analysis]`로 페이지를 `{wiki_root}/wiki/pages/{slug}.md`에 Write
+2. `type: concept`, `aliases: [{slug}]`, `tags: [query, analysis]`로 페이지를 `{wiki_root}/wiki/pages/concept/{today}-{slug}.md`에 Write
 3. ingest.md의 단계 7(index 갱신), 6(백링크 보강)를 수행 — 이 두 단계만 수행, overview는 갱신하지 않는다
 4. 로그:
    ```bash

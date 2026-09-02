@@ -1,10 +1,11 @@
 ---
 title: {title}
 slug: {slug}
+aliases: [{slug}]
 type: {type}
 created: {date}
 updated: {date}
-sources: [{source_slugs}]
+sources: [{raw_basenames}]
 tags: [{tags}]
 ---
 

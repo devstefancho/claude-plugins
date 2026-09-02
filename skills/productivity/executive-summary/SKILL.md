@@ -48,6 +48,15 @@ Comparing options? Use a table instead of bullets:
 | 비용 | …      | …      |
 ```
 
+Is the source a process — a pipeline, workflow, or multi-step progress report? Add a flow line. Bullets scatter the order; the reader loses where the work actually stands:
+
+```
+## 진행 흐름
+전사 → 컷 편집 → **썸네일(현재)** → ⛔ 업로드 승인 → 게시
+```
+
+Mark the current step in bold and any blocker or human approval gate with ⛔ — the point is showing where it stands, not just listing steps. Keep the flow to one line: if there are more than ~6 steps, group the finished ones ("소싱~편집 완료 →").
+
 ## Output medium
 
 - **Default — inline.** Render the brief directly in your reply. Most "정리해줘 / 알려줘" requests want it right here — don't make a file unless asked.

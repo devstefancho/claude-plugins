@@ -6,7 +6,7 @@
 
 ## 1. 사용자에게 위키 정체성을 묻는다
 
-`AskUserQuestion`:
+사용자에게 묻는다:
 
 > 위키를 생성합니다.
 > - **위키 이름** (예: "Stefan's Knowledge Wiki")
@@ -18,8 +18,13 @@
 ## 2. 디렉토리 생성
 
 ```bash
-mkdir -p {wiki_root}/raw {wiki_root}/wiki/pages
+mkdir -p {wiki_root}/raw/sources {wiki_root}/wiki/pages/source {wiki_root}/wiki/pages/entity {wiki_root}/wiki/pages/concept {wiki_root}/journal {wiki_root}/inbox
 ```
+
+- `raw/sources/` — 원본(불변). `{YYYY-MM-DD}-{slug}.{ext}`, 날짜 = 자료 사건일
+- `wiki/pages/{type}/` — 페이지. `{created}-{slug}.md`, wikilink는 frontmatter slug로 해석
+- `journal/` — 날짜별 데일리 메모 (사용자 편집·capture)
+- `inbox/` — 링크·처리 대기 자료 park (capture·Web Clipper → "위키 정리" 때 distill이 소비)
 
 ## 3. 시스템 페이지 작성
 
@@ -30,6 +35,7 @@ mkdir -p {wiki_root}/raw {wiki_root}/wiki/pages
 - `templates/schema-template.md` → `{wiki_root}/SCHEMA.md`
 - `templates/index-template.md` → `{wiki_root}/wiki/index.md`
 - `templates/overview-template.md` → `{wiki_root}/wiki/overview.md`
+- `templates/tags-template.md` → `{wiki_root}/wiki/tags.md`
 
 치환은 **단순 문자열 치환**이 아니라 의미를 이해하고 처리한다 — 사용자 입력에 `{date}` 같은 글자가 들어있으면 그대로 두고 템플릿 placeholder만 바꾼다.
 
@@ -53,5 +59,6 @@ Append-only operation record.
 ## 5. 사용자 보고
 
 > ✅ 위키 `{wiki_title}` 생성 완료
-> - 경로: `{wiki_root}/`
-> - 다음: `wiki ingest <source>`로 소스 추가
+> - 경로: `{wiki_root}/` (raw/sources · wiki/pages/{type} · journal · inbox)
+> - **Obsidian**: `{wiki_root}`를 vault로 열고 **Dataview**(tags.md MOC용)·**Web Clipper**(리서치 캡처용) 플러그인 설치 권장
+> - 다음: 메모·링크는 `capture`, 외부 자료와 "이 대화 정리"는 `wiki ingest`(같은 턴에 raw+pages), inbox가 쌓이면 "위키 정리"(`distill`, 스케줄 없음)

@@ -1,0 +1,41 @@
+# Local source of truth for cross-agent permissions.
+# Paths: ~ is $HOME. ** matches across directories.
+# This file stays on the machine — do not commit it.
+
+version = 1
+
+deny_reads = [
+  "~/.secrets/**",
+  "~/.ssh/**",
+  "~/.aws/**",
+  "~/.kube/**",
+  "~/.netrc",
+  "**/.env",
+  "**/.env.*",
+  "**/*.pem",
+  "**/*_rsa",
+]
+
+deny_writes = [
+  "~/.secrets/**",
+]
+
+# Claude/Grok get Bash(pattern). Cursor denies the first token only (broader).
+deny_commands = [
+  "rm -rf *",
+  "rm -r -f *",
+  "sudo *",
+  "git push --force *",
+  "git push -f *",
+]
+
+# Markdown files projected into each agent's rules directory.
+# Relative paths are from this file's directory.
+guidelines = [
+  "rules/secrets.md",
+]
+
+[agents]
+claude = true
+grok = true
+cursor = true

@@ -2,7 +2,7 @@
 <!--
   Executive one-pager template (self-contained, print-friendly).
   Fill the regions marked  <!-- EDIT ... -->  and delete any section you don't need.
-  Keep the whole thing to ONE page — if it overflows on screen/print, cut content.
+  Keep the whole thing to ONE page. If it overflows on screen/print, cut content.
 -->
 <html lang="ko">
 <head>
@@ -41,13 +41,20 @@
   .meta { color: var(--muted); font-size: 13px; }
   .bottomline {
     background: var(--accent-soft);
-    border-left: 4px solid var(--accent);
-    padding: 14px 18px;
-    border-radius: 0 6px 6px 0;
+    border: 1px solid #dbeafe;
+    padding: 16px 18px;
+    border-radius: 6px;
     margin: 0 0 26px;
     font-size: 16px;
   }
-  .bottomline strong { color: var(--accent); }
+  .bottomline strong {
+    display: block;
+    color: var(--accent);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 5px;
+  }
   h2 {
     font-size: 13px;
     text-transform: uppercase;
@@ -58,6 +65,18 @@
   ul { margin: 0; padding-left: 20px; }
   li { margin: 6px 0; }
   li::marker { color: var(--accent); }
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; font-size: 13px; }
+  .flow .step {
+    padding: 5px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .flow .step.done { color: var(--ink); background: #f9fafb; border-color: #d1d5db; }
+  .flow .step.current { color: #fff; background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .flow .step.blocked { color: #b91c1c; background: #fef2f2; border-color: #fecaca; font-weight: 600; }
+  .flow .arrow { color: var(--muted); }
   table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 6px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
   th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
@@ -76,7 +95,7 @@
     </header>
 
     <p class="bottomline">
-      <strong>한 줄 요약</strong> —
+      <strong>한 줄 요약</strong>
       <!-- EDIT:BOTTOMLINE -->의사결정자가 가장 먼저 알아야 할 1–2문장.<!-- /EDIT -->
     </p>
 
@@ -87,6 +106,19 @@
       <li>두 번째 포인트.</li>
       <li>세 번째 포인트.</li>
     </ul>
+    <!-- /EDIT -->
+
+    <!-- EDIT:FLOW (프로세스·단계 진행이 아니면 이 블록 통째로 삭제) -->
+    <h2>진행 흐름</h2>
+    <div class="flow">
+      <span class="step done">완료 단계</span>
+      <span class="arrow">→</span>
+      <span class="step current">현재 단계</span>
+      <span class="arrow">→</span>
+      <span class="step blocked">⛔ 승인 대기</span>
+      <span class="arrow">→</span>
+      <span class="step">남은 단계</span>
+    </div>
     <!-- /EDIT -->
 
     <!-- EDIT:DECISIONS (삭제 가능) -->
@@ -101,8 +133,8 @@
     <table>
       <thead><tr><th>항목</th><th>옵션 A</th><th>옵션 B</th></tr></thead>
       <tbody>
-        <tr><td>비용</td><td>—</td><td>—</td></tr>
-        <tr><td>리스크</td><td>—</td><td>—</td></tr>
+        <tr><td>비용</td><td>…</td><td>…</td></tr>
+        <tr><td>리스크</td><td>…</td><td>…</td></tr>
       </tbody>
     </table>
     <!-- /EDIT -->

@@ -31,7 +31,24 @@ esac
 
 [ $# -eq 0 ] && { echo "at least one target required"; exit 1; }
 
-SESSION="${CC_HL_SESSION:-hometax}"
+# Resolve the target session: CC_HL_SESSION if set, otherwise the only open one.
+NAMES=$(playwright-cli list --json 2>/dev/null \
+  | python3 -c 'import json,sys; print("\n".join(b["name"] for b in json.load(sys.stdin).get("browsers", [])))' 2>/dev/null)
+
+if [ -n "$CC_HL_SESSION" ]; then
+  SESSION="$CC_HL_SESSION"
+  if [ -n "$NAMES" ] && ! printf '%s\n' "$NAMES" | grep -qx "$SESSION"; then
+    echo "no such session: $SESSION (open: $(printf '%s' "$NAMES" | tr '\n' ' '))" >&2
+    exit 1
+  fi
+else
+  COUNT=$(printf '%s' "$NAMES" | grep -c . || true)
+  case "$COUNT" in
+    1) SESSION="$NAMES" ;;
+    0) echo "no open browser session — attach first: playwright-cli -s=<name> attach --extension=chrome" >&2; exit 1 ;;
+    *) echo "multiple sessions open ($(printf '%s' "$NAMES" | tr '\n' ' ')) — pick one with CC_HL_SESSION=<name>" >&2; exit 1 ;;
+  esac
+fi
 
 # 1) clear any previous data-cc-step tags first (idempotent)
 playwright-cli -s="$SESSION" eval "() => {

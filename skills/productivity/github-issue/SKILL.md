@@ -17,18 +17,20 @@ If the intent is genuinely ambiguous, ask which operation — don't guess.
 
 ## Common setup
 
-- Confirm `gh auth status` works once; if not, stop and tell the user to run `gh auth login`.
+- `gh auth status` 는 매번 돌리지 않는다. `gh` 호출이 인증 오류로 실패했을 때만 확인하고, 그때 사용자에게 `gh auth login` 을 안내한다 (12세션 실측: 사전 확인 실행 0회, 인증 실패 0건).
 - Default to the current repo. If the user names another repo, pass `-R <owner>/<repo>` to every `gh` call.
 
 ## Fetch
 
 1. If no issue number was given, run `gh issue list`, show the open issues, and let the user pick.
 2. `gh issue view <N> --json number,title,state,labels,author,url,body,comments`
-3. Download every attachment found in the body and comments — **plain curl/WebFetch returns 404 on GitHub attachment URLs**. Follow [fetching.md](fetching.md) exactly (auth-token download, image Read, video → ffmpeg frames).
+3. 본문이나 코멘트에 `github.com/user-attachments/` 링크가 있을 때만 [fetching.md](fetching.md) 를 읽고 그 절차대로 받는다 — **plain curl/WebFetch returns 404 on GitHub attachment URLs** (auth-token download, image Read, video → ffmpeg frames). 첨부가 없으면 이 단계는 없다.
 4. Summarize in the conversation: issue number/title/labels, the problem or request in one or two lines, and what the attachments show.
-5. If the user is picking the issue up to work on it: locate the relevant code (grep for the symbols/strings the issue points at), state an initial hypothesis and candidate approach in a sentence or two — then stop. **Do not start editing code**; intake ends at understanding.
+5. 사용자가 첫 지시에서 구현 범위까지 준 경우(워커 칸의 발제문이 보통 그렇다)에는 조회 뒤 그대로 이어서 작업한다. 지시가 "가져와/조회"뿐이면 관련 코드 위치(grep for the symbols/strings the issue points at)와 가설 한두 문장까지만 말하고 멈춘다 — intake ends at understanding.
 
 ## Create
+
+이 절은 사용자가 "이슈 만들어줘"라고 했을 때만이다. 작업 세션이 착수 전 스스로 만드는 이슈(work-routing 의 issue-SSOT)는 이 스킬을 거치지 않고 `gh issue create` 한 줄로 끝내고, 두 건 이상이면 `writing-tasks` 가 관계까지 건다.
 
 1. Pick a template, in this order:
    - The repo's own `.github/ISSUE_TEMPLATE/*.md|*.yml` if present — list them and match by intent.
@@ -47,8 +49,8 @@ If the intent is genuinely ambiguous, ask which operation — don't guess.
 
 ## Update
 
-1. Fetch the current state first (`gh issue view <N> --json title,body,labels,state`) — never edit blind.
-2. Show what will change as before → after (title/body diff, labels added/removed, state change) and **get confirmation before applying**.
+1. Fetch the current state first (`gh issue view <N> --json title,body,labels,state,comments`) — never edit blind. 코멘트만 달 때도 `body` 와 `comments` 를 함께 받는다. 본문을 안 읽고 단 코멘트는 이미 나온 답을 반복한다.
+2. 코멘트 추가는 확인 없이 바로 올린다 (덧붙이는 것이라 되돌리기 쉽고, 5세션 실측에서 사용자가 이미 내용을 지정한 상태였다). 본문·제목·라벨·상태를 바꿀 때만 before → after 를 보이고 확인을 받는다.
 3. Apply with the matching command:
    - body/title/labels: `gh issue edit <N> --title/--body-file/--add-label/--remove-label`
    - comment: `gh issue comment <N> --body-file <comment.md>`
@@ -59,5 +61,5 @@ If the intent is genuinely ambiguous, ask which operation — don't guess.
 
 - **WRONG**: `curl <attachment-url>` or WebFetch on `github.com/user-attachments/assets/...` → 404. **RIGHT**: download with `Authorization: token $(gh auth token)` per [fetching.md](fetching.md).
 - **WRONG**: Read a downloaded `.mp4` directly (wastes a turn, shows nothing). **RIGHT**: extract frames with ffmpeg and Read those.
-- **WRONG**: `gh issue create`/`edit` straight away with a body you never showed. **RIGHT**: full draft → user confirmation → apply.
+- **WRONG**: `gh issue create`/`edit` (본문·제목·라벨·상태 변경) straight away with a body you never showed. **RIGHT**: full draft → user confirmation → apply. 코멘트는 예외다.
 - **WRONG**: free-form issue body because the template "doesn't quite fit". **RIGHT**: pick the closest template and drop sections that are truly N/A.

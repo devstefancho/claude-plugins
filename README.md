@@ -30,36 +30,26 @@ Pick the skills you want; the installer copies them into your coding agent. Re-r
 | Skill | Description |
 |-------|-------------|
 | [writing-specs](./skills/spec-driven/writing-specs) | Write and manage spec files with search, conflict detection, and reporting |
-| [writing-tasks](./skills/spec-driven/writing-tasks) | Decompose specs into persistent task files with a dependency graph and progress |
+| [writing-tasks](./skills/spec-driven/writing-tasks) | Decompose specs into GitHub issues with a dependency graph and parallel lanes |
 | [writing-flows](./skills/spec-driven/writing-flows) | Write single-scenario Flow docs with a Mermaid diagram, step branches, and source references |
-| [implement-with-test](./skills/spec-driven/implement-with-test) | Implement a task with tests; auto-detects the test framework |
-| [test-commit-push-pr-clean](./skills/spec-driven/test-commit-push-pr-clean) | Branch-safe finish: lint, test, commit, push, open PR, clean worktrees |
 
 ### agents
 | Skill | Description |
 |-------|-------------|
-| [create-team](./skills/agents/create-team) | Create and manage a planner + implementer agent team (create / cleanup / expand) |
-| [split-work](./skills/agents/split-work) | Split current work into parallel-safe task groups with worktree branches |
+| [sync-agent-policy](./skills/agents/sync-agent-policy) | Project one policy file onto Claude Code, Grok, and Cursor Agent (deny rules, guideline files, read-deny hook) |
 
 ### browser
 | Skill | Description |
 |-------|-------------|
 | [browser-walkthrough](./skills/browser/browser-walkthrough) | Headed, step-by-step browser walkthrough for iframe/security-heavy sites |
-| [computer-use-test](./skills/browser/computer-use-test) | Run app test scenarios via Computer Use MCP and report UI/UX feedback |
-| [ui-prototype-preview](./skills/browser/ui-prototype-preview) | Turn a saved brainstorm idea into a standalone HTML prototype |
 
 ### productivity
 | Skill | Description |
 |-------|-------------|
-| [brain-storm](./skills/productivity/brain-storm) | Brainstorm features/improvements from the current codebase (pre-spec ideation) |
+| [github-issue](./skills/productivity/github-issue) | Fetch, create, and update GitHub issues via the gh CLI, attachments included |
+| [executive-summary](./skills/productivity/executive-summary) | Compress a long report into a one-page decision-maker brief |
 | [session-resume](./skills/productivity/session-resume) | Resume a previous Claude Code / Codex session from its JSONL transcript |
 | [llm-wiki](./skills/productivity/llm-wiki) | Maintain an LLM-powered personal wiki from raw sources |
-
-### misc
-| Skill | Description |
-|-------|-------------|
-| [hermes-runtime](./skills/misc/hermes-runtime) | Talk to / control the Hermes companion runtime (chat, run, status, jobs, setup) |
-| [setup-notification](./skills/misc/setup-notification) | Install macOS TTS + dialog hooks for Claude Code Stop/Notification events |
 
 ## Skill style
 

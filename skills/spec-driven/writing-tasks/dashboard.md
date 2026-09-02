@@ -1,42 +1,55 @@
 # Status Dashboard (derived, no stored file)
 
-Printed when `/writing-tasks` runs with fully-mapped tasks. Everything is computed from task frontmatter at runtime — nothing is persisted.
+Printed when `/writing-tasks` runs with every spec already mapped. Everything is queried from `gh` at runtime — nothing is persisted, so it can never drift.
+
+## Query
+
+```bash
+gh issue list -R <owner>/<repo> --state all --limit 200 \
+  --json number,title,state,assignees,labels,parent,blockedBy,blocking,updatedAt
+```
+
+Group by `parent` (issues with no parent and no sub-issues are standalone). Spec-level rollup comes from each spec's `issue:` frontmatter.
 
 ## Output format
 
 ```
-📊 Progress: X / Y done (Z%)
+📊 Progress: X / Y closed (Z%)
 
-   Phase 1 — foundation         ████████░░░░  6/12
-   Phase 2 — auth               ██░░░░░░░░░░  2/9
-   ...
+   phase-1-foundation  → #301   ████████░░░░  6/12
+   phase-2-auth        → #340   ██░░░░░░░░░░  2/9
+   (standalone)                 ███░░░░░░░░░  1/3
 
 🔵 In progress (N):
-   <id>  <title>          <duration since status change>
+   #314  아바타 업로드 end-to-end        @me · 2일 전 갱신
 
-✅ Ready to start (N):
-   <id>  <title>          (all deps met)
+✅ Ready to start (N):          ← open, every blocked-by closed
+   #315  프로필 삭제 + 정리 잡
 
-⚡ Suggested parallel lanes (only show if >= 2 ready tasks):
-   Lane A: [ids]     → touches <shared module>
-   Lane B: [ids]     → touches <different module>
+⚡ Suggested parallel lanes (only when >= 2 ready):
+   Lane A: #315            → touches lib/profile/
+   Lane B: #322 #323       → touches server/api/
 
 ⚠️  Blocked (N):
-   <id> waiting on <id>
+   #316 waiting on #314
 
-⚠️  Validation issues (only if any):
-   <brief list>
+⚠️  Mismatches (only if any):
+   spec phase-2-auth/02-token-refresh.md: status wip, parent #345 closed
 ```
 
 ## Computing "ready"
 
-A task is ready when `status == "todo"` AND every id in `depends_on` has `status == "done"`.
+An issue is ready when it is **open** and every entry in `blockedBy` is **closed**. That is the whole rule — no local status file, no derived state to keep in sync.
+
+## Computing "in progress"
+
+Whatever the repo already uses: an assignee, or the repo's own in-progress label (`gh label list`). Don't impose a new convention on a repo that already has one.
 
 ## Computing parallel lanes
 
-For all ready tasks:
+For the ready set:
 
-1. Read each task's `구현 체크리스트` section, extract file paths / module directories.
-2. Group by shared top-level module directory (e.g. `packages/api/src/routes/`).
+1. Read each issue's checklist, extract file paths / module directories.
+2. Group by shared top-level module directory.
 3. Same group → same lane (sequential). Different groups → different lanes (parallel).
-4. Flag conflicts when two lanes touch the same directory but are split by the user manually.
+4. Flag when two lanes touch the same directory.

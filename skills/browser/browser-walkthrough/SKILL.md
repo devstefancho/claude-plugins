@@ -7,7 +7,7 @@ allowed-tools: Bash
 # Browser Walkthrough (headed 모드 대화형 진행)
 
 사용자가 열어둔 headed 브라우저에 **attach**해서 같은 화면을 보며 한 스텝씩 진행한다. 명령어 전체 레퍼런스는 `playwright-cli` skill 참조 — 이 skill의 핵심은 **대화 프로토콜**이다.
-**사전 조건** — `playwright-cli` 스킬 필요 (외부 플러그인 또는 user-level 설치, README 참조).
+**사전 조건** — `playwright-cli` 설치(`npm install --prefix ~/.local -g @playwright/cli`) + 사용자가 보고 있는 창에 붙으려면 Chrome에 [Playwright Extension](https://chromewebstore.google.com/detail/playwright-extension/mmlmfjhmonkocbjadbfplnigmagldckm) 설치. 명령 레퍼런스는 `playwright-cli` 스킬.
 
 ## 사용자 응답 해석 (최우선)
 
@@ -33,11 +33,17 @@ snapshot이 비거나 ref가 안 잡히면 iframe 가능성 → [iframe-handling
 
 ## Bootstrap
 
+**기본은 사용자가 지금 보고 있는 탭에 붙는 것이다.** 새 창을 여는 건 사용자가 아직 아무것도 안 열었을 때뿐.
+
 ```bash
 playwright-cli list                                                          # 기존 세션 확인
-playwright-cli -s=<name> open <url> --browser=chrome --persistent --headed  # 없으면 headed 새 세션
-playwright-cli -s=<name> attach                                              # 이미 열린 브라우저면 attach
+playwright-cli -s=<name> attach --extension=chrome                           # 사용자가 보고 있는 탭에 붙기 (기본)
+playwright-cli -s=<name> open <url> --browser=chrome --persistent --headed  # 열린 게 없을 때만 새 headed 세션
 ```
+
+`attach --extension=chrome`을 실행하면 **사용자가 대상 탭에서 Playwright Extension 아이콘을 눌러 공유해야** 연결이 완료된다. 명령은 그때까지 기다리므로, 실행 직후 "지금 보고 계신 탭에서 확장 아이콘을 눌러주세요"라고 안내하고 대기한다. Chrome 재시작·디버깅 포트는 필요 없다.
+
+확장을 못 쓰는 상황이면 `chrome://inspect/#remote-debugging`에서 "Allow remote debugging for this browser instance"를 켠 뒤 `attach --cdp=chrome`. 이 경로는 디버깅 포트가 열린 채로 남으니 그 세션이 끝나면 다시 끈다.
 
 세션 이름은 작업 도메인 (`hometax`, `gov24`, `coupang`). 이후 **모든 명령에 `-s=<name>` 필수.**
 
